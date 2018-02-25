@@ -55,7 +55,8 @@ Annams is licensed under the GPLv3 license.
 - - -
 
 Authentication && Authorization MicroService (ANNAMS)
-Copyright (C) 2017 Joseph Matthias Goh
+
+Copyright (C) 2018 Joseph Matthias Goh
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
