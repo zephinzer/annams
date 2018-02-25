@@ -1,0 +1,43 @@
+{
+  "name": "annams",
+  "version": "1.0.0",
+  "description": "Authentication && Authorization MicroService created for container-based deployments.",
+  "main": "./src/entrypoint.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "ENV=production ./provisioning/scripts/build.sh",
+    "build-dev": "ENV=development ./provisioning/scripts/build.sh",
+    "build-devsh": "./provisioning/scripts/build-devsh.sh",
+    "start": "./provisioning/scripts/start.sh",
+    "start-prd": "ENV=production ./provisioning/scripts/start.sh",
+    "start-devsh": "./provisioning/scripts/start-devsh.sh",
+    "test": "mocha ."
+  },
+  "author": "zephinzer",
+  "contributors": [
+    {
+      "name": "Joseph Matthias Goh",
+      "url": "https://joeir.net"
+    }
+  ],
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "dotenv": "^5.0.0",
+    "mocha": "^5.0.1",
+    "nodemon": "^1.15.1",
+    "sinon": "^4.4.1",
+    "sinon-chai": "^2.14.0"
+  },
+  "dependencies": {
+    "compression": "^1.7.2",
+    "cors": "^2.8.4",
+    "fastify": "^1.0.0-rc.2",
+    "helmet": "^3.11.0",
+    "http-auth": "^3.2.3",
+    "uuid": "^3.2.1",
+    "winston": "^2.4.0"
+  }
+}

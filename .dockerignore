@@ -1,0 +1,8 @@
+# local development files
+.env
+provisioning/deployments
+provisioning/images
+
+# documentation & coverage
+coverage
+docs
