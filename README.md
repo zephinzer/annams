@@ -18,11 +18,11 @@
 ### Authentication
 Authentication is the process of knowing who a user is. Annams provides for the following methods of authenticating a user:
 
-1. Email/password
-2. Username/password
-3. One-Time-Email
-4. Via Facebook
-5. Via Google
+- [ ] Email/password
+- [ ] Username/password
+- [ ] One-Time-Email
+- [ ] Via Facebook
+- [ ] Via Google
 
 To keep Annams stateless, we utilise JSON Web Tokens (JWTs) which are signed using asymmetric keys.
 
@@ -44,6 +44,10 @@ Annams was created for deployment as part of a larger microservice architecture 
 - [ ] Readiness Checks
 - [ ] Cross-Origin-Resource-Sharing (CORS)
 - [ ] REST-ful API
+
+### Future Development
+The following are on the roadmap for future development:
+
 - [ ] HTTP/2 Compatibility
 - [ ] GraphQL API
 - [ ] Administrator Frontend
@@ -56,7 +60,7 @@ Annams is licensed under the GPLv3 license.
 
 Authentication && Authorization MicroService (ANNAMS)
 
-Copyright (C) 2018 Joseph Matthias Goh
+Copyright (C) 2018 Joseph Matthias Goh (@zephinzer)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
