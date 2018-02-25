@@ -1,10 +1,10 @@
 # ANNAMS
 **Authentication && Authorization MicroService** created for container-based deployments.
 
-1. Authentication
+1. [Authentication](#authentication)
 2. &&
-3. Authoorisation
-4. Microservice
+3. [Authoorisation](#authorization)
+4. [MicroService](#microservice)
 
 ## Documentation Index
 
