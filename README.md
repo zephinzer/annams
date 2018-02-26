@@ -36,14 +36,16 @@ Authorization is the process of restricting access to content a user may access.
 ### Microservice
 Annams was created for deployment as part of a larger microservice architecture and accounts for both intra-network communications with other microservices, as well as communication with a client-side application. We implement the following features:
 
+- [x] Basic HTTP header security
+- [x] GZIP compressed responses
+- [x] Metrics collection/exposing (via Prometheus)
+- [x] Liveness Checks
+- [x] Readiness Checks
 - [ ] Containerisable (via Docker)
 - [ ] Virtual Machine Deployment Support (via PM2)
 - [ ] Container Deployment Support (via Docker)
 - [ ] Container Deployment Support (via Kubernetes)
-- [ ] Metrics (via Prometheus)
 - [ ] Logging (via Fluentd)
-- [ ] Liveness Checks
-- [ ] Readiness Checks
 - [ ] Cross-Origin-Resource-Sharing (CORS)
 - [ ] REST-ful API
 
