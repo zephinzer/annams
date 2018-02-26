@@ -6,4 +6,4 @@ docker run \
   --volume "${HOME}/.gitconfig:/root/.gitconfig" \
   --volume "$(pwd):/app" \
   --volume "/var/run/docker.sock:/var/run/docker.sock" \
-  zephinzer/annams-devsh:latest;
+  zephinzer/annams:devsh-latest;

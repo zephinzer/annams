@@ -6,3 +6,6 @@ provisioning/images
 # documentation & coverage
 coverage
 docs
+
+# dependencies
+node_modules

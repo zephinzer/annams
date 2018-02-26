@@ -66,6 +66,11 @@ Path: `config.endpoint.live`
 
 Path: `config.endpoint.ready`
 
+### `ENDPOINT_METRICS`
+> Defaults to `"/metrics"`
+
+Path: `config.endpoint.metrics`
+
 ### `ERROR_ADDRINUSE_INTERVAL`
 > Defaults to `5000`
 
@@ -86,6 +91,11 @@ Path: `config.error.dbnotfound.interval`
 
 Path: `config.error.dbnotfound.ttl`
 
+### `METRICS_INTERVAL`
+> Defaults to `5000`
+
+Path: `config.metrics.interval`
+
 ### `SERVER_LOG_LEVEL`
 > Defaults to `"info"`
 
@@ -95,3 +105,8 @@ Path: `config.server.log.level`
 > Defaults to `10000`
 
 Path: `config.server.port`
+
+### `SERVER_BIND_ADDRESS`
+> Defaults to `0.0.0.0`
+
+Path: `config.server.bind.address`

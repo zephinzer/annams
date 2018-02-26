@@ -1,55 +1,21 @@
-try { // should only succeed in development
-  require('dotenv').config();
-} catch (ex) { }
-
+try { require('dotenv').config(); } catch (ex) { }
 const config = require('./config')();
 const logging = require('./logging')();
-const server = require('./server')();
+const metrics = require('./metrics')();
+const server = require('./server');
 
-initializeServer(server, {
-  port: config.server.port,
-  addrTakenTtl: config.error.addrinuse.ttl,
-  addrTakenInterval: config.error.addrinuse.interval,
-});
-
-console.info('---');
-function initializeServer(
-  server,
-  {
-    port,
-    addrTakenTtl,
-    addrTakenInterval,
-  },
-  addressInUseErrorCounter = 0
-) {
-  server.listen(port, (err) => {
-    if (err) {
-      if (err.code === 'EADDRINUSE') {
-        if (addressInUseErrorCounter++ < addrTakenTtl) {
-          console.error(`Port ${port} is in use. Retrying in ${addrTakenInterval}ms...`);
-          server.reset();
-          server = require('./server')();
-          setTimeout(
-            initializeServer.bind(
-              this, server, {
-              port,
-              addrTakenTtl,
-              addrTakenInterval,
-            }, addressInUseErrorCounter),
-            addrTakenInterval
-          );
-        } else {
-          throw new Error(`Port ${port} is still in use. Exiting with status code 1.`);
-          // console.error(`Port ${port} is still in use. Exiting with status code 1.`);
-          // process.exit(1);
-        }
-      }
-    } else {
-      console.info(`Server listening on port ${port} > http://127.0.0.1:${port}`);
-    }
-  });
+const fatalErrorHandler = (ex) => {
+  console.error(ex.stack);
+  console.info(ex.message);
+  process.exit(1);
 };
 
-process.on('error', () => {
-  console.info('hi');
+process.on('uncaughtException', fatalErrorHandler);
+process.on('unhandledRejection', fatalErrorHandler);
+
+server.start({
+  port: config.server.port,
+  bindAddress: config.server.bind.address,
+  addrInUseTTL: config.error.addrinuse.ttl,
+  addrInUseInterval: config.error.addrinuse.interval,
 });

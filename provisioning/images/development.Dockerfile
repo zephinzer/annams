@@ -1,7 +1,7 @@
 ARG BASE_IMAGE='node:8-alpine'
 FROM ${BASE_IMAGE}
 LABEL maintainer="dev@joeir.net" \
-  description="development shell"
+  description="annams development shell"
 WORKDIR /app
 USER root
 RUN apk add --update --upgrade --no-cache bash curl vim jq git docker openssh python py-pip make \
@@ -9,6 +9,7 @@ RUN apk add --update --upgrade --no-cache bash curl vim jq git docker openssh py
   && rm -rf ~/.cache/pip/* \
   && printf -- '\
   printf -- "hostname       : $(hostname)\n"; \
+  printf -- "local ip       : $(ifconfig | grep inet | grep -v 127.0.0.1 | tr -s " " | cut -f 3 -d " " | cut -f 2 -d ":")\n"; \
   printf -- "whoami         : $(whoami)\n"; \
   printf -- "PATH           : ${PATH}\n"; \
   printf -- "git            : $(git --version | cut -f 3 -d " ")\n"; \

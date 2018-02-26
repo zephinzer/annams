@@ -10,6 +10,7 @@ We work via standard fork + merge request to `master` model.
 ## Technologies Involved
 1. Node.js - *the runtime*
   - Fastify application framework
+  - Knex query builder library
   - Mocha test framework
   - Chai assertion library
   - Sinon mocking library
@@ -47,6 +48,20 @@ To get started, install the NPM dependencies. We use Yarn to manage the dependen
 ```bash
 yarn install
 ```
+
+Next, start the services in the background:
+
+```bash
+npm run start-services
+```
+
+Verify they are up by running:
+
+```bash
+docker ps
+```
+
+> To stop the services, run `npm run stop-services`
 
 You should then be able to run the following command to get started developing locally:
 

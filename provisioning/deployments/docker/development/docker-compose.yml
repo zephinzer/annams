@@ -1,0 +1,19 @@
+version: "3"
+services:
+  cache:
+    container_name: annams_cache_redis
+    image: redis:4-alpine
+    ports:
+      - "16379:6379"
+  database:
+    container_name: annams_database_mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "annams_root_password"
+      MYSQL_DATABASE: "annams"
+      MYSQL_USER: "annams_user"
+      MYSQL_PASSWORD: "annams_password"
+    ports:
+      - "13306:3306"
+    volumes:
+      - "./data/mysql:/var/lib/mysql"
