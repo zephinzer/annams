@@ -96,6 +96,16 @@ Path: `config.error.dbnotfound.ttl`
 
 Path: `config.metrics.interval`
 
+### `SERVER_CORS_ALLOWED_HOSTS`
+> Defaults to `[]`
+
+Path: `config.server.cors.allowed.hosts`
+
+### `SERVER_CORS_ALLOWED_METHODS`
+> Defaults to `[]`
+
+Path: `config.server.cors.allowed.methods`
+
 ### `SERVER_LOG_LEVEL`
 > Defaults to `"info"`
 
