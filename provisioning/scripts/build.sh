@@ -5,3 +5,6 @@ docker build \
   --build-arg NODE_ENV="${ENV}" \
   --tag zephinzer/annams:${ENV}-latest \
   .;
+if [ "${ENV}" = "production" ]; then
+  docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
+fi;

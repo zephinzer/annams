@@ -1,11 +1,14 @@
 # local development files
+.git
 .env
 provisioning/deployments
 provisioning/images
 
 # documentation & coverage
-coverage
 docs
+*.md
+LICENSE
+coverage
 
 # dependencies
 node_modules
