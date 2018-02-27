@@ -1,7 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
-const cors = require('cors');
 const config = require('../config')();
 const utility = require('./utility');
 const metrics = require('./metrics');
@@ -16,8 +15,8 @@ function server() {
     server.instance = express();
     server.instance.use(helmet());
     server.instance.use(compression());
-    server.instance.use(cors());
     server.instance.use(metrics.getController());
+    server.instance.use(utility.getCors());
     server.instance.get(config.endpoint.ready, utility.getAuth(), require('./readiness').getRoute());
     server.instance.get(config.endpoint.live, utility.getAuth(), require('./liveness').getRoute());
     server.instance.get(config.endpoint.metrics, metrics.getRoute());

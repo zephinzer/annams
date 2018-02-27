@@ -41,12 +41,12 @@ Annams was created for deployment as part of a larger microservice architecture 
 - [x] Metrics collection/exposing (via Prometheus)
 - [x] Liveness Checks
 - [x] Readiness Checks
+- [x] Cross-Origin-Resource-Sharing (CORS)
 - [ ] Containerisable (via Docker)
 - [ ] Virtual Machine Deployment Support (via PM2)
 - [ ] Container Deployment Support (via Docker)
 - [ ] Container Deployment Support (via Kubernetes)
 - [ ] Logging (via Fluentd)
-- [ ] Cross-Origin-Resource-Sharing (CORS)
 - [ ] REST-ful API
 
 ### Future Development
