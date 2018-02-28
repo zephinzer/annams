@@ -43,12 +43,16 @@ npm run start-devsh;
 If you have both Docker, at least Node 8, and Yarn installed locally, you can safely start developing without worry.
 
 ## Running in development
-To get started, install the NPM dependencies. We use Yarn to manage the dependencies:
+To get started, install the NPM dependencies.
+
+### Dependency Installation
+We use Yarn to manage the dependencies:
 
 ```bash
 yarn install
 ```
 
+### External Services Startup
 Next, start the services in the background:
 
 ```bash
@@ -63,6 +67,7 @@ docker ps
 
 > To stop the services, run `npm run stop-services`
 
+### Application Startup
 You should then be able to run the following command to get started developing locally:
 
 ```bash
@@ -95,3 +100,8 @@ To fix auto-correctable errors, run:
 ```bash
 npm run lint-fix;
 ```
+
+### Functional Testing
+Mocha is used as the test framework with tests stored in [`./tests`](../tests) relative to the project root.
+
+`WIP`
