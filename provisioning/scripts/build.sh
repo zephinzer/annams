@@ -2,12 +2,16 @@
 if [ "${ENV}" = "" ]; then
   ENV='production';
 fi;
+printf -- "Building ANNAMS in '${ENV}' environment...\n";
 docker build \
   --file ./provisioning/images/application.Dockerfile \
   --build-arg YARN_FLAGS="--${ENV}" \
   --build-arg NODE_ENV="${ENV}" \
   --tag zephinzer/annams:${ENV}-latest \
   .;
-if [ "${ENV}" = "production" ]; then
-  docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
+if [ "$?" = "0" ]; then 
+  printf -- "ANNAMS built in '${ENV}' environment.\n";
+  if [ "${ENV}" = "production" ]; then
+    docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
+  fi;
 fi;
