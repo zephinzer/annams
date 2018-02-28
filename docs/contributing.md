@@ -19,11 +19,11 @@ We work via standard fork + merge request to `master` model.
 3. Kubernetes - *deployment*
   - MiniKube for testing deployments
 
-## Setting up the development environment
+## Provisioning
 You'll need a Docker daemon installed and running on your host machine, and you can get it from this link: https://store.docker.com/search?type=edition&offering=community.
 
 ### Method 1 - via Development Shell
-We use a development shell to standardise the development environment.
+We use a development shell to standardise the development environment. The shell contains Git, Node and Yarn and the command has volume mappings to directories needed to run Git. If you don't trust the code, use Method 2.
 
 To build the development shell, run:
 
@@ -40,13 +40,22 @@ npm run start-devsh;
 > The development shell uses your host's Docker to run Docker commands.
 
 ### Method 2 - via local machine
-If you have both Docker, at least Node 8, and Yarn installed locally, you can safely start developing without worry.
+Confirm that Docker, Git, Node 8 and Yarn are installed on your machine. You can verify this via:
 
-## Running in development
-To get started, install the NPM dependencies.
+```bash
+docker version;
+# > Client: ...
+git --version
+# > git version ...
+node -v
+# > v....
+yarn -v
+# > ...
+```
 
+## Development
 ### Dependency Installation
-We use Yarn to manage the dependencies:
+To get started, install the NPM dependencies. We use Yarn to manage the dependencies:
 
 ```bash
 yarn install
@@ -105,3 +114,5 @@ npm run lint-fix;
 Mocha is used as the test framework with tests stored in [`./tests`](../tests) relative to the project root.
 
 `WIP`
+
+## Integration
