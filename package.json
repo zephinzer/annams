@@ -11,6 +11,7 @@
     "build-dev": "ENV=development ./provisioning/scripts/build.sh",
     "build-devsh": "./provisioning/scripts/build-devsh.sh",
     "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "start-services": "./provisioning/scripts/start-services.sh",
     "stop-services": "./provisioning/scripts/stop-services.sh",
     "start": "./provisioning/scripts/start.sh",

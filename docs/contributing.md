@@ -83,4 +83,15 @@ ENV=production npm start
 
 ## Testing
 
-WIP
+### Code Quality
+ESLint is used for the linter. Run it with:
+
+```bash
+npm run lint;
+```
+
+To fix auto-correctable errors, run:
+
+```bash
+npm run lint-fix;
+```
