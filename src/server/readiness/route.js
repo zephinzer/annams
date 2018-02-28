@@ -1,4 +1,4 @@
-const express = reqire('express'); // eslint-disable-line no-unused-vars
+const express = require('express'); // eslint-disable-line no-unused-vars
 
 const readiness = require('./controller');
 

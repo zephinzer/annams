@@ -107,9 +107,36 @@ Path: `config.server.cors.allowed.hosts`
 Path: `config.server.cors.allowed.methods`
 
 ### `SERVER_LOG_LEVEL`
-> Defaults to `"info"`
+> Defaults to `"trace"`
+
+#### Possible Options
+One of:
+- `"fatal"`
+- `"error"`
+- `"warn"`
+- `"info"`
+- `"debug"`
+- `"trace"`
+- `"silent"`
 
 Path: `config.server.log.level`
+
+### `SERVER_LOG_PRETTY`
+> Defaults to `true`
+
+When set to `false`, logs look like:
+
+```
+{"level":30,"time":1519833207129,"msg":"Server listening on port 10000 > http://127.0.0.1:10000","pid":34325,"hostname":"<HOSTNAME>","v":1}
+```
+
+When set to `true`, logs look like:
+
+```
+[2018-02-28T15:52:03.283Z] INFO (34278 on <HOSTNAME>): Server listening on port 10000 > http://127.0.0.1:10000
+```
+
+Path: `config.server.log.pretty`
 
 ### `SERVER_PORT`
 > Defaults to `10000`

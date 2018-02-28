@@ -6,15 +6,7 @@ const config = require('./config')();
 const server = require('./server');
 require('./metrics')();
 require('./logging')();
-
-const fatalErrorHandler = (ex) => {
-  console.error(ex.stack);
-  console.info(ex.message);
-  process.exit(1);
-};
-
-process.on('uncaughtException', fatalErrorHandler);
-process.on('unhandledRejection', fatalErrorHandler);
+require('./grace')();
 
 server.start({
   port: config.server.port,

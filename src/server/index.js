@@ -9,11 +9,12 @@ module.exports = server;
 
 /**
  * Creates a server instance for accessing the API
+ * @param {Boolean} asMiddleware?
  * @return {Object}
  */
-function server() {
+function server(asMiddleware = false) {
   if (server.instance === null) {
-    server.instance = express();
+    server.instance = asMiddleware ? new express.Router() : express();
     server.instance.use(helmet());
     server.instance.use(compression());
     server.instance.use(metrics.getController());

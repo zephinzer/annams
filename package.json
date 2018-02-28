@@ -2,7 +2,7 @@
   "name": "annams",
   "version": "1.0.0",
   "description": "Authentication && Authorization MicroService created for container-based deployments.",
-  "main": "./src/entrypoint.js",
+  "main": "./src/server/index.js",
   "directories": {
     "doc": "docs"
   },
@@ -48,9 +48,9 @@
     "knex": "^0.14.4",
     "mysql2": "^1.5.2",
     "os-utils": "^0.0.14",
+    "pino": "^4.13.0",
     "prom-client": "^10.2.2",
     "redis": "^2.8.0",
-    "uuid": "^3.2.1",
-    "winston": "^2.4.0"
+    "uuid": "^3.2.1"
   }
 }
