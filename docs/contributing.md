@@ -110,11 +110,23 @@ To fix auto-correctable errors, run:
 npm run fix-lint;
 ```
 
+### Depndency Vulnerability
+NSP is used to check for known security vulnerabilities in dependencies. Run it with:
+
+```bash
+npm run test-sec;
+```
+
 ### Functional Testing
 Mocha is used as the test framework with tests stored in [`./tests`](../tests) relative to the project root.
 
 `WIP`
 
-## Integration
+## Building
+`WIP`
 
+## Integration
+`WIP`
+
+## Release
 `WIP`
