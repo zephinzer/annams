@@ -110,6 +110,13 @@ To fix auto-correctable errors, run:
 npm run fix-lint;
 ```
 
+For pipeline purposes, run:
+
+```bash
+ENV=developmnt npm run build \
+  && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test-lint;
+```
+
 ### Depndency Vulnerability
 NSP is used to check for known security vulnerabilities in dependencies. Run it with:
 
@@ -117,10 +124,24 @@ NSP is used to check for known security vulnerabilities in dependencies. Run it 
 npm run test-sec;
 ```
 
+For pipeline purposes, run:
+
+```bash
+ENV=developmnt npm run build \
+  && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test-sec;
+```
+
 ### Functional Testing
 Mocha is used as the test framework with tests stored in [`./tests`](../tests) relative to the project root.
 
 `WIP`
+
+For pipeline purposes, run:
+
+```bash
+ENV=developmnt npm run build \
+  && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test;
+```
 
 ## Building
 `WIP`
