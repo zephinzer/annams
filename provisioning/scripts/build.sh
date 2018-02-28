@@ -1,4 +1,7 @@
 #!/bin/sh
+if [ "${ENV}" = "" ]; then
+  ENV='production';
+fi;
 docker build \
   --file ./provisioning/images/application.Dockerfile \
   --build-arg YARN_FLAGS="--${ENV}" \

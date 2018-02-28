@@ -7,16 +7,16 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "ENV=production ./provisioning/scripts/build.sh",
-    "build-dev": "ENV=development ./provisioning/scripts/build.sh",
+    "build": "./provisioning/scripts/build.sh",
     "build-devsh": "./provisioning/scripts/build-devsh.sh",
-    "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "devsh": "./provisioning/scripts/devsh.sh",
+    "fix-lint": "eslint . --fix",
+    "start": "./provisioning/scripts/start.sh",
     "start-services": "./provisioning/scripts/start-services.sh",
     "stop-services": "./provisioning/scripts/stop-services.sh",
-    "start": "./provisioning/scripts/start.sh",
-    "devsh": "./provisioning/scripts/devsh.sh",
-    "test": "mocha ."
+    "test": "mocha .",
+    "test-lint": "eslint .",
+    "test-sec": "nsp check ."
   },
   "author": "zephinzer",
   "contributors": [
@@ -33,6 +33,7 @@
     "eslint-config-google": "^0.9.1",
     "mocha": "^5.0.1",
     "nodemon": "^1.15.1",
+    "nsp": "^3.2.1",
     "sinon": "^4.4.1",
     "sinon-chai": "^2.14.0"
   },

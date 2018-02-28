@@ -101,13 +101,13 @@ ENV=production npm start
 ESLint is used for the linter. Run it with:
 
 ```bash
-npm run lint;
+npm run test-lint;
 ```
 
 To fix auto-correctable errors, run:
 
 ```bash
-npm run lint-fix;
+npm run fix-lint;
 ```
 
 ### Functional Testing
@@ -116,3 +116,5 @@ Mocha is used as the test framework with tests stored in [`./tests`](../tests) r
 `WIP`
 
 ## Integration
+
+`WIP`
