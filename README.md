@@ -2,9 +2,8 @@
 **Authentication && Authorization MicroService** created for container-based deployments.
 
 1. [Authentication](#authentication)
-2. &&
-3. [Authoorisation](#authorization)
-4. [MicroService](#microservice)
+2. [Authorisation](#authorization)
+3. [MicroService](#microservice)
 
 ## Documentation Index
 
@@ -33,7 +32,7 @@ Authorization is the process of restricting access to content a user may access.
 2. Groups can be assigned one or more Users.
 3. Users belonging to a Group that has access to a Resource Type will be able to access the Resource Type, otherwise, access can be denied.
 
-### Microservice
+### MicroService
 Annams was created for deployment as part of a larger microservice architecture and accounts for both intra-network communications with other microservices, as well as communication with a client-side application. We implement the following features:
 
 - [x] Basic HTTP header security
