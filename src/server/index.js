@@ -1,7 +1,9 @@
 const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
+
 const config = require('../config')();
+const logging = require('../logging');
 const utility = require('./utility');
 const metrics = require('./metrics');
 
@@ -15,9 +17,21 @@ module.exports = server;
 function server(asMiddleware = false) {
   if (server.instance === null) {
     server.instance = asMiddleware ? new express.Router() : express();
-    server.instance.use(helmet());
+    server.instance.disable('x-powered-by');
+    server.instance.use(helmet.dnsPrefetchControl());
+    server.instance.use(helmet.xssFilter());
+    server.instance.use(helmet.noSniff());
+    server.instance.use(helmet.noCache());
+    server.instance.use(helmet.ieNoOpen());
+    server.instance.use(helmet.hsts({maxAge: 60 * 60 * 24 * 60}));
+    server.instance.use(helmet.frameguard({action: 'sameorigin'}));
+    if (!asMiddleware) {
+      server.instance.use(logging.request.insertRequestUuid());
+      server.instance.use(logging.request.getIncoming());
+      server.instance.use(logging.request.getOutgoing());
+      server.instance.use(metrics.getController());
+    }
     server.instance.use(compression());
-    server.instance.use(metrics.getController());
     server.instance.use(utility.getCors());
     server.instance.get(
       config.endpoint.ready,
