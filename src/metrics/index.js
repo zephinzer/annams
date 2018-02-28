@@ -4,6 +4,11 @@ const config = require('../config')();
 
 module.exports = metrics;
 
+/**
+ * Initializes the metrics collection and returns the used register
+ *
+ * @return {Prometheus.Register}
+ */
 function metrics() {
   Prometheus.register.clear();
   metrics.os = {

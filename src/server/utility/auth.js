@@ -16,5 +16,5 @@ module.exports = () => {
       );
     });
   }
-  return httpAuth.connect(basicAuthentication)
+  return httpAuth.connect(basicAuthentication);
 };

@@ -16,13 +16,17 @@ module.exports = {
         process.env.AUTHN_JWT_KEY_PRIVATE : DEFAULT_JWT_KEY_PRIVATE,
       public: process.env.AUTHN_JWT_KEY_PUBLIC ?
         process.env.AUTHN_JWT_KEY_PUBLIC : DEFAULT_JWT_KEY_PUBLIC,
-    }
-  }
+    },
+  },
 };
 
-const healthcheckPasswordFromEnvironmentHash = require('crypto').createHash('md5').update(process.env.AUTHN_HEALTHCHECK_PASSWORD || '').digest("hex");
-const healthcheckPasswordHash = require('crypto').createHash('md5').update(module.exports.healthcheck.password || '').digest("hex");
-console.info(`AUTHN_HEALTHCHECK_USERNAME: "${process.env.AUTHN_HEALTHCHECK_USERNAME}" (= "${module.exports.healthcheck.username}")`);
-console.info(`AUTHN_HEALTHCHECK_PASSWORD: "md5:${healthcheckPasswordFromEnvironmentHash}" (= "md5:${healthcheckPasswordHash}")`);
-console.info(`AUTHN_JWT_KEY_PRIVATE: "${process.env.AUTHN_JWT_KEY_PRIVATE}" (= "${module.exports.jwt.key.private}")`);
-console.info(`AUTHN_JWT_KEY_PUBLIC: "${process.env.AUTHN_JWT_KEY_PUBLIC}" (= "${module.exports.jwt.key.public}")`);
+const generateMD5Hash = (data) =>
+  crypto.createHash('md5').update(data).digest('hex');
+const healthcheckPasswordFromEnvironmentHash =
+  generateMD5Hash(process.env.AUTHN_HEALTHCHECK_PASSWORD || '');
+const healthcheckPasswordHash =
+  generateMD5Hash(module.exports.healthcheck.password || '');
+console.info(`AUTHN_HEALTHCHECK_USERNAME: "${process.env.AUTHN_HEALTHCHECK_USERNAME}" (= "${module.exports.healthcheck.username}")`); // eslint-disable-line max-len
+console.info(`AUTHN_HEALTHCHECK_PASSWORD: "md5:${healthcheckPasswordFromEnvironmentHash}" (= "md5:${healthcheckPasswordHash}")`); // eslint-disable-line max-len
+console.info(`AUTHN_JWT_KEY_PRIVATE: "${process.env.AUTHN_JWT_KEY_PRIVATE}" (= "${module.exports.jwt.key.private}")`); // eslint-disable-line max-len
+console.info(`AUTHN_JWT_KEY_PUBLIC: "${process.env.AUTHN_JWT_KEY_PUBLIC}" (= "${module.exports.jwt.key.public}")`); // eslint-disable-line max-len

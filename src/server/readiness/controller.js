@@ -13,13 +13,20 @@ module.exports = {
   getStatus,
 };
 
+/**
+ * Retrieves the status of various third party services and resolves true if
+ * all services are working and can be connected to. Resolves to false
+ * otherwise.
+ *
+ * @return {Promise}
+ */
 function getStatus() {
   return Promise.all([
     new Promise((resolve, reject) => {
       const connectionTest = redis.createClient({
         host: config.cache.host,
         port: config.cache.port,
-      })
+      });
       connectionTest.on('error', (err) => {
         module.exports.status.cache = false;
         module.exports.error.cache = err;
@@ -32,7 +39,7 @@ function getStatus() {
         connectionTest.quit();
         connectionTest.unref();
         resolve();
-      })
+      });
     }),
     new Promise((resolve, reject) => {
       const connectionTest = mysql.createConnection({
@@ -50,6 +57,6 @@ function getStatus() {
       });
     }),
   ].map(
-    (promise) => promise.then(() => true).catch(err => err)
+    (promise) => promise.then(() => true).catch((err) => err)
   )).then((res) => res.reduce((prev, curr) => prev && (curr === true), true));
 };

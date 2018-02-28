@@ -9,6 +9,7 @@ module.exports = server;
 
 /**
  * Creates a server instance for accessing the API
+ * @return {Object}
  */
 function server() {
   if (server.instance === null) {
@@ -17,8 +18,16 @@ function server() {
     server.instance.use(compression());
     server.instance.use(metrics.getController());
     server.instance.use(utility.getCors());
-    server.instance.get(config.endpoint.ready, utility.getAuth(), require('./readiness').getRoute());
-    server.instance.get(config.endpoint.live, utility.getAuth(), require('./liveness').getRoute());
+    server.instance.get(
+      config.endpoint.ready,
+      utility.getAuth(),
+      require('./readiness').getRoute()
+    );
+    server.instance.get(
+      config.endpoint.live,
+      utility.getAuth(),
+      require('./liveness').getRoute()
+    );
     server.instance.get(config.endpoint.metrics, metrics.getRoute());
     server.instance.get('/', (req, res) => res
       .type('application/json')
@@ -30,16 +39,21 @@ function server() {
 
 server.instance = null;
 
-server.start = ({port, bindAddress, addrInUseTTL, addrInUseInterval}, addressInUseErrorCounter = 0) => {
+server.start = (
+  {
+    port, bindAddress, addrInUseTTL, addrInUseInterval,
+  },
+  addressInUseErrorCounter = 0
+) => {
   (server.instance === null) && server();
   server.instance.listen(port, bindAddress, (err) => {
     if (!err) {
       console.info(`Server listening on port ${port} > http://${bindAddress}:${port}`);
-    } 
+    }
   }).on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
       if (addressInUseErrorCounter++ < addrInUseTTL) {
-        console.error(`Port ${port} is in use. Retrying in ${addrInUseInterval}ms... (${addressInUseErrorCounter}/${addrInUseTTL} tries)`);
+        console.error(`Port ${port} is in use. Retrying in ${addrInUseInterval}ms... (${addressInUseErrorCounter}/${addrInUseTTL} tries)`); // eslint-disable-line max-len
         server();
         setTimeout(
           server.start.bind(
@@ -48,14 +62,14 @@ server.start = ({port, bindAddress, addrInUseTTL, addrInUseInterval}, addressInU
               port,
               bindAddress,
               addrInUseTTL,
-              addrInUseInterval
+              addrInUseInterval,
             },
             addressInUseErrorCounter
           ),
           addrInUseInterval
         );
       } else {
-        console.error(`Port ${port} is still in use. Exiting with status code 1.`);
+        console.error(`Port ${port} is still in use. Exiting with status code 1.`); // eslint-disable-line max-len
         process.exit(1);
       }
     } else {

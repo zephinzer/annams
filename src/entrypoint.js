@@ -1,8 +1,11 @@
-try { require('dotenv').config(); } catch (ex) { }
+try {
+  require('dotenv').config();
+} catch (ex) {}
+
 const config = require('./config')();
-const logging = require('./logging')();
-const metrics = require('./metrics')();
 const server = require('./server');
+require('./metrics')();
+require('./logging')();
 
 const fatalErrorHandler = (ex) => {
   console.error(ex.stack);
