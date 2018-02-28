@@ -42,7 +42,9 @@ Annams was created for deployment as part of a larger microservice architecture 
 - [x] Liveness Checks
 - [x] Readiness Checks
 - [x] Cross-Origin-Resource-Sharing (CORS)
-- [ ] Containerisable (via Docker)
+- [x] MicroServices compatible logging (via Pino)
+- [x] Containerisable (via Docker)
+- [ ] Traceability (via Zipkin)
 - [ ] Virtual Machine Deployment Support (via PM2)
 - [ ] Container Deployment Support (via Docker)
 - [ ] Container Deployment Support (via Kubernetes)
@@ -55,6 +57,31 @@ The following are on the roadmap for future development:
 - [ ] HTTP/2 Compatibility
 - [ ] GraphQL API
 - [ ] Administrator Frontend
+
+## Architecture Notes
+### Primary Technologies
+- Shell Scripting
+- JavaScript (ES2017)
+- Docker
+- Kubernetes
+
+### Significant Frameworks/Libraries/Tools
+App Framework : [Express](https://github.com/expressjs/express)
+API Framework : [Swagger](https://swagger.io/)
+Service Logger : [Pino](https://github.com/pinojs/pino)
+Request Logger : [Morgan](https://github.com/expressjs/morgan)
+Query Builder : [Knex](http://knexjs.org/)
+Object Relational Mapper : [Objection.js](https://github.com/Vincit/objection.js/)
+Test Framework : [Mocha](https://mochajs.org/)
+Assertion Library : [Chai](http://chaijs.com/)
+Code Quality Checker : [ESLint](https://eslint.org/)
+Vulnerability Assessment : [NSP](https://github.com/nodesecurity/nsp)
+Metrics : [Prometheus](https://prometheus.io/)
+Request Tracing : [Zipkin](https://zipkin.io/)
+Container Bundling : [Docker](https://www.docker.com/)
+Continuous Integration : [Travis](https://travis-ci.org/)
+Deployment : [PM2](https://github.com/Unitech/pm2) [Docker](https://www.docker.com/), [Kubernetes](https://kubernetes.io/)
+Releases : [NPM](https://www.npmjs.com/), [GitHub](https://github.com), [DockerHub](https://hub.docker.com)
 
 ## License
 
