@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
 const redis = require('redis');
 const config = require('../../config')();
+
 module.exports = {
   status: {
     database: null,

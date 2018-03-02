@@ -43,7 +43,7 @@ Annams was created for deployment as part of a larger microservice architecture 
 - [x] Cross-Origin-Resource-Sharing (CORS)
 - [x] MicroServices compatible logging (via Pino)
 - [x] Containerisable (via Docker)
-- [ ] Traceability (via Zipkin)
+- [x] Traceability (via Zipkin)
 - [ ] Virtual Machine Deployment Support (via PM2)
 - [ ] Container Deployment Support (via Docker)
 - [ ] Container Deployment Support (via Kubernetes)

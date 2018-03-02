@@ -11,6 +11,16 @@ Path: `config.authn.healthcheck.username`
 
 Path: `config.authn.healthcheck.password`
 
+### `AUTHN_METRICS_USERNAME`
+> Defaults to `null`
+
+Path: `config.authn.metrics.username`
+
+### `AUTHN_METRICS_PASSWORD`
+> Defaults to `null`
+
+Path: `config.authn.metrics.password`
+
 ### `AUTHN_JWT_KEY_PRIVATE`
 > Defaults to `null`
 
@@ -96,6 +106,16 @@ Path: `config.error.dbnotfound.ttl`
 
 Path: `config.metrics.interval`
 
+### `NODE_ENV`
+> Defaults to `"development"`
+
+Path: `config.environment`
+
+### `SERVER_BIND_ADDRESS`
+> Defaults to `0.0.0.0`
+
+Path: `config.server.bind.address`
+
 ### `SERVER_CORS_ALLOWED_HOSTS`
 > Defaults to `[]`
 
@@ -143,7 +163,22 @@ Path: `config.server.log.pretty`
 
 Path: `config.server.port`
 
-### `SERVER_BIND_ADDRESS`
-> Defaults to `0.0.0.0`
+### `SERVER_TRACING_ZIPKIN_ENABLED`
+> Defaults to `true`
 
-Path: `config.server.bind.address`
+Path: `config.server.tracing.zipkin.enabled`
+
+### `SERVER_TRACING_ZIPKIN_HOSTNAME`
+> Defaults to `"http://localhost:9411"`
+
+Path: `config.server.tracing.zipkin.hostname`
+
+### `SERVER_TRACING_ZIPKIN_PATH`
+> Defaults to `"/api/v2/spans"`
+
+Path: `config.server.tracing.zipkin.path`
+
+### `SERVER_TRACING_ZIPKIN_USE_HTTP`
+> Defaults to `false`
+
+Path: `config.server.tracing.zipkin.use.http`

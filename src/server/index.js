@@ -25,25 +25,33 @@ function server(asMiddleware = false) {
     server.instance.use(helmet.ieNoOpen());
     server.instance.use(helmet.hsts({maxAge: 60 * 60 * 24 * 60}));
     server.instance.use(helmet.frameguard({action: 'sameorigin'}));
+    server.instance.use(logging.request.insertRequestUuid());
+    server.instance.use(logging.request.getIncoming());
+    server.instance.use(logging.request.getOutgoing());
     if (!asMiddleware) {
-      server.instance.use(logging.request.insertRequestUuid());
-      server.instance.use(logging.request.getIncoming());
-      server.instance.use(logging.request.getOutgoing());
       server.instance.use(metrics.getController());
+      server.instance.use(logging.tracer(
+        'annams',
+        config.server.tracing.zipkin.use.http
+      ));
     }
     server.instance.use(compression());
     server.instance.use(utility.getCors());
-    server.instance.get(
-      config.endpoint.ready,
-      utility.getAuth(),
-      require('./readiness').getRoute()
-    );
-    server.instance.get(
-      config.endpoint.live,
-      utility.getAuth(),
-      require('./liveness').getRoute()
-    );
-    server.instance.get(config.endpoint.metrics, metrics.getRoute());
+    server.instance.use(require('./readiness').getRoute(
+      config.endpoint.ready, {
+      basicAuthUsername: config.authn.healthcheck.username,
+      basicAuthPassword: config.authn.healthcheck.password,
+    }));
+    server.instance.use(require('./liveness').getRoute(
+      config.endpoint.live, {
+        basicAuthUsername: config.authn.healthcheck.username,
+        basicAuthPassword: config.authn.healthcheck.password,
+      }));
+    server.instance.use(metrics.getRoute(
+      config.endpoint.metrics, {
+        basicAuthUsername: config.authn.metrics.username,
+        basicAuthPassword: config.authn.metrics.password,
+      }));
     server.instance.get('/', (req, res) => res
       .type('application/json')
       .status(200)

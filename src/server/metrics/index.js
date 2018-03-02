@@ -1,6 +1,4 @@
-const route = require('./route');
-
 module.exports = {
-  getRoute: () => route().metricsMiddleware,
-  getController: () => route(),
+  getRoute: require('./route'),
+  getController: require('./controller'),
 };

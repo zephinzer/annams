@@ -1,3 +1,3 @@
 module.exports = {
-  getRoute: () => require('./route'),
+  getRoute: require('./route'),
 };

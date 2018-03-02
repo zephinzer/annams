@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const DEFAULT_ENVIRONMENT = 'development';
+
 let config = null;
 
 module.exports = initializeConfiguration;
@@ -29,6 +31,8 @@ function initializeConfiguration(force = false) {
         config[configKey] = configValue;
       }
     }
+    config.environment = process.env.NODE_ENV || DEFAULT_ENVIRONMENT;
+    console.info(`NODE_ENV: "${process.env.NODE_ENV}" (="${config.environment}")`); // eslint-disable-line max-len
     config.reset = initializeConfiguration;
     config.__timestamp = (new Date()).getTime();
     console.info('/ Configuration initialized\n');
