@@ -76,6 +76,16 @@ docker ps
 
 > To stop the services, run `npm run stop-services`
 
+The available services are:
+
+- MySQL (exposed on port 13306 on host)
+- Prometheus (exposed on port 19090 on host)
+- Prometheus PushGateway (exposed on port 19091 on host)
+- Redis (exposed on port 16379 on host)
+- Zipkin (exposed on port 19411 on host)
+
+> The ports have been configured with a pre-pended `1` to avoid confusion between running in production/running in development.
+
 ### Application Startup
 You should then be able to run the following command to get started developing locally:
 

@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 10s
+  scrape_timeout: 10s
+  evaluation_interval: 10s
+scrape_configs:
+- job_name: annams
+  metrics_path: /metrics
+  honor_labels: true
+  scheme: http
+  static_configs:
+  - targets:
+    - annams_dev_metrics_push_gateway:9091
+- job_name: zipkin
+  metrics_path: /prometheus
+  honor_labels: true
+  scheme: http
+  static_configs:
+  - targets:
+    - annams_dev_tracing_zipkin:9411

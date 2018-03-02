@@ -1,12 +1,12 @@
 version: "3"
 services:
-  cache:
-    container_name: annams_cache_redis
+  dev_cache:
+    container_name: annams_dev_cache_redis
     image: redis:4-alpine
     ports:
       - "16379:6379"
-  database:
-    container_name: annams_database_mysql
+  dev_database:
+    container_name: annams_dev_database_mysql
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: "annams_root_password"
@@ -17,3 +17,21 @@ services:
       - "13306:3306"
     volumes:
       - "./data/mysql:/var/lib/mysql"
+  dev_tracing:
+    container_name: annams_dev_tracing_zipkin
+    image: openzipkin/zipkin:2.5
+    ports:
+      - "19411:9411"
+  dev_metrics:
+    container_name: annams_dev_metrics_prometheus
+    image: prom/prometheus:v2.1.0
+    volumes:
+      - "./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./data/prometheus:/prometheus"
+    ports:
+      - "19090:9090"
+  dev_metrics_push_gateway:
+    container_name: annams_dev_metrics_push_gateway
+    image: prom/pushgateway:v0.4.0
+    ports:
+      - "19091:9091"

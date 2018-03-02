@@ -169,7 +169,7 @@ Path: `config.server.port`
 Path: `config.server.tracing.zipkin.enabled`
 
 ### `SERVER_TRACING_ZIPKIN_HOSTNAME`
-> Defaults to `"http://localhost:9411"`
+> Defaults to `"http://localhost:19411"`
 
 Path: `config.server.tracing.zipkin.hostname`
 
