@@ -1,6 +1,6 @@
 const express = require('express');
 
-const controller = require('./controller');
+const collector = require('./collector');
 const utility = require('../utility');
 
 module.exports = metricsRouteHandler;
@@ -26,7 +26,7 @@ function metricsRouteHandler(
     (basicAuthUsername === null || basicAuthPassword === null) ?
       (req, res, next) => next()
       : utility.getAuth(basicAuthUsername, basicAuthPassword),
-    controller().metricsMiddleware
+    collector().metricsMiddleware
   );
   return metricsRoute;
 };

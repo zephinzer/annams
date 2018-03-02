@@ -1,4 +1,4 @@
 module.exports = {
-  getAuth: require('./auth'),
-  getCors: require('./cors'),
+  basicAuth: require('./basic-auth'),
+  cors: require('./cors'),
 };

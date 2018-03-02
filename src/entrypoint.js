@@ -5,7 +5,7 @@ try {
 const config = require('./config')();
 const server = require('./server');
 require('./metrics')();
-require('./logging').initializeApplication();
+require('./logging')();
 require('./grace')();
 
 server.start({

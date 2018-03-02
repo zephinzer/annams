@@ -42,13 +42,16 @@ function metrics() {
     }),
   };
   Prometheus.collectDefaultMetrics({
-    register: metrics.register,
+    register: Prometheus.register,
     timeout: config.metrics.interval,
   });
   if (metrics._harvestOperatingSystemMetrics !== null) {
     clearTimeout(metrics._harvestOperatingSystemMetrics());
   }
   metrics.harvestOperatingSystemMetrics();
+  if (config.environment === 'development') {
+    metrics.initializePushGatewayForDevelopment(true);
+  }
   return Prometheus.register;
 };
 
@@ -64,5 +67,30 @@ metrics.harvestOperatingSystemMetrics = () => {
   metrics._harvestOperatingSystemMetrics = setTimeout(
     metrics.harvestOperatingSystemMetrics,
     config.metrics.interval
+  );
+};
+
+metrics._pushGatewayForDevelopment = null;
+metrics._pushGatewayForDevelopmentTimeout = null;
+metrics._pushGatewayForDevelopmentHostname = 'http://localhost:19091';
+metrics._pushGatewayResponseTimeout = 10 * 1000; // 10 seconds
+metrics._pushGatewayPushInterval = 5 * 1000; // 5 seconds
+metrics.initializePushGatewayForDevelopment = (reset = false) => {
+  if (metrics._pushGatewayForDevelopment === null || reset) {
+    (reset && (metrics._pushGatewayForDevelopmentTimeout !== null))
+      && clearTimeout(metrics._pushGatewayForDevelopmentTimeout);
+    metrics._pushGatewayForDevelopment = new Prometheus.Pushgateway(
+      metrics._pushGatewayForDevelopmentHostname,
+      {timeout: metrics._pushGatewayResponseTimeout}
+    );
+  }
+  metrics._pushGatewayForDevelopment.push(
+    {jobName: 'annams'},
+    (err, res, body) => {
+      (err) && console.error(err);
+    }),
+  metrics._pushGatewayForDevelopmentTimeout = setTimeout(
+    metrics.initializePushGatewayForDevelopment,
+    metrics._pushGatewayPushInterval
   );
 };

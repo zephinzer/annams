@@ -1,4 +1,4 @@
 module.exports = {
-  getRoute: require('./route'),
-  getController: require('./controller'),
+  route: require('./route'),
+  collector: require('./collector'),
 };
