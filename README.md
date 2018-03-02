@@ -47,7 +47,6 @@ Annams was created for deployment as part of a larger microservice architecture 
 - [ ] Virtual Machine Deployment Support (via PM2)
 - [ ] Container Deployment Support (via Docker)
 - [ ] Container Deployment Support (via Kubernetes)
-- [ ] Logging (via Fluentd)
 - [ ] REST-ful API
 
 ### Future Development
