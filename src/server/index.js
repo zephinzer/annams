@@ -1,15 +1,13 @@
 const express = require('express');
-const helmet = require('helmet');
 const compression = require('compression');
 
-const config = require('../config')();
-
+const liveness = require('./liveness');
 const logger = require('./logger');
-const tracer = require('./tracer');
-const utility = require('./utility');
 const metrics = require('./metrics');
 const readiness = require('./readiness');
-const liveness = require('./liveness');
+const security = require('./security');
+const tracer = require('./tracer');
+const utility = require('./utility');
 
 module.exports = server;
 
@@ -20,43 +18,25 @@ module.exports = server;
  */
 function server(asMiddleware = false) {
   if (server.instance === null) {
-    server.instance = asMiddleware ? new express.Router() : express();
-    server.instance.disable('x-powered-by');
-    server.instance.use(helmet.dnsPrefetchControl());
-    server.instance.use(helmet.xssFilter());
-    server.instance.use(helmet.noSniff());
-    server.instance.use(helmet.noCache());
-    server.instance.use(helmet.ieNoOpen());
-    server.instance.use(helmet.hsts({maxAge: 60 * 60 * 24 * 60}));
-    server.instance.use(helmet.frameguard({action: 'sameorigin'}));
-    server.instance.use(tracer.middleware('annams'));
-    server.instance.use(logger.requestId(tracer));
-    server.instance.use(logger.incoming());
-    server.instance.use(logger.outgoing());
+    const app = asMiddleware ? new express.Router() : express();
+    security.connect(app);
+    app.use(tracer.middleware('annams'));
+    app.use(logger.requestId(tracer));
+    app.use(logger.incoming());
+    app.use(logger.outgoing());
     if (!asMiddleware) {
-      server.instance.use(metrics.collector());
-      server.instance.use(metrics.route(
-        config.endpoint.metrics, {
-          basicAuthUsername: config.authn.metrics.username,
-          basicAuthPassword: config.authn.metrics.password,
-        }));
+      app.use(metrics.collector());
+      app.use(metrics.route());
     }
-    server.instance.use(compression());
-    server.instance.use(utility.cors());
-    server.instance.use(readiness(
-      config.endpoint.ready, {
-      basicAuthUsername: config.authn.healthcheck.username,
-      basicAuthPassword: config.authn.healthcheck.password,
-    }));
-    server.instance.use(liveness(
-      config.endpoint.live, {
-        basicAuthUsername: config.authn.healthcheck.username,
-        basicAuthPassword: config.authn.healthcheck.password,
-      }));
-    server.instance.get('/', (req, res) => res
+    app.use(compression());
+    app.use(utility.cors());
+    app.use(readiness());
+    app.use(liveness());
+    app.get('/', (req, res) => res
       .type('application/json')
       .status(200)
       .json('ok'));
+    server.instance = app;
   }
   return server.instance;
 };

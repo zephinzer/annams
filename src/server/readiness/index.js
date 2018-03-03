@@ -8,20 +8,20 @@ const utility = require('../utility');
 module.exports = readinessRouteHandler;
 
 /**
- * @param {String} endpointPath
+ * Factory function for an express.Router that handles the readiness check.
+ *
+ * @param {String} options.endpointPath
  * @param {String} options.basicAuthUsername
  * @param {String} options.basicAuthPassword
  * @param {Object} options
  *
  * @return {express.Router}
  */
-function readinessRouteHandler(
-  endpointPath,
-  {
-    basicAuthUsername = config.authn.healthcheck.username,
-    basicAuthPassword = config.authn.healthcheck.password,
-  }
-) {
+function readinessRouteHandler({
+  endpointPath = config.endpoint.ready,
+  basicAuthUsername = config.authn.healthcheck.username,
+  basicAuthPassword = config.authn.healthcheck.password,
+} = {}) {
   const readinessRoute = new express.Router();
   readinessRoute.get(
     endpointPath,

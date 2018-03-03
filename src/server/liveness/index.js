@@ -1,24 +1,24 @@
 const express = require('express');
 
+const config = require('../../config')();
+
 const utility = require('../utility');
 
 module.exports = livenessRouteHandler;
 
 /**
- * @param {String} endpointPath
- * @param {String} options.basicAuthUsername
- * @param {String} options.basicAuthPassword
- * @param {Object} options
+ * @param {String} [options.endpointPath]
+ * @param {String} [options.basicAuthUsername]
+ * @param {String} [options.basicAuthPassword]
+ * @param {Object} [options]
  *
  * @return {express.Router}
  */
-function livenessRouteHandler(
-  endpointPath,
-  {
-    basicAuthUsername = config.authn.healthcheck.username,
-    basicAuthPassword = config.authn.healthcheck.password,
-  }
-) {
+function livenessRouteHandler({
+  endpointPath = config.endpoint.live,
+  basicAuthUsername = config.authn.healthcheck.username,
+  basicAuthPassword = config.authn.healthcheck.password,
+} = {}) {
   const livenessRoute = new express.Router();
   livenessRoute.get(
     endpointPath,
