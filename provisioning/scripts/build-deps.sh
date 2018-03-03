@@ -9,7 +9,7 @@ if [ "${DEPENDENCIES_HASH}" = "" ]; then
   exit 1;
 fi;
 if [ "${ENVIRONMENT}" != "" ]; then
-  BUILD_ARGUMENTS="--build-arg NODE_ENV=\"${ENVIRONMENT}\" --build-arg YARN_FLAGS=\"--${ENVIRONMENT}\"";
+  BUILD_ARGUMENTS="--build-arg NODE_ENV=${ENVIRONMENT} --build-arg YARN_FLAGS=--${ENVIRONMENT}";
 else
   ENVIRONMENT='production';
   BUILD_ARGUMENTS='';
