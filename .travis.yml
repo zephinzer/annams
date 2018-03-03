@@ -1,0 +1,11 @@
+sudo: required
+language: bash
+services:
+  - docker
+stages:
+  - build
+jobs:
+  include:
+  - stage: build
+    script:
+    - printf -- 'hello build'
