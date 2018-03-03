@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "./provisioning/scripts/build.sh",
+    "build-deps": "./provisioning/scripts/build-deps.sh",
     "build-devsh": "./provisioning/scripts/build-devsh.sh",
     "devsh": "./provisioning/scripts/devsh.sh",
     "fix-lint": "eslint . --fix",
@@ -16,7 +17,10 @@
     "stop-services": "./provisioning/scripts/stop-services.sh",
     "test": "mocha .",
     "test-lint": "eslint .",
-    "test-sec": "nsp check ."
+    "test-sec": "nsp check .",
+    "version-patch-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate patch -q",
+    "version-minor-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate minor -q",
+    "version-major-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate major -q"
   },
   "author": "zephinzer",
   "contributors": [

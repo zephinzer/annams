@@ -1,11 +1,32 @@
 sudo: required
 language: bash
+notifications:
+  email:
+    recipients:
+    - ${MAINTAINER_EMAIL}
 services:
   - docker
 stages:
-  - build
+  - build_dependencies
+  - test
+  - name: release
+    if: branch =~ ^release\-[.]+$
 jobs:
   include:
-  - stage: build
+  - stage: build_dependencies
     script:
-    - printf -- 'hello build'
+    - cat package.json | jq '.dependencies,.devDependencies' | md5 -q > ./.dependency_hash
+    - npm run build-deps -- "$(cat ./.dependency_hash)" "development"
+    - docker push zephinzer/annams:dependency-set-$(cat ./.dependency_hash)
+  - stage: build_dependencies
+    script:
+    - cat package.json | jq '.dependencies,.devDependencies' | md5 -q > ./.dependency_hash
+    - npm run build-deps -- "$(cat ./.dependency_hash)"
+    - docker push zephinzer/annams:dependency-set-$(cat ./.dependency_hash)
+  - stage: build_application
+    script:
+    - git log -n 1 --format='%H' > ./.commit_hash
+    - npm run build
+    - docker tag zephinzer/annams:latest zephinzer/annams:$(cat ./.commit_hash)
+    - docker push zephinzer/annams:latest
+    - docker push zephinzer/annams:$(cat ./.commit_hash)
