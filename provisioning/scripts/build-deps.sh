@@ -14,5 +14,5 @@ docker build \
   --build-arg NODE_ENV=${ENV} \
   --build-arg YARN_FLAGS=--${ENV} \
   --file ./provisioning/images/dependencies.Dockerfile \
-  --tag zephinzer/annams:dependency-set-${ENV}-${DEPENDENCIES_HASH} \
+  --tag zephinzer/annams:deps-${ENV}-${DEPENDENCIES_HASH} \
   .;
