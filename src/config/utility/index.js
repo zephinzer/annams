@@ -7,6 +7,7 @@ const generateMD5Hash = (data) =>
   crypto.createHash('md5').update(data).digest('hex');
 
 module.exports = {
+  generateMD5Hash,
   nullableFromEnv: (environmentVariableName, defaultValue) =>
     process.env[environmentVariableName] ?
       process.env[environmentVariableName]
@@ -16,7 +17,7 @@ module.exports = {
     || defaultValue,
   arrayFromEnv: (environmentVariableName, defaultValue) =>
     (typeof process.env[environmentVariableName] === 'string') ?
-      process.env[environmentVariableName].split(',')
+      process.env[environmentVariableName].split(',').map((item) => item.trim())
       : defaultValue,
   booleanFromEnv: (environmentVariableName, defaultValue) =>
     process.env[environmentVariableName] ?
@@ -24,7 +25,7 @@ module.exports = {
       : defaultValue,
   reportStatus: (environmentVariableName, finalValue, redacted = false) => {
     const envVar = process.env[environmentVariableName];
-    const reportedEnvironmentValue = (redacted) ? `*${generateMD5Hash(envVar || '')}` : envVar; // eslint-disable-line max-len
+    const reportedEnvironmentValue = (redacted) ? `#_${generateMD5Hash(envVar || '')}` : envVar; // eslint-disable-line max-len
     const reportedFinalValue = (redacted) ? `#_${generateMD5Hash(finalValue || '')}` : finalValue; // eslint-disable-line max-len
     console.info(`${environmentVariableName}:"${reportedEnvironmentValue}"="${reportedFinalValue}":${typeof finalValue}`); // eslint-disable-line max-len
   },

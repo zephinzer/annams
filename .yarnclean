@@ -43,3 +43,6 @@ wercker.yml
 
 # misc
 *.md
+
+# exclusions for nyc
+!nyc/node_modules/istanbul-reports/lib/html/assets

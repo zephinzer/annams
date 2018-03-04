@@ -8,9 +8,11 @@ require('./metrics')();
 require('./logging')();
 require('./grace')();
 
-server.start({
-  port: config.server.port,
-  bindAddress: config.server.bind.address,
-  addrInUseTTL: config.error.addrinuse.ttl,
-  addrInUseInterval: config.error.addrinuse.interval,
-});
+if (!module.parent) {
+  server.start({
+    port: config.server.port,
+    bindAddress: config.server.bind.address,
+    addrInUseTTL: config.error.addrinuse.ttl,
+    addrInUseInterval: config.error.addrinuse.interval,
+  });
+}
