@@ -21,7 +21,12 @@ function initializeConfiguration(force = false) {
     console.info('> Initializing configuration (format: ENVVAR_NAME: "(provided value)" (= "[evaulated value]")'); // eslint-disable-line max-len
     const configurationListing = fs.readdirSync(configurationPath);
     for (let i = 0; i < configurationListing.length; ++i) {
-      if (configurationListing[i].indexOf('index.js') !== 0) {
+      if (
+        (configurationListing[i].indexOf('index.js') !== 0)
+        && (!fs.lstatSync(
+          path.join(configurationPath, configurationListing[i])
+        ).isDirectory())
+      ) {
         const configKey =
           configurationListing[i].substr(
             0, configurationListing[i].lastIndexOf('.')
