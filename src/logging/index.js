@@ -34,17 +34,21 @@ initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS = [
 ];
 
 initializeApplicationLogging.overrideDefaultConsoleWith = (pinoInstance) => {
-  for (let i = 0; i < initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS.length; ++i) {
-    const key = initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS[i];
-    initializeApplicationLogging._console[key.console] = global.console[key.console];
+  const keys = initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS;
+  for (let i = 0; i < keys.length; ++i) {
+    const key = keys[i];
+    initializeApplicationLogging._console[key.console] =
+      global.console[key.console];
     global.console[key.console] = pinoInstance[key.pino].bind(pinoInstance);
   }
 };
 
 initializeApplicationLogging.resetToDefaultConsole = () => {
-  for (let i = 0; i < initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS.length; ++i) {
-    const key = initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS[i];
-    global.console[key.console] = initializeApplicationLogging._console[key.console];
+  const keys = initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS;
+  for (let i = 0; i < keys.length; ++i) {
+    const key = keys[i];
+    global.console[key.console] =
+      initializeApplicationLogging._console[key.console];
   }
 };
 
