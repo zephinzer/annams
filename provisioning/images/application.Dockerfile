@@ -16,5 +16,6 @@ RUN yarn install ${YARN_FLAGS} \
   && yarn cache clean \
   && npm cache clean --force
 COPY ./src /app/src
+COPY ./tests /app/tests
 COPY ./provisioning /app/provisioning
 ENTRYPOINT [ "npm", "start" ]
