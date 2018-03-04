@@ -17,17 +17,17 @@ jobs:
   include:
   - stage: "Build Dependencies"
     env:
-      - ENVIRONMENT: development
+      - ENV: development
     script:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' ' > ./.dependency_hash
-    - ENV=development npm run build-deps -- "$(cat ./.dependency_hash)"
+    - ENV=${ENV} npm run build-deps -- "$(cat ./.dependency_hash)"
     - |
-      curl -s https://index.docker.io/v1/repositories/zephinzer/annams/tags | jq '.[].name' | grep "deps-development-$(cat ./.dependency_hash)";
+      curl -s https://index.docker.io/v1/repositories/zephinzer/annams/tags | jq '.[].name' | grep "deps-${ENV}-$(cat ./.dependency_hash)";
       if [ "$?" != "0" ]; then
         docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
-        docker tag zephinzer/annams:deps-development-$(cat ./.dependency_hash) zephinzer/annams:deps-development-latest;
-        docker push zephinzer/annams:deps-development-$(cat ./.dependency_hash);
-        docker push zephinzer/annams:deps-development-latest;
+        docker tag zephinzer/annams:deps-${ENV}-$(cat ./.dependency_hash) zephinzer/annams:deps-${ENV}-latest;
+        docker push zephinzer/annams:deps-${ENV}-$(cat ./.dependency_hash);
+        docker push zephinzer/annams:deps-${ENV}-latest;
         docker logout;
       fi;
   - stage: "Build Dependencies"
