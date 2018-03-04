@@ -11,36 +11,7 @@ module.exports = metrics;
  */
 function metrics() {
   Prometheus.register.clear();
-  metrics.os = {
-    cpuUsage: new Prometheus.Gauge({
-      name: 'process_cpu_usage',
-      help: 'CPU usage percentage',
-    }),
-    freeMemory: new Prometheus.Gauge({
-      name: 'process_free_memory_percentage',
-      help: 'Free memory by percentage',
-    }),
-    loadAvg15: new Prometheus.Gauge({
-      name: 'process_load_avg_15',
-      help: 'CPU load average (15)',
-    }),
-    loadAvg5: new Prometheus.Gauge({
-      name: 'process_load_avg_5',
-      help: 'CPU load average (5)',
-    }),
-    loadAvg1: new Prometheus.Gauge({
-      name: 'process_load_avg_1',
-      help: 'CPU load average (1)',
-    }),
-    processUptime: new Prometheus.Gauge({
-      name: 'process_uptime',
-      help: 'Uptime of the process',
-    }),
-    systemUptime: new Prometheus.Gauge({
-      name: 'process_system_uptime',
-      help: 'Uptime of the system',
-    }),
-  };
+  metrics.registerOperatingSystemMetrics();
   Prometheus.collectDefaultMetrics({
     register: Prometheus.register,
     timeout: config.metrics.interval,
@@ -53,6 +24,22 @@ function metrics() {
     metrics.initializePushGatewayForDevelopment(true);
   }
   return Prometheus.register;
+};
+
+metrics.createGauge = (name, help) => {
+  return new Prometheus.Gauge({name, help});
+};
+
+metrics.registerOperatingSystemMetrics = () => {
+  metrics.os = {
+    cpuUsage: metrics.createGauge('process_cpu_usage', 'CPU usage percentage'),
+    freeMemory: metrics.createGauge('process_free_memory_percentage', 'Free memory by percentage'), // eslint-disable-line max-len
+    loadAvg15: metrics.createGauge('process_load_avg_15', 'CPU load average (15)'), // eslint-disable-line max-len
+    loadAvg5: metrics.createGauge('process_load_avg_5', 'CPU load average (5)'),
+    loadAvg1: metrics.createGauge('process_load_avg_1', 'CPU load average (1)'),
+    processUptime: metrics.createGauge('process_uptime', 'Uptime of the process'), // eslint-disable-line max-len
+    systemUptime: metrics.createGauge('system_uptime', 'Uptime of the system'),
+  };
 };
 
 metrics._harvestOperatingSystemMetrics = null;
