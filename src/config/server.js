@@ -1,3 +1,5 @@
+const utility = require('./utility');
+
 const DEFAULT_CORS_ALLOWED_HOSTS = [];
 const DEFAULT_CORS_ALLOWED_METHODS = [];
 const DEFAULT_LOG_ENABLED = true;
@@ -12,43 +14,27 @@ const DEFAULT_TRACING_ZIPKIN_USE_HTTP = false;
 
 module.exports = () => ({
   bind: {
-    address: process.env.SERVER_BIND_ADDRESS || DEFAULT_BIND_ADDRESS,
+    address: utility.stringFromEnv('SERVER_BIND_ADDRESS', DEFAULT_BIND_ADDRESS),
   },
   cors: {
     allowed: {
-      hosts: (typeof process.env.SERVER_CORS_ALLOWED_HOSTS === 'string') ?
-        process.env.SERVER_CORS_ALLOWED_HOSTS.split(',')
-        : DEFAULT_CORS_ALLOWED_HOSTS,
-      methods: (typeof process.env.SERVER_CORS_ALLOWED_METHODS === 'string') ?
-        process.env.SERVER_CORS_ALLOWED_METHODS.split(',')
-        : DEFAULT_CORS_ALLOWED_METHODS,
+      hosts: utility.arrayFromEnv('SERVER_CORS_ALLOWED_HOSTS', DEFAULT_CORS_ALLOWED_HOSTS), // eslint-disable-line max-len
+      methods: utility.arrayFromEnv('SERVER_CORS_ALLOWED_METHODS', DEFAULT_CORS_ALLOWED_METHODS), // eslint-disable-line max-len
     },
   },
   log: {
-    enabled: process.env.SERVER_LOG_ENABLED ?
-      (['true', '1'].indexOf(process.env.SERVER_LOG_ENABLED) !== -1)
-        : DEFAULT_LOG_ENABLED,
-    level: process.env.SERVER_LOG_LEVEL || DEFAULT_LOG_LEVEL,
-    pretty: process.env.SERVER_LOG_PRETTY ?
-      (['true', '1'].indexOf(process.env.SERVER_LOG_PRETTY) !== -1)
-        : DEFAULT_LOG_PRETTY,
+    enabled: utility.booleanFromEnv('SERVER_LOG_ENABLED', DEFAULT_LOG_ENABLED),
+    level: utility.stringFromEnv('SERVER_LOG_LEVEL', DEFAULT_LOG_LEVEL),
+    pretty: utility.booleanFromEnv('SERVER_LOG_PRETTY', DEFAULT_LOG_PRETTY),
   },
-  port: process.env.SERVER_PORT || DEFAULT_PORT,
+  port: utility.stringFromEnv('SERVER_PORT', DEFAULT_PORT),
   tracing: {
     zipkin: {
-      enabled: process.env.SERVER_TRACING_ZIPKIN_ENABLED ?
-        (['true', '1'].indexOf(
-          process.env.SERVER_TRACING_ZIPKIN_ENABLED) !== -1
-        ) : DEFAULT_TRACING_ZIPKIN_ENABLED,
-      hostname: process.env.SERVER_TRACING_ZIPKIN_HOSTNAME
-        || DEFAULT_TRACING_ZIPKIN_HOSTNAME,
-      path: process.env.SERVER_TRACING_ZIPKIN_PATH
-        || DEFAULT_TRACING_ZIPKIN_PATH,
+      enabled: utility.booleanFromEnv('SERVER_TRACING_ZIPKIN_ENABLED', DEFAULT_TRACING_ZIPKIN_ENABLED), // eslint-disable-line max-len
+      hostname: utility.stringFromEnv('SERVER_TRACING_ZIPKIN_HOSTNAME', DEFAULT_TRACING_ZIPKIN_HOSTNAME), // eslint-disable-line max-len
+      path: utility.stringFromEnv('SERVER_TRACING_ZIPKIN_PATH', DEFAULT_TRACING_ZIPKIN_PATH), // eslint-disable-line max-len
       use: {
-        http: process.env.SERVER_TRACING_ZIPKIN_USE_HTTP ?
-        (['true', '1'].indexOf(
-          process.env.SERVER_TRACING_ZIPKIN_USE_HTTP) !== -1
-        ) : DEFAULT_TRACING_ZIPKIN_USE_HTTP,
+        http: utility.booleanFromEnv('SERVER_TRACING_ZIPKIN_USE_HTTP', DEFAULT_TRACING_ZIPKIN_USE_HTTP), // eslint-disable-line max-len
       },
     },
   },

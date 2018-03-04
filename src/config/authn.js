@@ -11,17 +11,17 @@ const DEFAULT_JWT_KEY_PUBLIC = null;
 
 module.exports = () => ({
   healthcheck: {
-    username: utility.stringFromEnv('AUTHN_HEALTHCHECK_USERNAME', DEFAULT_HEALTHCHECK_USERNAME), // eslint-disable-line max-len
-    password: utility.stringFromEnv('AUTHN_HEALTHCHECK_PASSWORD', DEFAULT_HEALTHCHECK_PASSWORD), // eslint-disable-line max-len
+    username: utility.nullableFromEnv('AUTHN_HEALTHCHECK_USERNAME', DEFAULT_HEALTHCHECK_USERNAME), // eslint-disable-line max-len
+    password: utility.nullableFromEnv('AUTHN_HEALTHCHECK_PASSWORD', DEFAULT_HEALTHCHECK_PASSWORD), // eslint-disable-line max-len
   },
   metrics: {
-    username: utility.stringFromEnv('AUTHN_METRICS_USERNAME', DEFAULT_METRICS_USERNAME), // eslint-disable-line max-len
-    password: utility.stringFromEnv('AUTHN_METRICS_PASSWORD', DEFAULT_METRICS_PASSWORD), // eslint-disable-line max-len
+    username: utility.nullableFromEnv('AUTHN_METRICS_USERNAME', DEFAULT_METRICS_USERNAME), // eslint-disable-line max-len
+    password: utility.nullableFromEnv('AUTHN_METRICS_PASSWORD', DEFAULT_METRICS_PASSWORD), // eslint-disable-line max-len
   },
   jwt: {
     key: {
-      private: utility.stringFromEnv('AUTHN_JWT_KEY_PRIVATE', DEFAULT_JWT_KEY_PRIVATE), // eslint-disable-line max-len
-      public: utility.stringFromEnv('AUTHN_JWT_KEY_PUBLIC', DEFAULT_JWT_KEY_PUBLIC), // eslint-disable-line max-len
+      private: utility.nullableFromEnv('AUTHN_JWT_KEY_PRIVATE', DEFAULT_JWT_KEY_PRIVATE), // eslint-disable-line max-len
+      public: utility.nullableFromEnv('AUTHN_JWT_KEY_PUBLIC', DEFAULT_JWT_KEY_PUBLIC), // eslint-disable-line max-len
     },
   },
 });

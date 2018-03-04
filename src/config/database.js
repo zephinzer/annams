@@ -1,3 +1,5 @@
+const utility = require('./utility');
+
 const crypto = require('crypto');
 
 const DEFAULT_AUTH_USERNAME = 'annams_user';
@@ -8,12 +10,12 @@ const DEFAULT_PORT = '3306';
 
 module.exports = () => ({
   auth: {
-    username: process.env.DATABASE_AUTH_USERNAME || DEFAULT_AUTH_USERNAME,
-    password: process.env.DATABASE_AUTH_PASSWORD || DEFAULT_AUTH_PASSWORD,
+    username: utility.stringFromEnv('DATABASE_AUTH_USERNAME', DEFAULT_AUTH_USERNAME), // eslint-disable-line max-len
+    password: utility.stringFromEnv('DATABASE_AUTH_PASSWORD', DEFAULT_AUTH_PASSWORD), // eslint-disable-line max-len
   },
-  host: process.env.DATABASE_HOST || DEFAULT_HOST,
-  name: process.env.DATABASE_NAME || DEFAULT_NAME,
-  port: process.env.DATABASE_PORT || DEFAULT_PORT,
+  host: utility.stringFromEnv('DATABASE_HOST', DEFAULT_HOST),
+  name: utility.stringFromEnv('DATABASE_NAME', DEFAULT_NAME),
+  port: utility.stringFromEnv('DATABASE_PORT', DEFAULT_PORT),
 });
 
 const generateMD5Hash = (data) =>
