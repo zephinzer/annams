@@ -76,6 +76,7 @@ The following are on the roadmap for future development:
 - Object Relational Mapper : [Objection.js](https://github.com/Vincit/objection.js/)
 - Test Framework : [Mocha](https://mochajs.org/)
 - Assertion Library : [Chai](http://chaijs.com/)
+- Test Coverage : [NYC](https://github.com/istanbuljs/nyc)
 - Code Quality Checker : [ESLint](https://eslint.org/)
 - Vulnerability Assessment : [NSP](https://github.com/nodesecurity/nsp)
 - Metrics : [Prometheus](https://prometheus.io/)
@@ -84,6 +85,11 @@ The following are on the roadmap for future development:
 - Continuous Integration : [Travis](https://travis-ci.org/)
 - Deployment : [PM2](https://github.com/Unitech/pm2) [Docker](https://www.docker.com/), [Kubernetes](https://kubernetes.io/)
 - Releases : [NPM](https://www.npmjs.com/), [GitHub](https://github.com), [DockerHub](https://hub.docker.com)
+
+### Third Party Services
+- [Code Climate](https://codeclimate.com) for code quality
+- [DockerHub](https://hub.docker.com) for container image hosting
+- [Travis](https://travis-ci.org) for continuous integration/delivery
 
 ## License
 
