@@ -34,18 +34,18 @@ jobs:
     script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - ENV=development npm run build
-    - docker tag zephinzer/annams:latest zephinzer/annams:dev-$(cat ./.commit_hash)
+    - docker tag zephinzer/annams:development-latest zephinzer/annams:dev-$(cat ./.commit_hash)
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
-    - docker push zephinzer/annams:latest
+    - docker push zephinzer/annams:development-latest
     - docker push zephinzer/annams:dev-$(cat ./.commit_hash)
     - docker logout
   - stage: build_application
     script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - ENV=production npm run build
-    - docker tag zephinzer/annams:latest zephinzer/annams:$(cat ./.commit_hash)
+    - docker tag zephinzer/annams:production-latest zephinzer/annams:$(cat ./.commit_hash)
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
-    - docker push zephinzer/annams:latest
+    - docker push zephinzer/annams:production-latest
     - docker push zephinzer/annams:$(cat ./.commit_hash)
     - docker logout
   - stage: test

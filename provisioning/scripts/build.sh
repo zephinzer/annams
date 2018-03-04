@@ -11,7 +11,4 @@ docker build \
   .;
 if [ "$?" = "0" ]; then 
   printf -- "ANNAMS built in '${ENV}' environment.\n";
-  if [ "${ENV}" = "production" ]; then
-    docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
-  fi;
 fi;
