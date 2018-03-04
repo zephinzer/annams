@@ -20,9 +20,9 @@
     "test-lint": "eslint .",
     "test-sec": "nsp check .",
     "test-watch": "./provisioning/scripts/test.sh --watch",
-    "version-patch-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate patch -q",
-    "version-minor-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate minor -q",
-    "version-major-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate major -q"
+    "version-patch-bump": "docker pull zephinzer/vtscripts:latest && docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate patch -q",
+    "version-minor-bump": "docker pull zephinzer/vtscripts:latest && docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate minor -q",
+    "version-major-bump": "docker pull zephinzer/vtscripts:latest && docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate major -q"
   },
   "author": "zephinzer",
   "contributors": [

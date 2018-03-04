@@ -12,8 +12,7 @@ stages:
   - "Build Dependencies"
   - "Build Application"
   - test
-  - name: release
-    if: branch =~ ^release\-[.]+$
+  - release
 jobs:
   include:
   - stage: "Build Dependencies"
@@ -69,3 +68,14 @@ jobs:
     - export ANNAMS_DEV_IMAGE="zephinzer/annams:dev-$(cat ./.commit_hash)"
     - docker pull "${ANNAMS_DEV_IMAGE}"
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test
+  - stage: release
+    script:
+    - |
+      git log -n 1 --format='%H' > ./.commit_hash;
+      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+        git checkout "${TRAVIS_BRANCH}";
+        git checkout "$(cat ./.commit_hash)";
+        npm run version-patch-bump fi;
+        git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
+        git push origin "${TRAVIS_BRANCH}" --tags;
+      fi;
