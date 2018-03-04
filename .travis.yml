@@ -9,28 +9,28 @@ notifications:
 services:
   - docker
 stages:
-  - build_dependencies
-  - build_application
+  - "Build Dependencies"
+  - "Build Application"
   - test
   - name: release
     if: branch =~ ^release\-[.]+$
 jobs:
   include:
-  - stage: build_dependencies
+  - stage: "Build Dependencies"
     script:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' ' > ./.dependency_hash
     - ENV=development npm run build-deps -- "$(cat ./.dependency_hash)"
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
     - docker push zephinzer/annams:deps-development-$(cat ./.dependency_hash)
     - docker logout
-  - stage: build_dependencies
+  - stage: "Build Dependencies"
     script:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash
     - ENV=production npm run build-deps -- "$(cat ./.dependency_hash)"
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
     - docker push zephinzer/annams:deps-production-$(cat ./.dependency_hash)
     - docker logout
-  - stage: build_application
+  - stage: "Build Application"
     script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - ENV=development npm run build
@@ -39,7 +39,7 @@ jobs:
     - docker push zephinzer/annams:development-latest
     - docker push zephinzer/annams:dev-$(cat ./.commit_hash)
     - docker logout
-  - stage: build_application
+  - stage: "Build Application"
     script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - ENV=production npm run build
