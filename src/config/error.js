@@ -16,7 +16,7 @@ module.exports = () => ({
   },
 });
 
-console.info(`ERROR_ADDRINUSE_TTL: "${process.env.ERROR_ADDRINUSE_TTL}" (= "${module.exports().addrinuse.ttl}")`); // eslint-disable-line max-len
-console.info(`ERROR_ADDRINUSE_INTERVAL: "${process.env.ERROR_ADDRINUSE_INTERVAL}" (= "${module.exports().addrinuse.interval}")`); // eslint-disable-line max-len
-console.info(`ERROR_DBNOTFOUND_TTL: "${process.env.ERROR_DBNOTFOUND_TTL}" (= "${module.exports().dbnotfound.ttl}")`); // eslint-disable-line max-len
-console.info(`ERROR_DBNOTFOUND_INTERVAL: "${process.env.ERROR_DBNOTFOUND_INTERVAL}" (= "${module.exports().dbnotfound.interval}")`); // eslint-disable-line max-len
+utility.reportStatus('ERROR_ADDRINUSE_TTL', module.exports().addrinuse.ttl); // eslint-disable-line max-len
+utility.reportStatus('ERROR_ADDRINUSE_INTERVAL', module.exports().addrinuse.interval); // eslint-disable-line max-len
+utility.reportStatus('ERROR_DBNOTFOUND_TTL', module.exports().dbnotfound.ttl); // eslint-disable-line max-len
+utility.reportStatus('ERROR_DBNOTFOUND_INTERVAL', module.exports().dbnotfound.interval); // eslint-disable-line max-len

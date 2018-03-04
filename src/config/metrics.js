@@ -6,4 +6,4 @@ module.exports = () => ({
   interval: utility.stringFromEnv('METRICS_INTERVAL', DEFAULT_INTERVAL),
 });
 
-console.info(`METRICS_INTERVAL: "${process.env.METRICS_INTERVAL}" (= "${module.exports().interval}")`); // eslint-disable-line max-len
+utility.reportStatus('METRICS_INTERVAL', module.exports().interval); // eslint-disable-line max-len

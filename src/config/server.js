@@ -40,14 +40,14 @@ module.exports = () => ({
   },
 });
 
-console.info(`SERVER_BIND_ADDRESS: "${process.env.SERVER_BIND_ADDRESS}" (= "${module.exports().bind.address}")`); // eslint-disable-line max-len
-console.info(`SERVER_CORS_ALLOWED_HOSTS: "${process.env.SERVER_CORS_ALLOWED_HOSTS}" (= "${module.exports().cors.allowed.hosts}")`); // eslint-disable-line max-len
-console.info(`SERVER_CORS_ALLOWED_METHODS: "${process.env.SERVER_CORS_ALLOWED_METHODS}" (= "${module.exports().cors.allowed.methods}")`); // eslint-disable-line max-len
-console.info(`SERVER_LOG_ENABLED: "${process.env.SERVER_LOG_ENABLED}" (= "${module.exports().log.enabled}")`); // eslint-disable-line max-len
-console.info(`SERVER_LOG_LEVEL: "${process.env.SERVER_LOG_LEVEL}" (= "${module.exports().log.level}")`); // eslint-disable-line max-len
-console.info(`SERVER_LOG_PRETTY: "${process.env.SERVER_LOG_PRETTY}" (= "${module.exports().log.pretty}")`); // eslint-disable-line max-len
-console.info(`SERVER_PORT: "${process.env.SERVER_PORT}" (= "${module.exports().port}")`); // eslint-disable-line max-len
-console.info(`SERVER_TRACING_ZIPKIN_ENABLED: "${process.env.SERVER_TRACING_ZIPKIN_ENABLED}" (= "${module.exports().tracing.zipkin.enabled}")`); // eslint-disable-line max-len
-console.info(`SERVER_TRACING_ZIPKIN_HOSTNAME: "${process.env.SERVER_TRACING_ZIPKIN_HOSTNAME}" (= "${module.exports().tracing.zipkin.hostname}")`); // eslint-disable-line max-len
-console.info(`SERVER_TRACING_ZIPKIN_PATH: "${process.env.SERVER_TRACING_ZIPKIN_PATH}" (= "${module.exports().tracing.zipkin.path}")`); // eslint-disable-line max-len
-console.info(`SERVER_TRACING_ZIPKIN_USE_HTTP: "${process.env.SERVER_TRACING_ZIPKIN_USE_HTTP}" (= "${module.exports().tracing.zipkin.use.http}")`); // eslint-disable-line max-len
+utility.reportStatus('SERVER_BIND_ADDRESS', module.exports().bind.address); // eslint-disable-line max-len
+utility.reportStatus('SERVER_CORS_ALLOWED_HOSTS', module.exports().cors.allowed.hosts); // eslint-disable-line max-len
+utility.reportStatus('SERVER_CORS_ALLOWED_METHODS', module.exports().cors.allowed.methods); // eslint-disable-line max-len
+utility.reportStatus('SERVER_LOG_ENABLED', module.exports().log.enabled); // eslint-disable-line max-len
+utility.reportStatus('SERVER_LOG_LEVEL', module.exports().log.level); // eslint-disable-line max-len
+utility.reportStatus('SERVER_LOG_PRETTY', module.exports().log.pretty); // eslint-disable-line max-len
+utility.reportStatus('SERVER_PORT', module.exports().port); // eslint-disable-line max-len
+utility.reportStatus('SERVER_TRACING_ZIPKIN_ENABLED', module.exports().tracing.zipkin.enabled); // eslint-disable-line max-len
+utility.reportStatus('SERVER_TRACING_ZIPKIN_HOSTNAME', module.exports().tracing.zipkin.hostname); // eslint-disable-line max-len
+utility.reportStatus('SERVER_TRACING_ZIPKIN_PATH', module.exports().tracing.zipkin.path); // eslint-disable-line max-len
+utility.reportStatus('SERVER_TRACING_ZIPKIN_USE_HTTP', module.exports().tracing.zipkin.use.http); // eslint-disable-line max-len

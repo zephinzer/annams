@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const utility = require('./utility');
+
 const DEFAULT_VERSION = 'unknown';
 const VERSION_FILE_PATH = path.join(process.cwd(), '/.version');
 
@@ -17,4 +19,4 @@ module.exports = () => {
   }
 };
 
-console.info(`VERSION: ${module.exports()}`);
+utility.reportStatus('VERSION', module.exports());

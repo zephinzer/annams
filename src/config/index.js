@@ -16,13 +16,16 @@ module.exports = initializeConfiguration;
  */
 function initializeConfiguration(force = false) {
   if (initializeConfiguration.config === null || force === true) {
-    console.info('> Initializing configuration (format: ENVVAR_NAME: "(provided value)" (= "[evaulated value]")'); // eslint-disable-line max-len
+    console.info('#> Initializing configuration');
+    console.info('#> Config report format: (envvar):"(provided value)"="(evaulated value)":(typeof value))'); // eslint-disable-line max-len
+    console.info('---\n\`\`\`');
     initializeConfiguration.config = initializeConfiguration.loadConfiguration(); // eslint-disable-line max-len
     initializeConfiguration.config.environment = utility.stringFromEnv('NODE_ENV', DEFAULT_ENVIRONMENT); // eslint-disable-line max-len
-    console.info(`NODE_ENV: "${process.env.NODE_ENV}" (="${initializeConfiguration.config.environment}")`); // eslint-disable-line max-len
+    utility.reportStatus('NODE_ENV', initializeConfiguration.config.environment); // eslint-disable-line max-len
     initializeConfiguration.config.reset = initializeConfiguration.bind(null, true); // eslint-disable-line max-len
     initializeConfiguration.config.__timestamp = (new Date()).getTime();
-    console.info('/ Configuration initialized\n');
+    console.info('\`\`\`\n---');
+    console.info('#/ Configuration initialized\n');
   }
   return initializeConfiguration.config;
 };
