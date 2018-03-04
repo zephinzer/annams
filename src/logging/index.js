@@ -17,28 +17,35 @@ function initializeApplicationLogging() {
       safe: true,
       stream: process.stdout,
     });
-    initializeApplicationLogging._console.silent = global.console.silent;
-    global.console.silent = pino.silent.bind(pino);
-    initializeApplicationLogging._console.trace = global.console.trace;
-    global.console.trace = pino.trace.bind(pino);
-    initializeApplicationLogging._console.log = global.console.log;
-    global.console.log = pino.debug.bind(pino);
-    initializeApplicationLogging._console.info = global.console.info;
-    global.console.info = pino.info.bind(pino);
-    initializeApplicationLogging._console.warn = global.console.warn;
-    global.console.warn = pino.warn.bind(pino);
-    initializeApplicationLogging._console.error = global.console.error;
-    global.console.error = pino.error.bind(pino);
-    initializeApplicationLogging._console.reset = () => {
-      global.console.silent = initializeApplicationLogging._console.silent;
-      global.console.trace = initializeApplicationLogging._console.trace;
-      global.console.log = initializeApplicationLogging._console.log;
-      global.console.info = initializeApplicationLogging._console.info;
-      global.console.warn = initializeApplicationLogging._console.warn;
-      global.console.error = initializeApplicationLogging._console.error;
-    };
+    initializeApplicationLogging.overrideDefaultConsoleWith(pino);
+    initializeApplicationLogging._console.reset =
+      initializeApplicationLogging.resetToDefaultConsole;
   }
   return initializeApplicationLogging._console;
+};
+
+initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS = [
+  {pino: 'silent', console: 'silent'},
+  {pino: 'trace', console: 'trace'},
+  {pino: 'debug', console: 'log'},
+  {pino: 'info', console: 'info'},
+  {pino: 'warn', console: 'warn'},
+  {pino: 'error', console: 'error'},
+];
+
+initializeApplicationLogging.overrideDefaultConsoleWith = (pinoInstance) => {
+  for (let i = 0; i < initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS.length; ++i) {
+    const key = initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS[i];
+    initializeApplicationLogging._console[key.console] = global.console[key.console];
+    global.console[key.console] = pinoInstance[key.pino].bind(pinoInstance);
+  }
+};
+
+initializeApplicationLogging.resetToDefaultConsole = () => {
+  for (let i = 0; i < initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS.length; ++i) {
+    const key = initializeApplicationLogging.DEFAULT_OVERRIDE_KEYS[i];
+    global.console[key.console] = initializeApplicationLogging._console[key.console];
+  }
 };
 
 initializeApplicationLogging._console = null;
