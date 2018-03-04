@@ -1,6 +1,10 @@
 # ANNAMS
 **Authentication && Authorization MicroService** created for container-based deployments.
 
+[![Build Status](https://travis-ci.org/zephinzer/annams.svg?branch=master)](https://travis-ci.org/zephinzer/annams)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ee6be816408e41b1f01f/maintainability)](https://codeclimate.com/github/zephinzer/annams/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ee6be816408e41b1f01f/test_coverage)](https://codeclimate.com/github/zephinzer/annams/test_coverage)
+
 1. [Authentication](#authentication)
 2. [Authorisation](#authorization)
 3. [MicroService](#microservice)
