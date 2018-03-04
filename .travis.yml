@@ -70,12 +70,15 @@ jobs:
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test
   - stage: release
     script:
-    - |
-      git log -n 1 --format='%H' > ./.commit_hash;
+    - git log -n 1 --format='%H' > ./.commit_hash;
+    - git log -n 1 --format='%s' > ./.commit_message;
+    - git checkout "$(cat ./.commit_hash)";
       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-        git checkout "${TRAVIS_BRANCH}";
-        git checkout "$(cat ./.commit_hash)";
-        npm run version-patch-bump fi;
+        COMMIT_MESSAGE="$(cat ./.commit_message)";
         git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
-        git push origin "${TRAVIS_BRANCH}" --tags;
+        if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then npm run version-major-bump fi;
+        elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump fi;
+        else npm run version-patch-bump fi;
+        fi;
+        git push --tags;
       fi;
