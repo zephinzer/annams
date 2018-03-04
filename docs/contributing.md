@@ -153,11 +153,12 @@ ENV=developmnt npm run build \
   && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test;
 ```
 
-## Building
-`WIP`
+## Continuous Integration
+We use Travis to automatically run tests on every push to any branch. 
 
-## Integration
 `WIP`
 
 ## Release
+Releases are done on GitHub, NPM and Docker Hub.
+
 `WIP`
