@@ -50,6 +50,9 @@ jobs:
     - docker logout
   - stage: test
     script:
+    - npm run test-deployment
+  - stage: test
+    script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - export ANNAMS_DEV_IMAGE="zephinzer/annams:dev-$(cat ./.commit_hash)"
     - docker pull "${ANNAMS_DEV_IMAGE}"
