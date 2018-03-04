@@ -19,34 +19,48 @@ jobs:
     script:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' ' > ./.dependency_hash
     - ENV=development npm run build-deps -- "$(cat ./.dependency_hash)"
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
-    - docker push zephinzer/annams:deps-development-$(cat ./.dependency_hash)
-    - docker logout
+    - |
+      curl -s https://index.docker.io/v1/repositories/zephinzer/annams/tags | jq '.[].name' | grep "deps-development-$(cat ./.dependency_hash)";
+      if [ "$?" != "0" ]; then
+        docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
+        docker tag zephinzer/annams:deps-development-$(cat ./.dependency_hash) zephinzer/annams:deps-development-latest;
+        docker push zephinzer/annams:deps-development-$(cat ./.dependency_hash);
+        docker push zephinzer/annams:deps-development-latest;
+        docker logout;
+      fi;
   - stage: "Build Dependencies"
     script:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash
     - ENV=production npm run build-deps -- "$(cat ./.dependency_hash)"
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
-    - docker push zephinzer/annams:deps-production-$(cat ./.dependency_hash)
-    - docker logout
+    - |
+      curl -s https://index.docker.io/v1/repositories/zephinzer/annams/tags | jq '.[].name' | grep "deps-production-$(cat ./.dependency_hash)";
+      if [ "$?" != "0" ]; then
+        docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+        docker tag zephinzer/annams:deps-production-$(cat ./.dependency_hash) zephinzer/annams:deps-production-latest;
+        docker push zephinzer/annams:deps-production-$(cat ./.dependency_hash);
+        docker push zephinzer/annams:deps-production-latest;
+        docker logout;
+      fi;
   - stage: "Build Application"
     script:
-    - git log -n 1 --format='%H' > ./.commit_hash
-    - ENV=development npm run build
-    - docker tag zephinzer/annams:development-latest zephinzer/annams:dev-$(cat ./.commit_hash)
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
-    - docker push zephinzer/annams:development-latest
-    - docker push zephinzer/annams:dev-$(cat ./.commit_hash)
-    - docker logout
+    - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash;
+    - git log -n 1 --format='%H' > ./.commit_hash;
+    - ENV=development DEPENDENCY_VERSION="$(cat ./.dependency_hash)" npm run build;
+    - docker tag zephinzer/annams:development-latest zephinzer/annams:dev-$(cat ./.commit_hash);
+    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker push zephinzer/annams:development-latest;
+    - docker push zephinzer/annams:dev-$(cat ./.commit_hash);
+    - docker logout;
   - stage: "Build Application"
     script:
-    - git log -n 1 --format='%H' > ./.commit_hash
-    - ENV=production npm run build
-    - docker tag zephinzer/annams:production-latest zephinzer/annams:$(cat ./.commit_hash)
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD}
-    - docker push zephinzer/annams:production-latest
-    - docker push zephinzer/annams:$(cat ./.commit_hash)
-    - docker logout
+    - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash;
+    - git log -n 1 --format='%H' > ./.commit_hash;
+    - ENV=production DEPENDENCY_VERSION="$(cat ./.dependency_hash)" npm run build;
+    - docker tag zephinzer/annams:production-latest zephinzer/annams:$(cat ./.commit_hash);
+    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker push zephinzer/annams:production-latest;
+    - docker push zephinzer/annams:$(cat ./.commit_hash);
+    - docker logout;
   - stage: test
     script:
     - npm run test-deployment
@@ -76,9 +90,9 @@ jobs:
       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
         COMMIT_MESSAGE="$(cat ./.commit_message)";
         git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
-        if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then npm run version-major-bump fi;
-        elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump fi;
-        else npm run version-patch-bump fi;
+        if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then npm run version-major-bump;
+        elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump;
+        else npm run version-patch-bump;
         fi;
         git push --tags;
       fi;
