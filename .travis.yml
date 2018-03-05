@@ -20,6 +20,9 @@ jobs:
     script:
     - docker pull zephinzer/vtscripts:latest
     - printf -- "$(pwd)"
+    - git tag --list
+    - docker run -v $(pwd):/app zephinzer/vtscripts:latest get-latest
+    - docker run -v $(pwd):/app zephinzer/vtscripts:latest get-next
     - docker run -v $(pwd):/app zephinzer/vtscripts:latest iterate
     - exit 1
   - stage: BuildDependencies
