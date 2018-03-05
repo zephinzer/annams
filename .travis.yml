@@ -9,12 +9,18 @@ notifications:
 services:
   - docker
 stages:
+  - versioning
   - BuildDependencies
   - BuildApplications
   - test
   - release
 jobs:
   include:
+  - stage: versioning
+    script:
+    - docker pull zephinzer/vtscripts:latest
+    - docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate patch -q
+    - exit 1
   - stage: BuildDependencies
     env:
       - ENV: development
