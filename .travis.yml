@@ -16,15 +16,6 @@ stages:
   - release
 jobs:
   include:
-  - stage: versioning
-    script:
-    - docker pull zephinzer/vtscripts:latest
-    - printf -- "$(pwd)"
-    - git tag --list
-    - docker run -v $(pwd):/app zephinzer/vtscripts:latest get-latest
-    - docker run -v $(pwd):/app zephinzer/vtscripts:latest get-next
-    - docker run -v $(pwd):/app zephinzer/vtscripts:latest iterate
-    - exit 1
   - stage: BuildDependencies
     env:
       - ENV: development
@@ -116,7 +107,8 @@ jobs:
     script:
     - git log -n 1 --format='%H' > ./.commit_hash;
     - git log -n 1 --format='%s' > ./.commit_message;
-    - git checkout "$(cat ./.commit_hash)";
+    - git checkout "${TRAVIS_BRANCH}"
+    - git reset --hard "$(cat ./.commit_hash)";
     - |
       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
         COMMIT_MESSAGE="$(cat ./.commit_message)";
@@ -126,5 +118,5 @@ jobs:
         fi;
         git tag --list;
         git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
-        git push --tags;
+        git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
