@@ -20,7 +20,7 @@ jobs:
     script:
     - docker pull zephinzer/vtscripts:latest
     - printf -- "$(pwd)"
-    - docker run -v "$(pwd):/app" zephinzer/vtscripts:latest iterate patch -q
+    - docker run -v $(pwd):/app zephinzer/vtscripts:latest iterate
     - exit 1
   - stage: BuildDependencies
     env:
