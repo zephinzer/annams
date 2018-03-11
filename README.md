@@ -17,6 +17,13 @@
 4. [GraphQL API](./docs/api-graphql.md)
 5. [Contributing](./docs/contributing.md)
 
+## Annams Elsewhere
+- on CodeClimate @ https://codeclimate.com/github/zephinzer/annams
+- on DockerHub @ https://hub.docker.com/r/zephinzer/annams/
+- on GitHub @ https://github.com/zephinzer/annams
+- on NPM @ https://www.npmjs.com/package/annams
+- on Travis @ https://travis-ci.org/zephinzer/annams/
+
 ## About ANNAMS
 ### Authentication
 Authentication is the process of knowing who a user is. Annams provides for the following methods of authenticating a user:
@@ -90,11 +97,6 @@ The following are on the roadmap for future development:
 - [Code Climate](https://codeclimate.com) for code quality
 - [DockerHub](https://hub.docker.com) for container image hosting
 - [Travis](https://travis-ci.org) for continuous integration/delivery
-
-## Check Out Annams
-- on DockerHub @ https://hub.docker.com/r/zephinzer/annams/
-- on CodeClimate @ https://codeclimate.com/github/zephinzer/annams
-- on Travis @ https://travis-ci.org/zephinzer/annams/
 
 ## License
 
