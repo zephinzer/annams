@@ -128,7 +128,8 @@ jobs:
     env:
       - PLATFORM: npmjs.org
     script:
-    - ./provisioning/scripts/publish-npm.sh
+    - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
+    - ./provisioning/scripts/publish-npm.sh;
   - stage: publish
     env:
       - PLATFORM: hub.docker.io
