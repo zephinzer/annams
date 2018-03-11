@@ -129,3 +129,19 @@ jobs:
       - PLATFORM: npmjs.org
     script:
     - ./provisioning/scripts/publish-npm.sh
+  - stage: publish
+    env:
+      - PLATFORM: hub.docker.io
+      - ENV: production
+    script:
+    - git checkout "${TRAVIS_BRANCH}";
+    - git log -n 1 --format='%s' > ./.commit_message;
+    - git reset --hard "$(cat ./.commit_hash)";
+    - VERSION="$(npm run version-get | egrep -i '^[0-9]+\..')"
+    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker pull zephinzer/annams:${ENV}-latest;
+    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
+    - docker push zephinzer/annams:latest;
+    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${VERSION};
+    - docker push zephinzer/annams:${VERSION};
+    - docker logout
