@@ -130,6 +130,7 @@ jobs:
     script:
     - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
     - ./provisioning/scripts/publish-npm.sh;
+    - rm -rf ~/.npmrc;
   - stage: publish
     env:
       - PLATFORM: hub.docker.io
