@@ -6,14 +6,19 @@ module.exports = {
   status: {
     database: null,
     cache: null,
+    pushGateway: null,
   },
   error: {
     database: null,
     cache: null,
   },
+  warning: {
+    pushGateway: null,
+  },
   getStatus,
   getRedisStatus,
   getMySqlStatus,
+  getPrometheusPushGatewayStatus,
 };
 
 /**
@@ -32,7 +37,10 @@ function getRedisStatus() {
       module.exports.error.cache = err;
       connectionTest.quit();
       connectionTest.unref();
-      reject(err);
+      reject({
+        level: 'error',
+        data: err,
+      });
     }).on('connect', () => {
       module.exports.status.cache = true;
       module.exports.error.cache = false;
@@ -61,8 +69,29 @@ function getMySqlStatus() {
       module.exports.status.database = (err == null);
       module.exports.error.database = err ? err : false;
       connectionTest.close();
-      (err) && reject(err) || resolve();
+      (err) && reject({
+        level: 'error',
+        data: err,
+      }) || resolve();
     });
+  });
+};
+
+/**
+ * Resolves the status of the Prometheus metrics system
+ *
+ * @return {Promise}
+ */
+function getPrometheusPushGatewayStatus() {
+  return new Promise((resolve, reject) => {
+    const metrics = require('../../metrics');
+    module.exports.status.pushGateway = (metrics.error.pushGateway == null);
+    module.exports.warning.pushGateway = metrics.error.pushGateway ?
+      metrics.error.pushGateway : false;
+    (err) && reject({
+      level: 'warning',
+      data: metrics.error.pushGateway,
+    }) || resolve();
   });
 };
 
@@ -74,10 +103,16 @@ function getMySqlStatus() {
  * @return {Promise}
  */
 function getStatus() {
-  return Promise.all([
+  let statusMap = [
     getRedisStatus(),
     getMySqlStatus(),
-  ].map(
-    (promise) => promise.then(() => true).catch((err) => err)
+  ];
+  if (config.environment === 'development') {
+    statusMap.push(getPrometheusPushGatewayStatus());
+  }
+  return Promise.all(statusMap.map(
+    (promise) => promise.then(() => true).catch((err) => {
+      return (err.level === 'error') ? err.data : true;
+    })
   )).then((res) => res.reduce((prev, curr) => prev && (curr === true), true));
 };

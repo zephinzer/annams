@@ -88,6 +88,9 @@ metrics.initializePushGatewayForDevelopment = (reset = false) => {
         metrics.error.pushGateway = err;
         (err.message.indexOf('ECONNREFUSED') !== -1)
           && console.error(`Prometheus PushGateway at ${metrics._pushGatewayUrl} is not available.`); // eslint-disable-line max-len
+      } else {
+        metrics.status.pushGateway = true;
+        metrics.error.pushGateway = false;
       }
     }),
   metrics._pushGatewayTimeoutObject = setTimeout(

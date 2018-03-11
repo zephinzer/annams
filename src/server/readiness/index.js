@@ -29,12 +29,25 @@ function readinessRouteHandler({
     async (req, res) => {
       const status = await readiness.getStatus();
       (!status) && console.error(readiness.error);
+      const alerts = Object.keys(readiness.warning).reduce((prev, curr) => {
+        return Object.assign(prev, {[curr]: readiness.warning[curr]});
+      }, {});
       res
         .type('application/json')
         .status(status ? 200 : 503)
-        .json(status ? 'ok' : {
-          database: readiness.status.database,
-          cache: readiness.status.cache,
+        .json(status ? (alerts ? alerts :'ok') : {
+          database: {
+            status: readiness.status.database,
+            data: readiness.error.database,
+          },
+          cache: {
+            status: readiness.status.cache,
+            data: readiness.error.cache,
+          },
+          pushGateway: {
+            status: readiness.status.pushGateway,
+            data: readiness.warning.pushGateway,
+          },
         });
     }
   );
