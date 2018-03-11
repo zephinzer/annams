@@ -12,6 +12,15 @@ module.exports = {
     process.env[environmentVariableName] ?
       process.env[environmentVariableName]
       : defaultValue,
+  integerFromEnv: (environmentVariableName, defaultValue) => {
+    if (typeof process.env[environmentVariableName] !== 'undefined') {
+      const envNum = Number.parseInt(process.env[environmentVariableName]);
+      if (!Number.isNaN(envNum)) {
+        return envNum;
+      }
+    }
+    return defaultValue;
+  },
   stringFromEnv: (environmentVariableName, defaultValue) =>
     process.env[environmentVariableName]
     || defaultValue,

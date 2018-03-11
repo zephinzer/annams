@@ -106,6 +106,26 @@ Path: `config.error.dbnotfound.ttl`
 
 Path: `config.metrics.interval`
 
+### `METRICS_PUSHGATEWAY_HOST`
+> Defaults to `"http://localhost"`
+
+Path: `config.metrics.pushgateway.host`
+
+### `METRICS_PUSHGATEWAY_PORT`
+> Defaults to `"19091"`
+
+Path: `config.metrics.pushgateway.port`
+
+### `METRICS_PUSHGATEWAY_TIMEOUT`
+> Defaults to `10000`
+
+Path: `config.metrics.pushgateway.timeout`
+
+### `METRICS_PUSHGATEWAY_INTERVAL`
+> Defaults to `5000`
+
+Path: `config.metrics.pushgateway.interval`
+
 ### `NODE_ENV`
 > Defaults to `"development"`
 

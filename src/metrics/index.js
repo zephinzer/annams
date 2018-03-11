@@ -3,6 +3,15 @@ const osUtils = require('os-utils');
 const config = require('../config')();
 
 module.exports = metrics;
+metrics.status = {
+  pushGateway: null,
+  prometheus: null,
+};
+
+metrics.error = {
+  pushGateway: null,
+  prometheus: null,
+};
 
 /**
  * Initializes the metrics collection and returns the used register
@@ -57,26 +66,31 @@ metrics.harvestOperatingSystemMetrics = () => {
   );
 };
 
-metrics._pushGatewayForDevelopment = null;
-metrics._pushGatewayForDevelopmentTimeout = null;
-metrics._pushGatewayForDevelopmentHostname = 'http://localhost:19091';
-metrics._pushGatewayResponseTimeout = 10 * 1000; // 10 seconds
-metrics._pushGatewayPushInterval = 5 * 1000; // 5 seconds
+metrics._pushGateway = null;
+metrics._pushGatewayTimeoutObject = null;
+metrics._pushGatewayUrl = `${config.metrics.pushgateway.host}:${config.metrics.pushgateway.port}`; // eslint-disable-line max-len
+metrics._pushGatewayResponseTimeout = config.metrics.pushgateway.timeout;
+metrics._pushGatewayPushInterval = config.metrics.pushgateway.interval;
 metrics.initializePushGatewayForDevelopment = (reset = false) => {
-  if (metrics._pushGatewayForDevelopment === null || reset) {
-    (reset && (metrics._pushGatewayForDevelopmentTimeout !== null))
-      && clearTimeout(metrics._pushGatewayForDevelopmentTimeout);
-    metrics._pushGatewayForDevelopment = new Prometheus.Pushgateway(
-      metrics._pushGatewayForDevelopmentHostname,
+  if (metrics._pushGateway === null || reset) {
+    (reset && (metrics._pushGatewayTimeoutObject !== null))
+      && clearTimeout(metrics._pushGatewayTimeoutObject);
+    metrics._pushGateway = new Prometheus.Pushgateway(
+      metrics._pushGatewayUrl,
       {timeout: metrics._pushGatewayResponseTimeout}
     );
   }
-  metrics._pushGatewayForDevelopment.push(
+  metrics._pushGateway.push(
     {jobName: 'annams'},
     (err, res, body) => {
-      (err) && console.error(err);
+      if (err) {
+        metrics.status.pushGateway = false;
+        metrics.error.pushGateway = err;
+        (err.message.indexOf('ECONNREFUSED') !== -1)
+          && console.error(`Prometheus PushGateway at ${metrics._pushGatewayUrl} is not available.`); // eslint-disable-line max-len
+      }
     }),
-  metrics._pushGatewayForDevelopmentTimeout = setTimeout(
+  metrics._pushGatewayTimeoutObject = setTimeout(
     metrics.initializePushGatewayForDevelopment,
     metrics._pushGatewayPushInterval
   );
