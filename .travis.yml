@@ -111,9 +111,9 @@ jobs:
       - PLATFORM: github.com
     script:
     - git checkout "${TRAVIS_BRANCH}";
-    - git reset --hard "$(cat ./.commit_hash)";
-    - git log -n 1 --format='%H' > ./.commit_hash;
     - git log -n 1 --format='%s' > ./.commit_message;
+    - git log -n 1 --format='%H' > ./.commit_hash;
+    - git reset --hard "$(cat ./.commit_hash)";
     - |
       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
         COMMIT_MESSAGE="$(cat ./.commit_message)";
