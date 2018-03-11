@@ -110,9 +110,9 @@ jobs:
     env:
       - PLATFORM: github.com
     script:
-    - git checkout "${TRAVIS_BRANCH}";
     - git log -n 1 --format='%s' > ./.commit_message;
     - git log -n 1 --format='%H' > ./.commit_hash;
+    - git checkout "${TRAVIS_BRANCH}";
     - git reset --hard "$(cat ./.commit_hash)";
     - |
       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
@@ -134,9 +134,8 @@ jobs:
       - PLATFORM: hub.docker.io
       - ENV: production
     script:
+    - git log -n 1 --format='%H' > ./.commit_hash;
     - git checkout "${TRAVIS_BRANCH}";
-    - git log -n 1 --format='%s' > ./.commit_message;
-    - git reset --hard "$(cat ./.commit_hash)";
     - VERSION="$(npm run version-get | egrep -i '^[0-9]+\..')"
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
     - docker pull zephinzer/annams:${ENV}-latest;
