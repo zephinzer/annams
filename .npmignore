@@ -1,0 +1,11 @@
+.vscode
+coverage
+node_modules
+provisioning
+tests
+*.test.js
+**/*.test.js
+.dockerignore
+.env
+.nodemon.json
+.nsprc

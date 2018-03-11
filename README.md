@@ -11,8 +11,8 @@
 
 ## Documentation Index
 
-1. [Configurations](./docs/configuration.md)
-2. [Deployment Notes](./docs/deployment.md)
+1. [Configuring Annams](./docs/configuration.md)
+2. [Deploying Annams](./docs/deployment.md)
 3. [REST-ful API](./docs/api-restful.md)
 4. [GraphQL API](./docs/api-graphql.md)
 5. [Contributing](./docs/contributing.md)
@@ -90,6 +90,11 @@ The following are on the roadmap for future development:
 - [Code Climate](https://codeclimate.com) for code quality
 - [DockerHub](https://hub.docker.com) for container image hosting
 - [Travis](https://travis-ci.org) for continuous integration/delivery
+
+## Check Out Annams
+- on DockerHub @ https://hub.docker.com/r/zephinzer/annams/
+- on CodeClimate @ https://codeclimate.com/github/zephinzer/annams
+- on Travis @ https://travis-ci.org/zephinzer/annams/
 
 ## License
 

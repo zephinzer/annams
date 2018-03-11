@@ -57,10 +57,10 @@ jobs:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash;
     - git log -n 1 --format='%H' > ./.commit_hash;
     - ENV=${ENV} DEPENDENCY_VERSION="$(cat ./.dependency_hash)" npm run build;
-    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:dev-$(cat ./.commit_hash);
+    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
     - docker push zephinzer/annams:${ENV}-latest;
-    - docker push zephinzer/annams:dev-$(cat ./.commit_hash);
+    - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
   - stage: BuildApplications
     env:
@@ -69,10 +69,10 @@ jobs:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash;
     - git log -n 1 --format='%H' > ./.commit_hash;
     - ENV=${ENV} DEPENDENCY_VERSION="$(cat ./.dependency_hash)" npm run build;
-    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:$(cat ./.commit_hash);
+    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
     - docker push zephinzer/annams:${ENV}-latest;
-    - docker push zephinzer/annams:$(cat ./.commit_hash);
+    - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
   - stage: test
     env:
@@ -104,11 +104,13 @@ jobs:
     - docker pull "${ANNAMS_DEV_IMAGE}"
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
   - stage: release
+    env:
+      - PLATFORM: github.com
     script:
+    - git checkout "${TRAVIS_BRANCH}";
+    - git reset --hard "$(cat ./.commit_hash)";
     - git log -n 1 --format='%H' > ./.commit_hash;
     - git log -n 1 --format='%s' > ./.commit_message;
-    - git checkout "${TRAVIS_BRANCH}"
-    - git reset --hard "$(cat ./.commit_hash)";
     - |
       if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
         COMMIT_MESSAGE="$(cat ./.commit_message)";
@@ -116,7 +118,11 @@ jobs:
         elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump;
         else npm run version-patch-bump;
         fi;
-        git tag --list;
-        git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
+        git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@${PLATFORM}/${GIT_ORIGIN_REMOTE_PATH};
         git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
+  - stage: release
+    env:
+      - PLATFORM: npmjs.org
+    script:
+    - ./provisioning/scripts/publish-npm.sh
