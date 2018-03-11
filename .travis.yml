@@ -9,17 +9,17 @@ notifications:
 services:
   - docker
 stages:
-  - versioning
-  - BuildDependencies
-  - BuildApplications
+  - build_dependencies
+  - build_applications
   - test
   - release
+  - publish
 branches:
   except:
     - /^[0-9]+\.[0-9]+\.[0-9]+$/
 jobs:
   include:
-  - stage: BuildDependencies
+  - stage: build_dependencies
     env:
       - ENV: development
     script:
@@ -36,7 +36,7 @@ jobs:
         docker push zephinzer/annams:deps-${ENV}-latest;
         docker logout;
       fi;
-  - stage: BuildDependencies
+  - stage: build_dependencies
     env:
       - ENV: production
     script:
@@ -53,7 +53,7 @@ jobs:
         docker push zephinzer/annams:deps-${ENV}-latest;
         docker logout;
       fi;
-  - stage: BuildApplications
+  - stage: build_applications
     env:
       - ENV: development
     script:
@@ -65,7 +65,7 @@ jobs:
     - docker push zephinzer/annams:${ENV}-latest;
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
-  - stage: BuildApplications
+  - stage: build_applications
     env:
       - ENV: production
     script:
@@ -121,10 +121,10 @@ jobs:
         elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump;
         else npm run version-patch-bump;
         fi;
-        git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@${PLATFORM}/${GIT_ORIGIN_REMOTE_PATH};
+        git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
         git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
-  - stage: release
+  - stage: publish
     env:
       - PLATFORM: npmjs.org
     script:
