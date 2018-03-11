@@ -40,8 +40,12 @@ describe('config/authn', () => {
       });
 
       it('takes on the correct values', () => {
-        expect(config.healthcheck.username).to.eql(process.env.AUTHN_HEALTHCHECK_USERNAME);
-        expect(config.healthcheck.password).to.eql(process.env.AUTHN_HEALTHCHECK_PASSWORD);
+        expect(config.healthcheck.username).to.eql(
+          process.env.AUTHN_HEALTHCHECK_USERNAME
+        );
+        expect(config.healthcheck.password).to.eql(
+          process.env.AUTHN_HEALTHCHECK_PASSWORD
+        );
       });
     });
   });
@@ -71,8 +75,12 @@ describe('config/authn', () => {
       });
 
       it('takes on the correct values', () => {
-        expect(config.metrics.username).to.eql(process.env.AUTHN_METRICS_USERNAME);
-        expect(config.metrics.password).to.eql(process.env.AUTHN_METRICS_PASSWORD);
+        expect(config.metrics.username).to.eql(
+          process.env.AUTHN_METRICS_USERNAME
+        );
+        expect(config.metrics.password).to.eql(
+          process.env.AUTHN_METRICS_PASSWORD
+        );
       });
     });
   });
@@ -109,8 +117,12 @@ describe('config/authn', () => {
         });
 
         it('takes on the correct values', () => {
-          expect(config.jwt.key.private).to.eql(process.env.AUTHN_JWT_KEY_PRIVATE);
-          expect(config.jwt.key.public).to.eql(process.env.AUTHN_JWT_KEY_PUBLIC);
+          expect(config.jwt.key.private).to.eql(
+            process.env.AUTHN_JWT_KEY_PRIVATE
+          );
+          expect(config.jwt.key.public).to.eql(
+            process.env.AUTHN_JWT_KEY_PUBLIC
+          );
         });
       });
     });
