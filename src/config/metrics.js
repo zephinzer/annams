@@ -7,7 +7,7 @@ const DEFAULT_PUSHGATEWAY_TIMEOUT = 10 * 1000; // 10 seconds
 const DEFAULT_PUSHGATEWAY_INTERVAL = 5 * 1000; // 5 seconds
 
 module.exports = () => ({
-  interval: utility.stringFromEnv('METRICS_INTERVAL', DEFAULT_INTERVAL),
+  interval: utility.integerFromEnv('METRICS_INTERVAL', DEFAULT_INTERVAL),
   pushgateway: {
     host: utility.stringFromEnv('METRICS_PUSHGATEWAY_HOST', DEFAULT_PUSHGATEWAY_HOST), // eslint-disable-line max-len
     port: utility.stringFromEnv('METRICS_PUSHGATEWAY_PORT', DEFAULT_PUSHGATEWAY_PORT), // eslint-disable-line max-len
