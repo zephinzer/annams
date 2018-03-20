@@ -8,7 +8,7 @@ describe('config/version', () => {
 
   before(() => {
     try {
-      const versionFile = fs.lstatSync(versionFilePath);
+      fs.lstatSync(versionFilePath);
       fs.renameSync(versionFilePath, `${versionFilePath}.bak`);
     } catch (ex) {}
     config = version();

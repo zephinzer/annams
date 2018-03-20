@@ -25,7 +25,7 @@ describe('config/endpoint', () => {
         expect(config.live).to.eql('/healthz');
       });
     });
-    
+
     context('environment variable set', () => {
       before(() => {
         process.env.ENDPOINT_LIVE = '/__test_endpoint_live';
@@ -34,14 +34,14 @@ describe('config/endpoint', () => {
 
       after(() => {
         delete process.env.ENDPOINT_LIVE;
-      })
+      });
 
       it('retrieves the correct value', () => {
         expect(config.live).to.eql('/__test_endpoint_live');
       });
     });
   });
-  
+
   describe('.ready', () => {
     context('default value', () => {
       before(() => {
@@ -52,7 +52,7 @@ describe('config/endpoint', () => {
         expect(config.ready).to.eql('/readyz');
       });
     });
-    
+
     context('environment variable set', () => {
       before(() => {
         process.env.ENDPOINT_READY = '/__test_endpoint_ready';
@@ -62,13 +62,13 @@ describe('config/endpoint', () => {
       after(() => {
         delete process.env.ENDPOINT_READY;
       });
-      
+
       it('retrieves the correct value', () => {
         expect(config.ready).to.eql('/__test_endpoint_ready');
       });
     });
   });
-  
+
   describe('.metrics', () => {
     context('default value', () => {
       before(() => {
@@ -79,7 +79,7 @@ describe('config/endpoint', () => {
         expect(config.metrics).to.eql('/metrics');
       });
     });
-    
+
     context('environment variable set', () => {
       before(() => {
         process.env.ENDPOINT_METRICS = '/__test_endpoint_metrics';
