@@ -5,15 +5,17 @@ module.exports = grace;
  */
 function grace() {
   process.on('uncaughtException',
-    fatalErrorHandler.bind(this, 'UNCAUGHT_EXCEPTION'));
+    grace.fatalErrorHandler.bind(this, 'UNCAUGHT_EXCEPTION')
+  );
   process.on('unhandledRejection',
-    fatalErrorHandler.bind(this, 'UNHANDLED_REJECTION'));
+    grace.fatalErrorHandler.bind(this, 'UNHANDLED_REJECTION')
+  );
   process.on('SIGINT', (code) => {
-    console.warn('SIGINT received. Exiting with code 127.');
+    console.warn(`SIGINT received (code: ${code}). Exiting with code 127.`);
     process.exit(127);
   });
   process.on('SIGTERM', (code) => {
-    console.warn('SIGTERM received. Exiting with code 127.');
+    console.warn(`SIGTERM received (code: ${code}). Exiting with code 127.`);
     process.exit(127);
   });
   process.on('exit', (code) => {
@@ -29,9 +31,9 @@ function grace() {
  * Handles a fatal error
  *
  * @param {String} code
- * @param {Error} ex exception or error
+ * @param {Error} [ex={}] exception or error
  */
-function fatalErrorHandler(code, ex) {
+grace.fatalErrorHandler = (code, ex = {}) => {
   (ex.message) && console.error(`${code}:`, ex.message);
   console.error(`${code}:`, ex.stack);
   process.exit(1);
