@@ -44,6 +44,7 @@ function loadConfiguration() {
       path.join(__dirname, configurationListing[i]);
     if (
       (configurationListing[i].indexOf('index.js') !== 0)
+      && (configurationListing[i].indexOf('.test.js') === -1)
       && (!fs.lstatSync(configurationListingPath).isDirectory())
     ) {
       const configKey = configurationListing[i].substr(
