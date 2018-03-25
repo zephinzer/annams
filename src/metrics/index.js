@@ -39,18 +39,6 @@ metrics.createGauge = (name, help) => {
   return new Prometheus.Gauge({name, help});
 };
 
-metrics.registerOperatingSystemMetrics = () => {
-  metrics.os = {
-    cpuUsage: metrics.createGauge('process_cpu_usage', 'CPU usage percentage'),
-    freeMemory: metrics.createGauge('process_free_memory_percentage', 'Free memory by percentage'), // eslint-disable-line max-len
-    loadAvg15: metrics.createGauge('process_load_avg_15', 'CPU load average (15)'), // eslint-disable-line max-len
-    loadAvg5: metrics.createGauge('process_load_avg_5', 'CPU load average (5)'),
-    loadAvg1: metrics.createGauge('process_load_avg_1', 'CPU load average (1)'),
-    processUptime: metrics.createGauge('process_uptime', 'Uptime of the process'), // eslint-disable-line max-len
-    systemUptime: metrics.createGauge('system_uptime', 'Uptime of the system'),
-  };
-};
-
 metrics._harvestOperatingSystemMetrics = null;
 metrics.harvestOperatingSystemMetrics = () => {
   osUtils.cpuUsage((usage) => metrics.os.cpuUsage.set(usage));
@@ -66,11 +54,34 @@ metrics.harvestOperatingSystemMetrics = () => {
   );
 };
 
+metrics.registerOperatingSystemMetrics = () => {
+  metrics.os = {
+    cpuUsage: metrics.createGauge('process_cpu_usage', 'CPU usage percentage'),
+    freeMemory: metrics.createGauge('process_free_memory_percentage', 'Free memory by percentage'), // eslint-disable-line max-len
+    loadAvg15: metrics.createGauge('process_load_avg_15', 'CPU load average (15)'), // eslint-disable-line max-len
+    loadAvg5: metrics.createGauge('process_load_avg_5', 'CPU load average (5)'),
+    loadAvg1: metrics.createGauge('process_load_avg_1', 'CPU load average (1)'),
+    processUptime: metrics.createGauge('process_uptime', 'Uptime of the process'), // eslint-disable-line max-len
+    systemUptime: metrics.createGauge('system_uptime', 'Uptime of the system'),
+  };
+};
+
 metrics._pushGateway = null;
 metrics._pushGatewayTimeoutObject = null;
 metrics._pushGatewayUrl = `${config.metrics.pushgateway.host}:${config.metrics.pushgateway.port}`; // eslint-disable-line max-len
 metrics._pushGatewayResponseTimeout = config.metrics.pushgateway.timeout;
 metrics._pushGatewayPushInterval = config.metrics.pushgateway.interval;
+metrics.pushGatewayResponseHandler = (err, res, body) => {
+  if (err) {
+    metrics.status.pushGateway = false;
+    metrics.error.pushGateway = err;
+    (err.message.indexOf('ECONNREFUSED') !== -1)
+      && console.error(`Prometheus PushGateway at ${metrics._pushGatewayUrl} is not available.`); // eslint-disable-line max-len
+  } else {
+    metrics.status.pushGateway = true;
+    metrics.error.pushGateway = false;
+  }
+};
 metrics.initializePushGatewayForDevelopment = (reset = false) => {
   if (metrics._pushGateway === null || reset) {
     (reset && (metrics._pushGatewayTimeoutObject !== null))
@@ -82,17 +93,7 @@ metrics.initializePushGatewayForDevelopment = (reset = false) => {
   }
   metrics._pushGateway.push(
     {jobName: 'annams'},
-    (err, res, body) => {
-      if (err) {
-        metrics.status.pushGateway = false;
-        metrics.error.pushGateway = err;
-        (err.message.indexOf('ECONNREFUSED') !== -1)
-          && console.error(`Prometheus PushGateway at ${metrics._pushGatewayUrl} is not available.`); // eslint-disable-line max-len
-      } else {
-        metrics.status.pushGateway = true;
-        metrics.error.pushGateway = false;
-      }
-    }),
+    metrics.pushGatewayResponseHandler),
   metrics._pushGatewayTimeoutObject = setTimeout(
     metrics.initializePushGatewayForDevelopment,
     metrics._pushGatewayPushInterval
