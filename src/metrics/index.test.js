@@ -193,7 +193,7 @@ describe('metrics', () => {
         metrics._pushGateway = {
           push: pushGatewaySpy,
         };
-        
+
         originalGlobalSetTimeout = global.setTimeout;
         setTimeoutSpy = sinon.spy();
         global.setTimeout = setTimeoutSpy;
