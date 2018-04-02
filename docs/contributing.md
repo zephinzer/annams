@@ -71,18 +71,18 @@ npm run start-services
 Verify they are up by running:
 
 ```bash
-docker ps
+docker ps | grep annams_dev
 ```
 
 > To stop the services, run `npm run stop-services`
 
 The available services are:
 
-- MySQL (exposed on port 13306 on host)
-- Prometheus (exposed on port 19090 on host)
-- Prometheus PushGateway (exposed on port 19091 on host)
-- Redis (exposed on port 16379 on host)
-- Zipkin (exposed on port 19411 on host)
+- MySQL (exposed on port 13306 on host - [localhost:13306](localhost:13306))
+- Prometheus (exposed on port 19090 on host [localhost:19090](http://localhost:19090))
+- Prometheus PushGateway (exposed on port 19091 on host [localhost:19091](http://localhost:19091))
+- Redis (exposed on port 16379 on host [localhost:16379](localhost:16379))
+- Zipkin (exposed on port 19411 on host [localhost:19411](http://localhost:19411))
 
 > The ports have been configured with a pre-pended `1` to avoid confusion between running in production/running in development.
 
