@@ -32,5 +32,3 @@ function livenessRouteHandler({
   );
   return livenessRoute;
 };
-
-livenessRouteHandler.get
