@@ -27,7 +27,7 @@ function metricsRouteHandler({
     endpointPath,
     (basicAuthUsername === null || basicAuthPassword === null) ?
       (req, res, next) => next()
-      : utility.getAuth(basicAuthUsername, basicAuthPassword),
+      : utility.basicAuth(basicAuthUsername, basicAuthPassword),
     collector().metricsMiddleware
   );
   return metricsRoute;

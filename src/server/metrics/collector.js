@@ -1,14 +1,31 @@
 const expressPromBundle = require('express-prom-bundle');
 
-let _metrics = null;
+module.exports = metricsCollector;
 
-module.exports = () => {
-  if (_metrics === null) {
-    _metrics = expressPromBundle({
-      autoregister: false,
-      includeMethod: true,
-      includePath: true,
-    });
+/**
+ * Returns an express-prom-bundle instance
+ *
+ * @return {Function}
+ */
+function metricsCollector() {
+  if (metricsCollector._metrics === null) {
+    metricsCollector._metrics = expressPromBundle(
+      metricsCollector.options.expressPromBundle
+    );
   }
-  return _metrics;
+  return metricsCollector._metrics;
+}
+
+metricsCollector._metrics = null;
+
+metricsCollector.clear = () => {
+  metricsCollector._metrics = null;
+};
+
+metricsCollector.options = {
+  expressPromBundle: {
+    autoregister: false,
+    includeMethod: true,
+    includePath: true,
+  },
 };
