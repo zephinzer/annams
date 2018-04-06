@@ -11,6 +11,8 @@
     "build-deps": "./provisioning/scripts/build-deps.sh",
     "build-devsh": "./provisioning/scripts/build-devsh.sh",
     "devsh": "./provisioning/scripts/devsh.sh",
+    "eslint": "npm run test-lint",
+    "eslint-fix": "npm run fix-lint",
     "fix-lint": "eslint . --fix",
     "start": "./provisioning/scripts/start.sh",
     "start-services": "./provisioning/scripts/start-services.sh",
@@ -44,7 +46,8 @@
     "nsp": "^3.2.1",
     "nyc": "^11.4.1",
     "sinon": "^4.4.1",
-    "sinon-chai": "^2.14.0"
+    "sinon-chai": "^2.14.0",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "compression": "^1.7.2",
