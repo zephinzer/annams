@@ -12,6 +12,12 @@ express._.mock = function(thisArg) {
 };
 
 express.request = {};
+express.request.headers = {};
+express.request.headers.id = '_test_express_mock_id';
+express.request.header = {};
+express.request.header.origin = '_test_express_mock_origin';
+express.request.host = '_test_express_mock_host';
+express.request.method = '_test_express_mock_method';
 
 express.response = {};
 express.response._ = {};
