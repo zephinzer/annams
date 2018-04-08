@@ -34,17 +34,20 @@ describe('server/metrics/route', () => {
       });
     });
 
+    it('rejects requests without basic authentication credentials', () => {
+      const server = express();
+      server.use(routeInstance);
+      return supertest(server)
+        .get(config().endpoint.metrics)
+        .expect(404);
+    });
+
     it('works as expected', () => {
       const server = express();
       server.use(routeInstance);
-      return Promise.all([
-        supertest(server)
-          .get(config().endpoint.metrics)
-          .expect(404),
-        supertest(server)
-          .get('/_test_metrics_route_custom_endpoint')
-          .expect(200),
-      ]);
+      return supertest(server)
+        .get('/_test_metrics_route_custom_endpoint')
+        .expect(200);
     });
   });
 

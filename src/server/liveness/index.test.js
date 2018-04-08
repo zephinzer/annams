@@ -1,11 +1,11 @@
 const express = require('express');
+const supertest = require('supertest');
 
 const config = require('../../config')();
-const expressMock = require('../../../test/mocks/express');
 
 const liveness = require('./');
 
-describe('server/liveness', () => {
+describe.only('server/liveness', () => {
   it('is a function', () => {
     expect(liveness).to.be.a('function');
   });
@@ -16,28 +16,63 @@ describe('server/liveness', () => {
       'username',
       'password',
     );
-    expect(
-      Object.getPrototypeOf(livenessHandler)
-    ).to.eql(
-      Object.getPrototypeOf(new express.Router())
-    );
+    expect(Object.getPrototypeOf(livenessHandler)
+    ).to.eql(Object.getPrototypeOf(new express.Router()));
   });
 
-  it('works as expected', () => {
-    const livenessHandler = liveness();
-    livenessHandler.stack[0].route.stack[1]
-      .handle(
-        expressMock.request,
-        expressMock.response
-      );
-    expect(livenessHandler.stack[0].route.path)
-      .to.eql(config.endpoint.live);
-    expect(expressMock.response.status.spy).to.be.calledOnce;
-    expect(expressMock.response.status.spy).to.be.calledWith(200);
-    expect(expressMock.response.json.spy).to.be.calledOnce;
-    expect(expressMock.response.json.spy).to.be.calledWith('ok');
-    expect(expressMock.response.type.spy).to.be.calledOnce;
-    expect(expressMock.response.type.spy)
-      .to.be.calledWith('application/json');
+  describe('.constructor()', () => {
+    let livenessInstance = null;
+
+    context('custom endpoint is set', () => {
+      const customEndpoint = '/_test_liveness_endpoint_path';
+
+      before(() => {
+        livenessInstance = liveness({
+          endpointPath: customEndpoint,
+        });
+      });
+
+      it('works as expected', () => {
+        const server = express();
+        server.use(livenessInstance);
+        return supertest(server)
+          .get(customEndpoint)
+          .expect(200)
+          .then((res) => {
+            expect(res.body).to.eql('ok');
+          });
+      });
+    });
+
+    context('basic authentication credentials are set', () => {
+      let basicAuthPassword = null;
+      let basicAuthUsername = null;
+
+      before(() => {
+        basicAuthPassword = '_test_liveness_basic_auth_password';
+        basicAuthUsername = '_test_liveness_basic_auth_username';
+        livenessInstance = liveness({
+          basicAuthPassword,
+          basicAuthUsername,
+        });
+      });
+
+      it('rejects requests without basic authentication credentials', () => {
+        const server = express();
+        server.use(livenessInstance);
+        return supertest(server)
+          .get(config.endpoint.live)
+          .expect(401);
+      });
+
+      it('works as expected', () => {
+        const server = express();
+        server.use(livenessInstance);
+        return supertest(server)
+          .get(config.endpoint.live)
+          .auth(basicAuthUsername, basicAuthPassword)
+          .expect(200);
+      });
+    });
   });
 });
