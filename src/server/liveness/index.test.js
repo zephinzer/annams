@@ -5,7 +5,7 @@ const config = require('../../config')();
 
 const liveness = require('./');
 
-describe.only('server/liveness', () => {
+describe('server/liveness', () => {
   it('is a function', () => {
     expect(liveness).to.be.a('function');
   });
