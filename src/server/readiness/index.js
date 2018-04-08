@@ -26,30 +26,40 @@ function readinessRouteHandler({
   readinessRoute.get(
     endpointPath,
     utility.basicAuth(basicAuthUsername, basicAuthPassword),
-    async (req, res) => {
-      const status = await readiness.getStatus();
-      (!status) && console.error(readiness.error);
-      const alerts = Object.keys(readiness.warning).reduce((prev, curr) => {
-        return Object.assign(prev, {[curr]: readiness.warning[curr]});
-      }, {});
-      res
-        .type('application/json')
-        .status(status ? 200 : 503)
-        .json(status ? (alerts ? alerts :'ok') : {
-          database: {
-            status: readiness.status.database,
-            data: readiness.error.database,
-          },
-          cache: {
-            status: readiness.status.cache,
-            data: readiness.error.cache,
-          },
-          pushGateway: {
-            status: readiness.status.pushGateway,
-            data: readiness.warning.pushGateway,
-          },
-        });
-    }
+    readinessRouteHandler.createMiddleware(readiness)
   );
   return readinessRoute;
 };
+
+readinessRouteHandler.createMiddleware = (readiness) => (
+  async (req, res) => {
+    const status = await readiness.getStatus();
+    (!status) && console.error(readiness.error);
+    const alerts = Object.keys(readiness.warning).reduce((prev, curr) => {
+      return Object.assign(prev, {[curr]: readiness.warning[curr]});
+    }, {});
+    const hasAlerts = Object.keys(alerts).length > 0;
+    res
+      .type('application/json')
+      .status(status ? 200 : 503)
+      .json(status ?
+        (hasAlerts ? alerts :'ok')
+        : readinessRouteHandler.createErrorResponse(readiness)
+      );
+  }
+);
+
+readinessRouteHandler.createErrorResponse = (readiness) => ({
+  database: {
+    status: readiness.status.database,
+    data: readiness.error.database,
+  },
+  cache: {
+    status: readiness.status.cache,
+    data: readiness.error.cache,
+  },
+  pushGateway: {
+    status: readiness.status.pushGateway,
+    data: readiness.warning.pushGateway,
+  },
+});
