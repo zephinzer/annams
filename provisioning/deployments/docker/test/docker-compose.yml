@@ -15,4 +15,5 @@ services:
     image: ${ANNAMS_DEV_IMAGE}
     entrypoint: [ "npm", "run", "test" ]
     volumes:
-      - "../../../../tests:/app/tests:ro"
+      - "../../../../test:/app/test:ro"
+      - "../../../../coverage:/app/coverage"
