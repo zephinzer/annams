@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 const redis = require('redis');
 const config = require('../../config')();
 
-module.exports = {
+const readinessController = {
   status: {
     database: null,
     cache: null,
@@ -21,6 +21,8 @@ module.exports = {
   getPrometheusPushGatewayStatus,
 };
 
+module.exports = readinessController;
+
 /**
  * Gets the connection status of the Redis cache.
  *
@@ -37,28 +39,46 @@ module.exports = {
  */
 function getRedisStatus() {
   return new Promise((resolve, reject) => {
-    const connectionTest = redis.createClient({
-      host: config.cache.host,
-      port: config.cache.port,
-    });
-    connectionTest.on('error', (err) => {
+    const connectionTest = getRedisStatus.getClient();
+    connectionTest
+      .on('error', getRedisStatus.getErrorHandler(connectionTest, reject))
+      .on('connect', getRedisStatus.getSuccessHandler(connectionTest, resolve));
+  });
+};
+
+getRedisStatus.options =
+  () => ({
+    host: config.cache.host,
+    port: config.cache.port,
+  });
+
+getRedisStatus.getClient =
+  () => (redis.createClient(getRedisStatus.options()));
+
+getRedisStatus.getErrorHandler =
+  (connectionTest, callback) => (
+    (err) => {
       module.exports.status.cache = false;
       module.exports.error.cache = err;
       connectionTest.quit();
       connectionTest.unref();
-      reject({
+      callback({
         level: 'error',
         data: err,
       });
-    }).on('connect', () => {
+    }
+  );
+
+getRedisStatus.getSuccessHandler =
+  (connectionTest, callback) => (
+    () => {
       module.exports.status.cache = true;
       module.exports.error.cache = false;
       connectionTest.quit();
       connectionTest.unref();
-      resolve();
-    });
-  });
-};
+      callback();
+    }
+  );
 
 /**
  * Resolves the status of the MySQL database.
@@ -76,24 +96,40 @@ function getRedisStatus() {
  */
 function getMySqlStatus() {
   return new Promise((resolve, reject) => {
-    const connectionTest = mysql.createConnection({
-      host: config.database.host,
-      port: config.database.port,
-      user: config.database.auth.username,
-      password: config.database.auth.password,
-      database: config.database.name,
-    });
-    connectionTest.execute('SELECT 1+1;', (err, res, fields) => {
-      module.exports.status.database = (err == null);
+    const connectionTest = getMySqlStatus.getClient();
+    connectionTest.execute(
+      getMySqlStatus.testCommand,
+      getMySqlStatus.getHandler(connectionTest, resolve, reject)
+    );
+  });
+};
+
+getMySqlStatus.getClient =
+  () => mysql.createConnection(getMySqlStatus.options());
+
+getMySqlStatus.getHandler =
+  (connectionTest, resolve, reject) => (
+    (err, res, fields) => {
+      module.exports.status.database = (!err);
       module.exports.error.database = err ? err : false;
       connectionTest.close();
       (err) && reject({
         level: 'error',
         data: err,
       }) || resolve();
-    });
+    }
+  );
+
+getMySqlStatus.options =
+  () => ({
+    host: config.database.host,
+    port: config.database.port,
+    user: config.database.auth.username,
+    password: config.database.auth.password,
+    database: config.database.name,
   });
-};
+
+getMySqlStatus.testCommand = 'SELECT 1+1;';
 
 /**
  * Resolves the status of the Prometheus metrics system.
@@ -111,16 +147,18 @@ function getMySqlStatus() {
  */
 function getPrometheusPushGatewayStatus() {
   return new Promise((resolve, reject) => {
-    const metrics = require('../../metrics');
-    module.exports.status.pushGateway = (metrics.error.pushGateway == null);
-    module.exports.warning.pushGateway = metrics.error.pushGateway ?
-      metrics.error.pushGateway : false;
+    const metrics = getPrometheusPushGatewayStatus.getMetrics();
+    const err = metrics.error.pushGateway;
+    module.exports.status.pushGateway = (err == null);
+    module.exports.warning.pushGateway = err ? err : false;
     (err) && reject({
       level: 'warning',
       data: metrics.error.pushGateway,
     }) || resolve();
   });
 };
+
+getPrometheusPushGatewayStatus.getMetrics = () => require('../../metrics');
 
 /**
  * Retrieves the status of various third party services and resolves to `true`
@@ -132,15 +170,15 @@ function getPrometheusPushGatewayStatus() {
  */
 function getStatus() {
   let statusMap = [
-    getRedisStatus(),
-    getMySqlStatus(),
+    readinessController.getRedisStatus(),
+    readinessController.getMySqlStatus(),
+    readinessController.getPrometheusPushGatewayStatus(),
   ];
-  if (config.environment === 'development') {
-    statusMap.push(getPrometheusPushGatewayStatus());
-  }
-  return Promise.all(statusMap.map(
-    (promise) => promise.then(() => true).catch((err) => {
-      return (err.level === 'error') ? err.data : true;
-    })
+  return Promise.all(
+    statusMap.map(
+      (promise) =>
+        promise
+          .then(() => true)
+          .catch((err) => (err.level === 'error') ? err.data : true)
   )).then((res) => res.reduce((prev, curr) => prev && (curr === true), true));
 };
