@@ -9,8 +9,6 @@ const DEFAULT_PORT = 10000;
 const DEFAULT_BIND_ADDRESS = '127.0.0.1';
 const DEFAULT_TRACING_ZIPKIN_ENABLED = true;
 const DEFAULT_TRACING_ZIPKIN_HOSTNAME = 'http://localhost:19411';
-const DEFAULT_TRACING_ZIPKIN_PATH = '/api/v2/spans';
-const DEFAULT_TRACING_ZIPKIN_USE_HTTP = false;
 
 module.exports = () => ({
   bind: {
@@ -32,10 +30,6 @@ module.exports = () => ({
     zipkin: {
       enabled: utility.booleanFromEnv('SERVER_TRACING_ZIPKIN_ENABLED', DEFAULT_TRACING_ZIPKIN_ENABLED), // eslint-disable-line max-len
       hostname: utility.stringFromEnv('SERVER_TRACING_ZIPKIN_HOSTNAME', DEFAULT_TRACING_ZIPKIN_HOSTNAME), // eslint-disable-line max-len
-      path: utility.stringFromEnv('SERVER_TRACING_ZIPKIN_PATH', DEFAULT_TRACING_ZIPKIN_PATH), // eslint-disable-line max-len
-      use: {
-        http: utility.booleanFromEnv('SERVER_TRACING_ZIPKIN_USE_HTTP', DEFAULT_TRACING_ZIPKIN_USE_HTTP), // eslint-disable-line max-len
-      },
     },
   },
 });
@@ -49,5 +43,3 @@ utility.reportStatus('SERVER_LOG_PRETTY', module.exports().log.pretty); // eslin
 utility.reportStatus('SERVER_PORT', module.exports().port); // eslint-disable-line max-len
 utility.reportStatus('SERVER_TRACING_ZIPKIN_ENABLED', module.exports().tracing.zipkin.enabled); // eslint-disable-line max-len
 utility.reportStatus('SERVER_TRACING_ZIPKIN_HOSTNAME', module.exports().tracing.zipkin.hostname); // eslint-disable-line max-len
-utility.reportStatus('SERVER_TRACING_ZIPKIN_PATH', module.exports().tracing.zipkin.path); // eslint-disable-line max-len
-utility.reportStatus('SERVER_TRACING_ZIPKIN_USE_HTTP', module.exports().tracing.zipkin.use.http); // eslint-disable-line max-len

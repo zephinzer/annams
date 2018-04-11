@@ -181,27 +181,23 @@ Path: `config.server.log.pretty`
 ### `SERVER_PORT`
 > Defaults to `10000`
 
+The port which Annams will listen to when it is up.
+
 Path: `config.server.port`
 
 ### `SERVER_TRACING_ZIPKIN_ENABLED`
 > Defaults to `true`
+
+When this is set to `false`, Zipkin request tracing will be disabled.
 
 Path: `config.server.tracing.zipkin.enabled`
 
 ### `SERVER_TRACING_ZIPKIN_HOSTNAME`
 > Defaults to `"http://localhost:19411"`
 
+When this is not specified, the tracer will send the traces to `console.trace`. When specified, the traces will be sent to the Zipkin server.
+
 Path: `config.server.tracing.zipkin.hostname`
-
-### `SERVER_TRACING_ZIPKIN_PATH`
-> Defaults to `"/api/v2/spans"`
-
-Path: `config.server.tracing.zipkin.path`
-
-### `SERVER_TRACING_ZIPKIN_USE_HTTP`
-> Defaults to `false`
-
-Path: `config.server.tracing.zipkin.use.http`
 
 ### `SERVICE_NAME`
 > Defaults to `"annams"`

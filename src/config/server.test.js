@@ -252,8 +252,6 @@ describe('config/server', () => {
         expect(config.tracing.zipkin).to.have.keys([
           'enabled',
           'hostname',
-          'path',
-          'use',
         ]);
       });
 
@@ -307,68 +305,6 @@ describe('config/server', () => {
 
           it('has the correct value', () => {
             expect(config.tracing.zipkin.hostname).to.eql('protocol://test:12345');
-          });
-        });
-      });
-
-      describe('.path', () => {
-        context('default value', () => {
-          before(() => {
-            config = server();
-          });
-
-          it('has the correct value', () => {
-            expect(config.tracing.zipkin.path).to.eql('/api/v2/spans');
-          });
-        });
-
-        context('environment variable set', () => {
-          before(() => {
-            process.env.SERVER_TRACING_ZIPKIN_PATH = '/test/path';
-            config = server();
-          });
-
-          after(() => {
-            delete process.env.SERVER_TRACING_ZIPKIN_PATH;
-          });
-
-          it('has the correct value', () => {
-            expect(config.tracing.zipkin.path).to.eql('/test/path');
-          });
-        });
-      });
-
-      describe('.use', () => {
-        it('has the correct keys', () => {
-          expect(config.tracing.zipkin.use).to.have.keys([
-            'http',
-          ]);
-        });
-
-        describe('.http', () => {
-          context('default value', () => {
-            before(() => {
-              config = server();
-            });
-
-            it('has the correct value', () => {
-              expect(config.tracing.zipkin.use.http).to.eql(false);
-            });
-          });
-
-          context('environment variable set', () => {
-            before(() => {
-              process.env.SERVER_TRACING_ZIPKIN_USE_HTTP = 'NO';
-              config = server();
-            });
-
-            after(() => {
-              delete process.env.SERVER_TRACING_ZIPKIN_USE_HTTP;
-            });
-
-            it('has the correct value', () => {
-              expect(config.tracing.zipkin.use.http).to.eql(false);
-            });
           });
         });
       });
