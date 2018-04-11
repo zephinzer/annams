@@ -105,7 +105,6 @@ jobs:
     - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - chmod +x ./cc-test-reporter
     - ./cc-test-reporter before-build
-    script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(cat ./.commit_hash)"
     - docker pull "${ANNAMS_DEV_IMAGE}"
@@ -113,7 +112,6 @@ jobs:
     - mkdir -p ./coverage/.nyc_output/processinfo
     - chmod 777 -R ./coverage
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
-    after_script:
     - ls -lA ./coverage
     - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
   - stage: release
