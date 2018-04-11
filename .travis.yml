@@ -114,7 +114,8 @@ jobs:
     - chmod 777 -R ./coverage
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
     after_script:
-      - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
+    - ls -lA ./coverage
+    - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
   - stage: release
     env:
       - PLATFORM: github.com

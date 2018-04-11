@@ -101,33 +101,26 @@ describe('grace', () => {
   });
 
   describe('.fatalErrorHandler()', () => {
-    let originalConsoleError = null;
-    let originalProcessExit = null;
-    let consoleErrorSpy = null;
-    let processExitSpy = null;
-
     before(() => {
       consoleErrorSpy = sinon.spy();
       processExitSpy = sinon.spy();
-      originalConsoleError = global.console.error;
-      global.console.error = consoleErrorSpy;
-      originalProcessExit = global.process.exit;
-      global.process.exit = processExitSpy;
+      sinon.stub(global.console, 'error');
+      sinon.stub(global.process, 'exit');
     });
 
     after(() => {
-      global.console.error = originalConsoleError;
-      global.process.exit = originalProcessExit;
+      global.console.error.restore();
+      global.process.exit.restore();
     });
 
     afterEach(() => {
-      consoleErrorSpy.resetHistory();
-      processExitSpy.resetHistory();
+      global.console.error.resetHistory();
+      global.process.exit.resetHistory();
     });
 
     it('displays message if error contains a message property', () => {
       grace.fatalErrorHandler('code', {message: '_test_message'});
-      expect(consoleErrorSpy).to.be.calledWith(
+      expect(global.console.error).to.be.calledWith(
         'code:',
         '_test_message'
       );
@@ -135,7 +128,7 @@ describe('grace', () => {
 
     it('displays the stack', () => {
       grace.fatalErrorHandler('code', {stack: '_test_stack'});
-      expect(consoleErrorSpy).to.be.calledWith(
+      expect(global.console.error).to.be.calledWith(
         'code:',
         '_test_stack'
       );
@@ -143,7 +136,7 @@ describe('grace', () => {
 
     it('exits with status code 1', () => {
       grace.fatalErrorHandler();
-      expect(processExitSpy).to.be.calledOnce;
+      expect(global.process.exit).to.be.calledOnce;
     });
   });
 });

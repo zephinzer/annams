@@ -1,7 +1,7 @@
 const httpAuth = require('http-auth');
 
 module.exports = (expectedUsername, expectedPassword) => {
-  return (expectedUsername === null || expectedPassword === null) ?
+  return (!expectedUsername || !expectedPassword) ?
     (req, res, next) => next()
     : httpAuth.connect(httpAuth.basic(
         {realm: 'annams'},
