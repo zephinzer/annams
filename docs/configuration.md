@@ -202,3 +202,8 @@ Path: `config.server.tracing.zipkin.path`
 > Defaults to `false`
 
 Path: `config.server.tracing.zipkin.use.http`
+
+### `SERVICE_NAME`
+> Defaults to `"annams"`
+
+Path: `config.service.name`

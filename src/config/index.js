@@ -4,6 +4,7 @@ const path = require('path');
 const utility = require('./utility');
 
 const DEFAULT_ENVIRONMENT = 'development';
+const DEFAULT_SERVICE_NAME = 'annams';
 
 module.exports = initializeConfiguration;
 
@@ -21,6 +22,9 @@ function initializeConfiguration(force = false) {
     console.info('---\n\`\`\`');
     initializeConfiguration.config = initializeConfiguration.loadConfiguration(); // eslint-disable-line max-len
     initializeConfiguration.config.environment = utility.stringFromEnv('NODE_ENV', DEFAULT_ENVIRONMENT); // eslint-disable-line max-len
+    initializeConfiguration.config.service = {
+      name: utility.stringFromEnv('SERVICE_NAME', DEFAULT_SERVICE_NAME),
+    };
     utility.reportStatus('NODE_ENV', initializeConfiguration.config.environment); // eslint-disable-line max-len
     initializeConfiguration.config.reset = initializeConfiguration.bind(null, true); // eslint-disable-line max-len
     initializeConfiguration.config.__timestamp = (new Date()).getTime();
