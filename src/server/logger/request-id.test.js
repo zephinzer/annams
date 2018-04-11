@@ -17,13 +17,11 @@ describe('server/logger/request-id', () => {
 
   context('tracer is defined', () => {
     it('sets the ID of the request header correctly', () => {
-      const contextSpy = sinon.spy();
+      const getTraceIdSpy = sinon.spy();
       const tracerMock = {
-        context: (...args) => {
-          contextSpy.apply(null, [...args]);
-          return {
-            traceId: '_test_request_id_trace_id',
-          };
+        getTraceId: (...args) => {
+          getTraceIdSpy.apply(null, [...args]);
+          return '_test_request_id_trace_id';
         },
       };
       const middleware = requestIdLogger(tracerMock);

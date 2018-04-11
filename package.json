@@ -54,6 +54,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-prom-bundle": "^3.3.0",
+    "express-zipkin-instrumentation": "^1.1.0",
     "fastify": "^1.0.0-rc.2",
     "helmet": "^3.11.0",
     "http-auth": "^3.2.3",

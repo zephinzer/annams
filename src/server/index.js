@@ -20,7 +20,7 @@ function server(asMiddleware = false) {
   if (server.instance === null) {
     const app = asMiddleware ? new express.Router() : express();
     security.connect(app);
-    app.use(tracer.middleware('annams'));
+    app.use(tracer());
     app.use(logger.requestId(tracer));
     app.use(logger.incoming());
     app.use(logger.outgoing());

@@ -18,12 +18,13 @@ describe('server/security', () => {
       return supertest(secureServer)
         .get('/')
         .then((res) => {
-          console.info(res.headers);
           expect(res.headers['x-powered-by']).to.be.undefined;
           expect(res.headers['x-dns-prefetch-control']).to.eql('off');
           expect(res.headers['x-xss-protection']).to.eql('1; mode=block');
           expect(res.headers['x-content-type-options']).to.eql('nosniff');
+          expect(res.headers['surrogate-control']).to.eql('no-store'); // eslint-disable-line max-len
           expect(res.headers['cache-control']).to.eql('no-store, no-cache, must-revalidate, proxy-revalidate'); // eslint-disable-line max-len
+          expect(res.headers['pragma']).to.eql('no-cache'); // eslint-disable-line max-len
           expect(res.headers['x-download-options']).to.eql('noopen');
           expect(res.headers['strict-transport-security']).to.contain('includeSubDomains'); // eslint-disable-line max-len
           expect(res.headers['x-frame-options']).to.eql('SAMEORIGIN');
