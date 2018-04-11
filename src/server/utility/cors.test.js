@@ -14,6 +14,8 @@ describe('server/utility/cors', () => {
     expect(cors).to.have.keys([
       'corsHandler',
       'initialize',
+      'originIsValid',
+      'createInvalidOriginError',
     ]);
   });
 
@@ -146,6 +148,33 @@ describe('server/utility/cors', () => {
             .expect(200),
         ])
       );
+    });
+  });
+
+  describe('.originIsValid()', () => {
+    it('disallows empty strings', () => {
+      expect(cors.originIsValid('', [])).to.be.false;
+    });
+
+    it('disallows origins not in the list of origins', () => {
+      expect(cors.originIsValid('b', ['a'])).to.be.false;
+    });
+
+    it('allows origins in the list of origins', () => {
+      expect(cors.originIsValid('a', ['a'])).to.be.true;
+    });
+
+    it('allows undefined origin', () => {
+      expect(cors.originIsValid(undefined, ['a'])).to.be.true;
+    });
+  });
+
+  describe('.createInvalidOriginError()', () => {
+    it('works as expected', () => {
+      const error = cors.createInvalidOriginError('_test_origin');
+      expect(error).to.have.key('status');
+      expect(error.status).to.eql(401);
+      expect(error.toString()).to.contain('_test_origin');
     });
   });
 });
