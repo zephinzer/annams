@@ -8,6 +8,7 @@ const readiness = require('./readiness');
 const security = require('./security');
 const tracer = require('./tracer');
 const utility = require('./utility');
+const api = require('/api');
 
 module.exports = server;
 
@@ -17,7 +18,7 @@ module.exports = server;
  * @return {Object}
  */
 function server(asMiddleware = false) {
-  if (server.instance === null) {
+  if (!server.instance) {
     const app = asMiddleware ? new express.Router() : express();
     security.connect(app);
     app.use(tracer());
@@ -30,6 +31,7 @@ function server(asMiddleware = false) {
     }
     app.use(compression());
     app.use(utility.cors());
+    app.use(api());
     app.use(readiness());
     app.use(liveness());
     app.get('/', (req, res) => res
