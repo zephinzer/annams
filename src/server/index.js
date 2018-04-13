@@ -8,7 +8,7 @@ const readiness = require('./readiness');
 const security = require('./security');
 const tracer = require('./tracer');
 const utility = require('./utility');
-const api = require('/api');
+const api = require('./api');
 
 module.exports = server;
 
