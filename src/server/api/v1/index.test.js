@@ -2,7 +2,7 @@ const express = require('express');
 
 const v1 = require('./');
 
-describe.only('server/api/v1', () => {
+describe('server/api/v1', () => {
   it('has the correct keys', () => {
     expect(v1).to.have.keys([
       'instance',
