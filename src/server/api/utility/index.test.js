@@ -3,10 +3,13 @@ const supertest = require('supertest');
 
 const apiUtility = require('./');
 
+const expressMock = require('../../../../test/mocks/express');
+
 describe('server/api/utility', () => {
   it('has the correct keys', () => {
     expect(apiUtility).to.have.keys([
       'initializeRouter',
+      'RESTfulEntity',
       'Route',
     ]);
   });
@@ -73,9 +76,59 @@ describe('server/api/utility', () => {
 
     it('has the correct defaults', () => {
       const route = new apiUtility.Route();
-      expect(route.handler()).to.eql(null);
       expect(route.method).to.eql('GET');
       expect(route.path).to.eql('/');
+      route.handler(null, expressMock.response);
+      expect(expressMock.response.json.spy).to.be.calledWith('TODO');
+    });
+  });
+
+  describe('.RESTfulEntity()', () => {
+    before(() => {
+      sinon.stub(global.console, 'info');
+    });
+
+    after(() => {
+      global.console.info.restore();
+    });
+
+    it('throws an error if routes is improperly defined', () => {
+      expect(() => new apiUtility.RESTfulEntity()).to.throw();
+      expect(() => new apiUtility.RESTfulEntity('a')).to.throw();
+      expect(() => new apiUtility.RESTfulEntity(true)).to.throw();
+      expect(() => new apiUtility.RESTfulEntity(1)).to.throw();
+      expect(() => new apiUtility.RESTfulEntity([])).to.throw();
+      expect(() => new apiUtility.RESTfulEntity(['a'])).to.throw();
+    });
+
+    it('has the correct static properties', () => {
+      expect(apiUtility.RESTfulEntity).to.have.keys([
+        'initialize',
+      ]);
+    });
+
+    it('has the correct instance properties', () => {
+      const restfulEntity = new apiUtility.RESTfulEntity([
+        new apiUtility.Route(),
+      ]);
+      expect(Object.keys(restfulEntity)).to.include('instance');
+      expect(Object.keys(restfulEntity)).to.include('routes');
+      expect(Object.getPrototypeOf(restfulEntity)).to.have.key('get');
+    });
+
+    describe('.get()', () => {
+      it('returns an express compatible middleware', () => {
+        const restfulEntity = new apiUtility.RESTfulEntity([
+          new apiUtility.Route(),
+        ]);
+        const router = restfulEntity.get();
+        const server = express();
+        expect(() => server.use(router)).to.not.throw();
+        return supertest(server)
+          .get('/')
+          .expect(200)
+          .then((r) => expect(r.body).to.eql('TODO'));
+      });
     });
   });
 });
