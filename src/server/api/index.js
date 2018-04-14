@@ -12,11 +12,13 @@ function api() {
     api.middleware = new express.Router();
     Object.keys(api).forEach((apiVersion) => {
       if (apiVersion.match(api.versionMatcher) !== null) {
-        const apiEndpoint = `/${apiVersion}`;
+        const apiEndpoint = `/api/${apiVersion}`;
         try {
-          api.middleware.use(apiEndpoint, api[apiVersion]);
-          console.info(`registered api endpoint ${apiEndpoint}`);
-        } catch (ex) {}
+          api.middleware.use(apiEndpoint, api[apiVersion]());
+          console.info(`[api] successfully registered path "${apiEndpoint}"`);
+        } catch (ex) {
+          console.error(ex);
+        }
       }
     });
   }
