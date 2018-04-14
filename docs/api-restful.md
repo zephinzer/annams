@@ -6,7 +6,7 @@ Entities:
 3. Group
 4. ResourceType
 
-The base URL for Annams is `http://annams.yourapp.com/v1`. The `v*` indicates the version of the API we are calling.
+The base URL for Annams API is `http://annams.yourapp.com/api/v1`. The `v*` indicates the version of the API we are calling.
 
 ## Session
 
