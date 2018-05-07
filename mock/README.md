@@ -13,7 +13,9 @@ This should result in Wiremock going up in the background and immediately going 
 
 To begin recording the endpoints, go to http://localhost:8080/__admin/recorder and enter `"http://localhost:10000"` in the **Target URL** input box. Hit **Record** to begin recording.
 
-Visiting `http://localhost:8080/*` where `*` is any endpoint in ANNAMS should work, and the recordings will be stored in `./mock/mappings` (relative to project root).
+Visiting `http://localhost:8080/*` where `*` is any endpoint in Annams should work, and the recordings will be stored in `./mock/mappings` (relative to project root).
+
+To automate the recording, you can run `npm run provision-mock` to start the recording and call all callable endpoints in Annams.
 
 To stop the mock, run:
 
