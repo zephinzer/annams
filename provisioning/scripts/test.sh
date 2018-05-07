@@ -17,5 +17,7 @@ nyc \
   --reporter=text-lcov \
   --show-process-tree \
   --temp-directory=coverage/.nyc_output \
-  mocha $@ --recursive ./src/test.entrypoint.js "./src/**/*.test.js";
+  mocha $@ --recursive ./src/test.entrypoint.js \
+  "./db/**/*.test.js" \
+  "./src/**/*.test.js";
 nyc report --temp-directory=coverage/.nyc_output;

@@ -26,8 +26,9 @@ services:
     container_name: annams_dev_metrics_prometheus
     image: prom/prometheus:v2.1.0
     volumes:
-      - "./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
-      - "./data/prometheus:/prometheus"
+      - "./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:Z"
+      - "./data/prometheus:/prometheus:Z"
+    user: "0"
     ports:
       - "19090:9090"
   dev_metrics_push_gateway:
