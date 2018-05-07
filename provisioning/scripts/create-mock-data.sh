@@ -1,9 +1,10 @@
 #!/bin/sh
+if [ "${SELF_IP_ADDRESS}" = '' ]; then SELF_IP_ADDRESS='127.0.0.1'; fi;
 if [ "${ANNAMS_PORT}" = '' ]; then ANNAMS_PORT=10000; fi;
 if [ "${WIREMOCK_PORT}" = '' ]; then WIREMOCK_PORT=18080; fi;
 
-ANNAMS_BASE_URL="http://127.0.0.1:${ANNAMS_PORT}";
-WIREMOCK_BASE_URL="http://127.0.0.1:${WIREMOCK_PORT}";
+ANNAMS_BASE_URL="http://${SELF_IP_ADDRESS}:${ANNAMS_PORT}";
+WIREMOCK_BASE_URL="http://${SELF_IP_ADDRESS}:${WIREMOCK_PORT}";
 
 curl -X GET "${WIREMOCK_BASE_URL}/__admin/mappings";
 if [ "$?" != "0" ]; then

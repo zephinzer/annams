@@ -68,6 +68,7 @@ jobs:
   - stage: build_applications
     env:
       - ENV: mock
+      - SELF_IP_ADDRESS: 0.0.0.0
     script:
     - npm run start-mock
     - npm run create-mock-data
