@@ -55,6 +55,7 @@ Annams was created for deployment as part of a larger microservice architecture 
 - [x] MicroServices compatible logging (via Pino)
 - [x] Containerisable (via Docker)
 - [x] Traceability (via Zipkin)
+- [ ] Support for Consumer Driven Contract (CDC) Testing (via Wiremock)
 - [ ] Virtual Machine Deployment Support (via PM2)
 - [ ] Container Deployment Support (via Docker)
 - [ ] Container Deployment Support (via Kubernetes)
@@ -88,6 +89,7 @@ The following are on the roadmap for future development:
 - Vulnerability Assessment : [NSP](https://github.com/nodesecurity/nsp)
 - Metrics : [Prometheus](https://prometheus.io/)
 - Request Tracing : [Zipkin](https://zipkin.io/)
+- Consumer Driven Contract Testing : [Wiremock](http://wiremock.org/)
 - Container Bundling : [Docker](https://www.docker.com/)
 - Continuous Integration : [Travis](https://travis-ci.org/)
 - Deployment : [PM2](https://github.com/Unitech/pm2) [Docker](https://www.docker.com/), [Kubernetes](https://kubernetes.io/)
@@ -124,3 +126,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - - -
 
 # Cheers
+
+*(please contribute!)*

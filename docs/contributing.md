@@ -15,8 +15,9 @@ We work via standard fork + merge request to `master` model.
   - Chai assertion library
   - Sinon mocking library
 2. Yarn - *dependency mangement*
-2. Docker - *local development/deployment*
-3. Kubernetes - *deployment*
+3. Docker - *local development/deployment*
+4. Wiremock - *consumer driven contract testing*
+5. Kubernetes - *deployment*
   - MiniKube for testing deployments
 
 ## Provisioning
@@ -152,6 +153,13 @@ For pipeline purposes, run:
 ENV=developmnt npm run build \
   && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test;
 ```
+
+### Consumer-Driven-Contract Testing
+Wiremock is used to mock Annams. This feature is still a WIP but you can check out the documentation on how to do this at [the README](../mock/README.md).
+
+In short, run `npm run build-mock` to create the Wiremock image, then run `npm run start-mock` to start the container. Visit http://localhost:8080. To start the recorder, go to http://localhost:8080/__admin/recorder.
+
+[Read more on Wiremock](http://wiremock.org).
 
 ## Continuous Integration
 We use Travis to automatically run tests on every push to any branch. 
