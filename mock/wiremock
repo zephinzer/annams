@@ -1,0 +1,5 @@
+#!/bin/sh
+java -jar /app/wiremock.jar \
+  --port 18080 \
+  --root-dir /app/data \
+;

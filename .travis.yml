@@ -67,6 +67,20 @@ jobs:
     - docker logout;
   - stage: build_applications
     env:
+      - ENV: mock
+    script:
+    - npm run start-mock
+    - npm run create-mock-data
+    - npm run stop-mock
+    - npm run build-mock
+    - git log -n 1 --format='%H' > ./.commit_hash;
+    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker push zephinzer/annams:${ENV}-latest;
+    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${ENV}-$(cat ./.commit_hash);
+    - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
+    - docker logout;
+  - stage: build_applications
+    env:
       - ENV: production
     script:
     - cat package.json | jq '.dependencies,.devDependencies' | md5sum | cut -f 1 -d ' '  > ./.dependency_hash;

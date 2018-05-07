@@ -5,17 +5,24 @@ This directory contains service mock data for Annams.
 To run the mock service, run the following in your terminal at the project's root:
 
 ```sh
-npm run build-mock;
 npm run start-mock;
 ```
 
-This should result in Wiremock going up in the background and immediately going to the logs. Hit `ctrl+c` to quit the logs display.
+The mock service together with Annams should come up, available on http://localhost:18080 and http://localhost:10000 respectively.
 
-To begin recording the endpoints, go to http://localhost:8080/__admin/recorder and enter `"http://localhost:10000"` in the **Target URL** input box. Hit **Record** to begin recording.
+To create the data mappings, run:
 
-Visiting `http://localhost:8080/*` where `*` is any endpoint in Annams should work, and the recordings will be stored in `./mock/mappings` (relative to project root).
+```sh
+npm run create-mock-data;
+```
 
-To automate the recording, you can run `npm run provision-mock` to start the recording and call all callable endpoints in Annams.
+Your `./mock/mappings` directory should be populated with the relevant recordings.
+
+To debug the mock service, create a shell into it with:
+
+```sh
+npm run exec-mock;
+```
 
 To stop the mock, run:
 
@@ -23,10 +30,16 @@ To stop the mock, run:
 npm run stop-mock;
 ```
 
-To debug the mock service, run the following while `docker ps | grep mock` shows something to get a shell inside the mock service's container:
+To generate the mock service as an image after creating the mappings at `./mock/mappings/*.json`, run:
 
 ```sh
-npm run exec-mock;
+npm run build-mock;
+```
+
+You can now run the image independently with the mock data by running:
+
+```sh
+docker run -p 18080:18080 zephinzer/annams:mock-latest;
 ```
 
 > This feature targetted at consumer driven contract testing is still a WIP.

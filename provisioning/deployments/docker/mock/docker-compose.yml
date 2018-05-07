@@ -1,0 +1,24 @@
+version: "3"
+services:
+  dev_mock:
+    container_name: annams_mock
+    network_mode: host
+    build:
+      context: ../../../../
+      dockerfile: ./provisioning/images/service-mock.Dockerfile
+    user: ${USER_ID}
+    volumes:
+      - "../../../../mock:/app/data:Z"
+  dev_app:
+    container_name: annams_dev
+    network_mode: host
+    build:
+      context: ../../../../
+      dockerfile: ./provisioning/images/dependencies.Dockerfile
+    entrypoint: [ "npm", "start" ]
+    user: ${USER_ID}
+    volumes:
+      - "../../../../src:/app/src:Z"
+      - "../../../../test:/app/test:Z"
+      - "../../../../db:/app/db:Z"
+      - "../../../../provisioning/scripts:/app/provisioning/scripts:Z"

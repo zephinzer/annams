@@ -2,6 +2,8 @@
   "ignore": [
     "./coverage",
     "./docs",
-    "./provisioning"
+    "./provisioning",
+    "./mock/__files",
+    "./mock/mappings"
   ]
 }
