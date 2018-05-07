@@ -38,7 +38,7 @@ describe('migration:create sessions', () => {
       expect(knexMock._.table.spy.timestamps).to.be.called;
     });
   });
-  
+
   context('downwards migration', () => {
     const migration = migrations.down;
     const promiseSpy = sinon.spy();
@@ -50,7 +50,7 @@ describe('migration:create sessions', () => {
     afterEach(() => {
       knexMock._.resetAll();
     });
-    
+
     it('drops the `accounts` table', () => {
       expect(knexMock._.schema.spy.dropTable).to.be.calledWith('accounts');
     });

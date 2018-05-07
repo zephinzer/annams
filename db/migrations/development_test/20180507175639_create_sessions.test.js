@@ -35,7 +35,8 @@ describe('migration:create sessions', () => {
       expect(knexMock._.table.spy.dateTime).to.be.calledWith('started_at');
       expect(knexMock._.table.spy.dateTime).to.be.calledWith('updated_at');
       expect(knexMock._.table.spy.dateTime).to.be.calledWith('ended_at');
-      expect(knexMock._.table.spy.defaultTo).to.be.calledWithExactly(knexMock._.fn.mock.now());
+      expect(knexMock._.table.spy.defaultTo)
+        .to.be.calledWithExactly(knexMock._.fn.mock.now());
       expect(knexMock._.table.spy.defaultTo).to.be.calledTwice;
     });
 
@@ -45,7 +46,7 @@ describe('migration:create sessions', () => {
       expect(knexMock._.table.spy.references).to.be.calledWith('id');
       expect(knexMock._.table.spy.inTable).to.be.calledWith('accounts');
     });
-    
+
     it('creates the foreign keys for `accounts`.`session_id` correctly', () => {
       expect(knexMock._.schema.spy.alterTable).to.be.calledWith('accounts');
       expect(knexMock._.table.spy.foreign).to.be.calledWith('session_id');
@@ -53,7 +54,7 @@ describe('migration:create sessions', () => {
       expect(knexMock._.table.spy.inTable).to.be.calledWith('sessions');
     });
   });
-  
+
   context('downwards migration', () => {
     const migration = migrations.down;
     const promiseSpy = sinon.spy();
@@ -67,17 +68,21 @@ describe('migration:create sessions', () => {
     });
 
     it('removes the foreign key for `accounts`.`session_id`', () => {
-      expect(knexMock._.schema.spy.alterTable).to.be.calledWith('accounts'); 
-      expect(knexMock._.table.spy.dropForeign).to.be.calledWith('session_id'); 
-      expect(knexMock._.spy.raw).to.be.calledWithMatch(RegExp(/^alter[\D\w]+accounts[\D\w]+drop key[\D\w]+session_id_foreign`$/));
+      expect(knexMock._.schema.spy.alterTable).to.be.calledWith('accounts');
+      expect(knexMock._.table.spy.dropForeign).to.be.calledWith('session_id');
+      expect(knexMock._.spy.raw).to.be.calledWithMatch(
+        /^alter[\D\w]+accounts[\D\w]+drop key[\D\w]+session_id_foreign`$/
+      );
     });
-    
+
     it('removes the foreign key for `sessions`.`account_id`', () => {
       expect(knexMock._.schema.spy.alterTable).to.be.calledWith('sessions');
-      expect(knexMock._.table.spy.dropForeign).to.be.calledWith('account_id'); 
-      expect(knexMock._.spy.raw).to.be.calledWithMatch(RegExp(/^alter[\D\w]+sessions[\D\w]+drop key[\D\w]+account_id_foreign`$/));
+      expect(knexMock._.table.spy.dropForeign).to.be.calledWith('account_id');
+      expect(knexMock._.spy.raw).to.be.calledWithMatch(
+        /^alter[\D\w]+sessions[\D\w]+drop key[\D\w]+account_id_foreign`$/
+      );
     });
-    
+
     it('drops the `sessions` table', () => {
       expect(knexMock._.schema.spy.dropTable).to.be.calledWith('sessions');
     });

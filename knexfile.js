@@ -7,16 +7,16 @@ module.exports = {
       host: '127.0.0.1',
       port: '13306',
       database: 'annams',
-      user:     'annams_user',
-      password: 'annams_password'
+      user: 'annams_user',
+      password: 'annams_password',
     },
     pool: {
       min: 10,
-      max: 15
+      max: 15,
     },
     migrations: {
       directory: './db/migrations/development',
-      tableName: 'knex_migrations'
+      tableName: 'knex_migrations',
     },
     seeds: {
       directory: './db/seeds/development',
