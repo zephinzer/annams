@@ -9,7 +9,7 @@ We work via standard fork + merge request to `master` model.
 
 ## Technologies Involved
 1. Node.js - *the runtime*
-  - Fastify application framework
+  - Express application framework
   - Knex query builder library
   - Mocha test framework
   - Chai assertion library
