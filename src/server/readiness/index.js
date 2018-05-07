@@ -36,8 +36,11 @@ readinessRouteHandler.createMiddleware = (readiness) => (
     const status = await readiness.getStatus();
     (!status) && console.error(readiness.error);
     const alerts = Object.keys(readiness.warning).reduce((prev, curr) => {
-      return Object.assign(prev, {[curr]: readiness.warning[curr]});
+      return (readiness.warning[curr]) ?
+        Object.assign(prev, {[curr]: readiness.warning[curr]})
+        : prev;
     }, {});
+    console.error(alerts);
     const hasAlerts = Object.keys(alerts).length > 0;
     res
       .type('application/json')

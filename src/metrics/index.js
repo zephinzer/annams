@@ -76,7 +76,7 @@ metrics.pushGatewayResponseHandler = (err, res, body) => {
     metrics.status.pushGateway = false;
     metrics.error.pushGateway = err;
     (err.message.indexOf('ECONNREFUSED') !== -1)
-      && console.error(`Prometheus PushGateway at ${metrics._pushGatewayUrl} is not available.`); // eslint-disable-line max-len
+      && console.warn(`Prometheus PushGateway at ${metrics._pushGatewayUrl} is not available.`); // eslint-disable-line max-len
   } else {
     metrics.status.pushGateway = true;
     metrics.error.pushGateway = false;
