@@ -1,14 +1,17 @@
 // Update with your config settings.
 
+const config = require('./src/config')();
+
+// TODO: replace values with those from config
 module.exports = {
   development: {
     client: 'mysql2',
     connection: {
-      host: '127.0.0.1',
-      port: '13306',
-      database: 'annams',
-      user: 'annams_user',
-      password: 'annams_password',
+      host: config.database.host,
+      port: config.database.port,
+      database: config.database.name,
+      user: config.database.auth.username,
+      password: config.database.auth.password,
     },
     pool: {
       min: 10,

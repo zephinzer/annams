@@ -1,0 +1,22 @@
+version: "3.5"
+services:
+  dev_mock_mapper:
+    container_name: annams_mock_mapper
+    networks:
+      - annams
+    build:
+      context: ../../../../
+      dockerfile: ./provisioning/images/utility.Dockerfile
+    environment:
+      - ANNAMS_HOST=dev_app
+      - WIREMOCK_HOST=dev_mock
+      - WIREMOCK_PORT=8080
+    entrypoint: [ "/app/provisioning/scripts/mock-scrape.sh" ]
+    user: ${USER_ID}
+    volumes:
+      - "../../../../mock:/app/mock:Z"
+      - "../../../../provisioning/scripts:/app/provisioning/scripts:Z"
+networks:
+  annams:
+    external: true
+    name: annams

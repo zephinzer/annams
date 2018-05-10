@@ -12,7 +12,7 @@ function user() {
     new Route('get', '/users'),
     new Route('get', '/user'),
     new Route('get', '/user/:userId'),
-    new Route('patch', '/user/group'),
+    new Route('pathch', '/user/:userId'),
     new Route('delete', '/user'),
   ]).get();
 };

@@ -6,7 +6,7 @@ const DEFAULT_LOG_ENABLED = true;
 const DEFAULT_LOG_LEVEL = 'trace';
 const DEFAULT_LOG_PRETTY = true;
 const DEFAULT_PORT = 10000;
-const DEFAULT_BIND_ADDRESS = '127.0.0.1';
+const DEFAULT_BIND_ADDRESS = '0.0.0.0';
 const DEFAULT_TRACING_ZIPKIN_ENABLED = true;
 const DEFAULT_TRACING_ZIPKIN_HOSTNAME = 'http://localhost:19411';
 

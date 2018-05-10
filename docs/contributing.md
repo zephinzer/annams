@@ -23,24 +23,6 @@ We work via standard fork + merge request to `master` model.
 ## Provisioning
 You'll need a Docker daemon installed and running on your host machine, and you can get it from this link: https://store.docker.com/search?type=edition&offering=community.
 
-### Method 1 - via Development Shell
-We use a development shell to standardise the development environment. The shell contains Git, Node and Yarn and the command has volume mappings to directories needed to run Git. If you don't trust the code, use Method 2.
-
-To build the development shell, run:
-
-```bash
-npm run build-devsh;
-```
-
-After it has built, run it with:
-
-```bash
-npm run start-devsh;
-```
-
-> The development shell uses your host's Docker to run Docker commands.
-
-### Method 2 - via local machine
 Confirm that Docker, Git, Node 8 and Yarn are installed on your machine. You can verify this via:
 
 ```bash
@@ -66,7 +48,7 @@ yarn install
 Next, start the services in the background:
 
 ```bash
-npm run start-services
+npm run services start
 ```
 
 Verify they are up by running:
@@ -75,7 +57,7 @@ Verify they are up by running:
 docker ps | grep annams_dev
 ```
 
-> To stop the services, run `npm run stop-services`
+> To stop the services, run `npm run services stop`
 
 The available services are:
 
@@ -83,6 +65,7 @@ The available services are:
 - Prometheus (exposed on port 19090 on host [localhost:19090](http://localhost:19090))
 - Prometheus PushGateway (exposed on port 19091 on host [localhost:19091](http://localhost:19091))
 - Redis (exposed on port 16379 on host [localhost:16379](localhost:16379))
+- Wiremock (exposed on port 18081 on host localhost:18081](localhost:18081))
 - Zipkin (exposed on port 19411 on host [localhost:19411](http://localhost:19411))
 
 > The ports have been configured with a pre-pended `1` to avoid confusion between running in production/running in development.

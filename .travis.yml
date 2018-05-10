@@ -68,12 +68,11 @@ jobs:
   - stage: build_applications
     env:
       - ENV: mock
-      - SELF_IP_ADDRESS: 0.0.0.0
     script:
-    - npm run start-mock
-    - npm run create-mock-data
-    - npm run stop-mock
-    - npm run build-mock
+    - npm run services start
+    - npm run mock scrape
+    - npm run services stop
+    - npm run mock export
     - git log -n 1 --format='%H' > ./.commit_hash;
     - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
     - docker push zephinzer/annams:${ENV}-latest;
