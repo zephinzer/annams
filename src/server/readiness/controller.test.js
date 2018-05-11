@@ -139,8 +139,14 @@ describe('server/readiness/controller', () => {
         expect(getRedisStatus.getClient).to.be.a('function');
       });
 
-      it('gets the correct options', () => {
-        getRedisStatus.getClient();
+      it('gets the correct options', (done) => {
+        const redisStatus = getRedisStatus.getClient();
+        redisStatus.on('error', (err) => {
+          redisStatus.quit();
+          redisStatus.unref();
+          console.error(err);
+          done();
+        });
         expect(getRedisStatus.options).to.be.calledOnce;
       });
     });
