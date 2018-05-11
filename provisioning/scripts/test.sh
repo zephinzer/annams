@@ -8,6 +8,7 @@ if [ -z "${CALLED_WITH_COMMAND##*$FLAG_WATCH*}" ]; then
 else
   NYC_FLAGS='';
 fi;
+export NODE_ENV='test';
 nyc \
   ${NYC_FLAGS} \
   --clean \
