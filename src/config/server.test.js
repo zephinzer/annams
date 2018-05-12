@@ -31,7 +31,7 @@ describe('config/server', () => {
         });
 
         it('has the correct value', () => {
-          expect(config.bind.address).to.eql('127.0.0.1');
+          expect(config.bind.address).to.eql('0.0.0.0');
         });
       });
 
