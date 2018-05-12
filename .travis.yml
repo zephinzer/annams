@@ -65,6 +65,7 @@ jobs:
     env:
       - ENV: mock
     script:
+    - apt add python
     - pip install docker-compose --upgrade
     - npm run services start
     - npm run mock scrape
