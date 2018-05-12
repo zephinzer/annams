@@ -54,7 +54,7 @@ function loadConfiguration() {
       const configKey = configurationListing[i].substr(
         0, configurationListing[i].lastIndexOf('.')
       );
-      const configValue = require(configurationListingPath)();
+      const configValue = require(configurationListingPath)(config);
       config[configKey] = configValue;
     }
   }
