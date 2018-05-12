@@ -24,7 +24,11 @@ function v1() {
 };
 
 v1.instance = null;
+/**
+ * This array determines what directories will be loaded as a module
+ * relative to this directory.
+ */
 v1.restfulEntities = [
-  'user',
+  'account',
 ];
 v1.getApiComponent = (componentName) => require(`./${componentName}`)();
