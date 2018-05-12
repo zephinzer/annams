@@ -8,6 +8,8 @@ module.exports = KnexMock;
 
 /**
  * Returns a mock knex instance
+ *
+ * @return {KnexMock}
  */
 function KnexMock(...args) {
   this.databaseName = args[0];
