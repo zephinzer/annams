@@ -2,10 +2,6 @@ sudo: required
 language: node_js
 node_js:
   - "lts/*"
-notifications:
-  email:
-    recipients:
-    - "${MAINTAINER_EMAIL}"
 services:
   - docker
 stages:
@@ -69,6 +65,7 @@ jobs:
     env:
       - ENV: mock
     script:
+    - pip install docker-compose --upgrade
     - npm run services start
     - npm run mock scrape
     - npm run services stop
