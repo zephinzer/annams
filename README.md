@@ -37,11 +37,11 @@ Authentication is the process of knowing who a user is. Annams provides for the 
 To keep Annams stateless, we utilise JSON Web Tokens (JWTs) which are signed using asymmetric keys.
 
 ### Authorization
-Authorization is the process of restricting access to content a user may access. Annams allows you to create Resource Types, Groups, and Users.
+Authorization is the process of restricting access to content a user may access. Annams allows you to create Resource Types, Groups, and Accounts.
 
 1. Resource Types are atomic and can be assigned one or more Groups.
-2. Groups can be assigned one or more Users.
-3. Users belonging to a Group that has access to a Resource Type will be able to access the Resource Type, otherwise, access can be denied.
+2. Groups can be assigned one or more Accounts.
+3. Accounts belonging to a Group that has access to a Resource Type will be able to access the Resource Type, otherwise, access can be denied.
 
 ### MicroService
 Annams was created for deployment as part of a larger microservice architecture and accounts for both intra-network communications with other microservices, as well as communication with a client-side application. We implement the following features:
