@@ -33,7 +33,7 @@ describe('server/api/v1', () => {
 
       beforeEach(() => {
         v1.instance = null;
-        v1.restfulEntities = ['user'];
+        v1.restfulEntities = ['account'];
         v1.getApiComponent = v1getApiComponentMock;
       });
 
@@ -88,7 +88,7 @@ describe('server/api/v1', () => {
 
   describe('.restfulEntities', () => {
     it('contains the correct entities', () => {
-      expect(v1.restfulEntities).to.contain('user');
+      expect(v1.restfulEntities).to.contain('account');
     });
   });
 
@@ -102,7 +102,7 @@ describe('server/api/v1', () => {
     });
 
     it('interfaces with v1 modules in a standardised way', () => {
-      expect(() => v1.getApiComponent('user')).to.not.throw();
+      expect(() => v1.getApiComponent('account')).to.not.throw();
     });
   });
 });

@@ -25,7 +25,7 @@ The base URL for Annams API is `http://annams.yourapp.com/api/v1`. The `v*` indi
 ## User
 
 ### Create User (Register New Account)
-#### `POST /user`
+#### `POST /account`
 
 ```json
 {
@@ -36,27 +36,27 @@ The base URL for Annams API is `http://annams.yourapp.com/api/v1`. The `v*` indi
 ```
 
 ### Retrieve all Users
-#### `GET /users`
+#### `GET /accounts`
 
 ### Retrieve User Data
-#### `GET /user`
-#### `GET /user/:userId`
+#### `GET /account`
+#### `GET /account/:userId`
 
 ### Retrieve Groups a User belongs to
-#### `GET /user/groups`
-#### `GET /user/:userId/groups`
+#### `GET /account/groups`
+#### `GET /account/:userId/groups`
 
 ### Retrieve User-Accessible ResourceTypes
-#### `GET /user/resource-types`
-#### `GET /user/:userId/resource-types`
+#### `GET /account/resource-types`
+#### `GET /account/:userId/resource-types`
 
 ### Update User Data
-#### `PATCH /user`
-#### `PATCH /user/:userId`
+#### `PATCH /account`
+#### `PATCH /account/:userId`
 
 ### Delete User (Delete Account)
-#### `DELETE /user`
-#### `PATCH /user/:userId`
+#### `DELETE /account`
+#### `PATCH /account/:userId`
 
 ## Group
 
@@ -70,7 +70,7 @@ The base URL for Annams API is `http://annams.yourapp.com/api/v1`. The `v*` indi
 #### `GET /group/:groupId`
 
 ### Retrieve Users in a Group
-#### `GET /group/:groupId/users`
+#### `GET /group/:groupId/accounts`
 
 ### Retrieve ResourceTypes in a Group
 #### `GET /group/:groupId/resource-types`

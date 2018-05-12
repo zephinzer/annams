@@ -68,27 +68,27 @@ METHOD='GET'; URL="${WIREMOCK_BASE_URL}/metrics";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
-METHOD='GET'; URL="${WIREMOCK_BASE_URL}/api/v1/user";
+METHOD='GET'; URL="${WIREMOCK_BASE_URL}/api/v1/account";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
-METHOD='POST'; URL="${WIREMOCK_BASE_URL}/api/v1/user";
+METHOD='POST'; URL="${WIREMOCK_BASE_URL}/api/v1/account";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
-METHOD='GET'; URL="${WIREMOCK_BASE_URL}/api/v1/users";
+METHOD='GET'; URL="${WIREMOCK_BASE_URL}/api/v1/accounts";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
-METHOD='GET'; URL="${WIREMOCK_BASE_URL}/api/v1/user/:userId";
+METHOD='GET'; URL="${WIREMOCK_BASE_URL}/api/v1/account/:accountId";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
-METHOD='PATCH'; URL="${WIREMOCK_BASE_URL}/api/v1/user/:userId";
+METHOD='PATCH'; URL="${WIREMOCK_BASE_URL}/api/v1/account/:accountId";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
-METHOD='DELETE'; URL="${WIREMOCK_BASE_URL}/api/v1/user";
+METHOD='DELETE'; URL="${WIREMOCK_BASE_URL}/api/v1/account";
 printf -- "  - ${METHOD} ${URL}\n";
 curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
