@@ -1,7 +1,13 @@
 module.exports = retrieveAccount;
 
 /**
- * Retrieves an account using the provided options.
+ * Retrieves an account using the provided options. In order of precedence, the
+ * options considered are:
+ * 1. email
+ * 2. username
+ * 3. uuid
+ *
+ * That is to say, if email is specified, the UUID will not be accounted for
  *
  * @param {Function} db
  * @param {Object} options
@@ -33,19 +39,22 @@ function retrieveAccount(db, {
   }
 };
 
-retrieveAccount.getUser = (db, key, value) => {
-  return db('account')
-    .select([
-      'email',
-      'username',
-      'uuid',
-      'id',
-    ])
-    .where(key, '=', value)
-    .then((results) => {
-      return results;
-    });
-};
+retrieveAccount.getUser =
+  (db, key, value, offset = 0, limit = 100) => {
+    return db('account')
+      .select([
+        'email',
+        'username',
+        'uuid',
+        'id',
+      ])
+      .where(key, '=', value)
+      .offset(offset)
+      .limit(limit)
+      .then((results) => {
+        return results;
+      });
+  };
 
 retrieveAccount.usingEmail = (db, email) => {
   return retrieveAccount.getUser(db, 'email', email);
