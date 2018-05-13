@@ -69,6 +69,51 @@ describe('account/retrieve', () => {
         expect(retrieveAccount.usingUuid).to.be.calledWith(knexMock, uuid);
       });
     });
+
+    context('precedence', () => {
+      const email = 'test@domain.com';
+      const username = 'testuser';
+      const uuid = 'teste-test-test-testtttt';
+
+      before(() => {
+        sinon.stub(retrieveAccount, 'usingEmail');
+        sinon.stub(retrieveAccount, 'usingUsername');
+        sinon.stub(retrieveAccount, 'usingUuid');
+      });
+
+      after(() => {
+        retrieveAccount.usingEmail.restore();
+        retrieveAccount.usingUsername.restore();
+        retrieveAccount.usingUuid.restore();
+      });
+
+      afterEach(() => {
+        retrieveAccount.usingEmail.resetHistory();
+        retrieveAccount.usingUsername.resetHistory();
+        retrieveAccount.usingUuid.resetHistory();
+      });
+
+      it('is given to email', () => {
+        retrieveAccount(knexMock, {email, username, uuid});
+        expect(retrieveAccount.usingEmail).to.be.calledOnce;
+        expect(retrieveAccount.usingUsername).to.not.be.called;
+        expect(retrieveAccount.usingUuid).to.not.be.called;
+      });
+
+      it('is given to username when email is absent', () => {
+        retrieveAccount(knexMock, {username, uuid});
+        expect(retrieveAccount.usingEmail).to.not.be.called;
+        expect(retrieveAccount.usingUsername).to.be.calledOnce;
+        expect(retrieveAccount.usingUuid).to.not.be.called;
+      });
+
+      it('is given to uuid when both usernamd and email iare absent', () => {
+        retrieveAccount(knexMock, {uuid});
+        expect(retrieveAccount.usingEmail).to.not.be.called;
+        expect(retrieveAccount.usingUsername).to.not.be.called;
+        expect(retrieveAccount.usingUuid).to.be.calledOnce;
+      });
+    });
   });
 
   describe('.getUser()', () => {
@@ -84,6 +129,8 @@ describe('account/retrieve', () => {
             'uuid',
             'id',
           ]);
+          expect(knexMocked.spy.offset).to.be.calledWith(0);
+          expect(knexMocked.spy.limit).to.be.calledWith(100);
           expect(knexMocked.spy.where).to.be.calledWith('_key', '=', '_value');
           expect(resolved).to.eql('_then_resolved');
         });
