@@ -14,13 +14,14 @@ describe('account/utility/validator', () => {
   describe('.id', () => {
     it('validates IDs correctly', () => {
       const validIds = [
+        '1',
         1,
+        '123',
         1234567,
       ];
       const invalidIds = [
         0,
         -1,
-        '123',
         true,
         {},
         null,

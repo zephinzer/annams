@@ -8,7 +8,7 @@ const validate = {};
 module.exports = validate;
 
 validate.id = (id) =>
-  (typeof id === 'number') && (id > 0);
+  ((typeof id === 'number') || (parseInt(id) !== NaN)) && (parseInt(id) > 0);
 
 validate.email = (email) => {
   return (
