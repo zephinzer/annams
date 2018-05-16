@@ -3,11 +3,36 @@ const validator = require('./validator');
 describe('account/utility/validator', () => {
   it('has the correct keys', () => {
     expect(validator).to.have.keys([
+      'id',
       'email',
       'password',
       'username',
       'uuid',
     ]);
+  });
+
+  describe('.id', () => {
+    it('validates IDs correctly', () => {
+      const validIds = [
+        1,
+        1234567,
+      ];
+      const invalidIds = [
+        0,
+        -1,
+        '123',
+        true,
+        {},
+        null,
+        () => {},
+      ];
+      validIds.forEach((id) => {
+        expect(validator.id(id)).to.be.true;
+      });
+      invalidIds.forEach((id) => {
+        expect(validator.id(id)).to.be.false;
+      });
+    })
   });
 
   describe('.email', () => {

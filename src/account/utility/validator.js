@@ -7,6 +7,9 @@ const validate = {};
 
 module.exports = validate;
 
+validate.id = (id) =>
+  (typeof id === 'number') && (id > 0);
+
 validate.email = (email) => {
   return (
     (typeof email === 'string')
