@@ -1,4 +1,4 @@
-const utility = require('./utility');
+const utility = require('./index');
 
 describe('account/utility', () => {
   it('has the correct keys', () => {
