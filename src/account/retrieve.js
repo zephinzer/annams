@@ -40,7 +40,7 @@ function retrieveAccount(db, {
 };
 
 retrieveAccount.getUser =
-  (db, key, value, offset = 0, limit = 100) => {
+  (db, key, value) => {
     return db('account')
       .select([
         'email',
@@ -49,8 +49,6 @@ retrieveAccount.getUser =
         'id',
       ])
       .where(key, '=', value)
-      .offset(offset)
-      .limit(limit)
       .then((results) => {
         return results;
       });

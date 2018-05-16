@@ -129,8 +129,6 @@ describe('account/retrieve', () => {
             'uuid',
             'id',
           ]);
-          expect(knexMocked.spy.offset).to.be.calledWith(0);
-          expect(knexMocked.spy.limit).to.be.calledWith(100);
           expect(knexMocked.spy.where).to.be.calledWith('_key', '=', '_value');
           expect(resolved).to.eql('_then_resolved');
         });
