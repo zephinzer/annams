@@ -54,6 +54,7 @@
     "supertest": "^3.0.0"
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "compression": "^1.7.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
@@ -65,10 +66,12 @@
     "morgan": "^1.9.0",
     "mysql2": "^1.5.3",
     "os-utils": "^0.0.14",
+    "password-validate": "^0.0.2",
     "pino": "^4.13.0",
     "prom-client": "^10.2.2",
     "redis": "^2.8.0",
     "uuid": "^3.2.1",
+    "validator": "^10.2.0",
     "zipkin": "^0.12.0",
     "zipkin-context-cls": "^0.11.0",
     "zipkin-instrumentation-express": "^0.12.0",

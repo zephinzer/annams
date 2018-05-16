@@ -1,6 +1,8 @@
 const utility = require('../../utility');
 const {Route} = utility;
 
+const account = require('../../../../account');
+
 module.exports = user;
 
 /**
@@ -8,7 +10,9 @@ module.exports = user;
  */
 function user() {
   return new utility.RESTfulEntity([
-    new Route('post', '/account'),
+    new Route('post', '/account', (req, res) => {
+      res.json('lol');
+    }),
     new Route('get', '/accounts'),
     new Route('get', '/account'),
     new Route('get', '/account/:accountId'),
