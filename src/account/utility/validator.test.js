@@ -33,7 +33,7 @@ describe('account/utility/validator', () => {
       invalidIds.forEach((id) => {
         expect(validator.id(id)).to.be.false;
       });
-    })
+    });
   });
 
   describe('.email', () => {
