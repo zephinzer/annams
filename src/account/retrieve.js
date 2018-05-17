@@ -1,3 +1,7 @@
+const {validate} = require('./utility');
+
+const ERROR_INVALID_PARAMETERS = 'Invalid paremeters - one of :id, :email, :username, :uuid has to be specified'; // eslint-disable-line max-len
+
 module.exports = retrieveAccount;
 
 /**
@@ -17,31 +21,38 @@ module.exports = retrieveAccount;
  *
  * @return {Promise}
  */
-function retrieveAccount(db, {
-  email,
-  username,
-  uuid,
-} = {}) {
+function retrieveAccount(
+  db,
+  {
+    id,
+    email,
+    username,
+    uuid,
+  } = {},
+) {
   const validation = {
-    email: typeof email === 'string',
-    username: typeof username === 'string',
-    uuid: typeof uuid === 'string',
+    id: validate.id(id),
+    email: validate.email(email),
+    username: validate.username(username),
+    uuid: validate.uuid(uuid),
   };
 
-  if (validation.email) {
+  if (validation.id) {
+    return retrieveAccount.usingId(db, id);
+  } else if (validation.email) {
     return retrieveAccount.usingEmail(db, email);
   } else if (validation.username) {
     return retrieveAccount.usingUsername(db, username);
   } else if (validation.uuid) {
     return retrieveAccount.usingUuid(db, uuid);
   } else {
-    throw new Error('Invalid paremeters - one of :email, :usenrame, :uuid has to be specified'); // eslint-disable-line max-len
+    throw new Error(ERROR_INVALID_PARAMETERS);
   }
 };
 
 retrieveAccount.getUser =
   (db, key, value) => {
-    return db('account')
+    return db('accounts')
       .select([
         'email',
         'username',
@@ -54,14 +65,14 @@ retrieveAccount.getUser =
       });
   };
 
-retrieveAccount.usingEmail = (db, email) => {
-  return retrieveAccount.getUser(db, 'email', email);
-};
+retrieveAccount.usingEmail = (db, email) =>
+  retrieveAccount.getUser(db, 'email', email);
 
-retrieveAccount.usingUsername = (db, username) => {
-  return retrieveAccount.getUser(db, 'username', username);
-};
+retrieveAccount.usingId = (db, id) =>
+  retrieveAccount.getUser(db, 'id', id);
 
-retrieveAccount.usingUuid = (db, uuid) => {
-  return retrieveAccount.getUser(db, 'uuid', uuid);
-};
+retrieveAccount.usingUsername = (db, username) =>
+  retrieveAccount.getUser(db, 'username', username);
+
+retrieveAccount.usingUuid = (db, uuid) =>
+  retrieveAccount.getUser(db, 'uuid', uuid);

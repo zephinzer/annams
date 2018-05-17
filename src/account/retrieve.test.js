@@ -7,6 +7,7 @@ describe('account/retrieve', () => {
     expect(retrieveAccount).to.have.keys([
       'getUser',
       'usingEmail',
+      'usingId',
       'usingUsername',
       'usingUuid',
     ]);
@@ -122,7 +123,7 @@ describe('account/retrieve', () => {
       knexMocked = retrieveAccount
         .getUser(knexMock, '_key', '_value')
         .then((resolved) => {
-          expect(knexMocked.spy.constructor).to.be.calledWith('account');
+          expect(knexMocked.spy.constructor).to.be.calledWith('accounts');
           expect(knexMocked.spy.select).to.be.calledWith([
             'email',
             'username',
