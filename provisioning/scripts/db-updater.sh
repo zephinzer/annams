@@ -1,8 +1,8 @@
 #!/bin/sh
-DATABASE_UP=0;
-DATABASE_HOST=dev_database;
-DATABASE_PORT=3306;
+if [ "${DATABASE_HOST}" = "" ]; then DATABASE_HOST=dev_database; fi;
+if [ "${DATABASE_HOST}" = "" ]; then DATABASE_PORT=3306; fi;
 
+DATABASE_UP=0;
 printf -- 'Waiting for MySQL to be up..';
 while [ "${DATABASE_UP}" = "0" ]; do
   nc -z -v "${DATABASE_HOST}" "${DATABASE_PORT}";
