@@ -25,22 +25,18 @@ function retrieveAccount(
   db,
   {
     id,
-    email,
     username,
     uuid,
   } = {},
 ) {
   const validation = {
     id: validate.id(id),
-    email: validate.email(email),
     username: validate.username(username),
     uuid: validate.uuid(uuid),
   };
 
   if (validation.id) {
     return retrieveAccount.usingId(db, id);
-  } else if (validation.email) {
-    return retrieveAccount.usingEmail(db, email);
   } else if (validation.username) {
     return retrieveAccount.usingUsername(db, username);
   } else if (validation.uuid) {
@@ -64,9 +60,6 @@ retrieveAccount.getUser =
         return results;
       });
   };
-
-retrieveAccount.usingEmail = (db, email) =>
-  retrieveAccount.getUser(db, 'email', email);
 
 retrieveAccount.usingId = (db, id) =>
   retrieveAccount.getUser(db, 'id', id);
