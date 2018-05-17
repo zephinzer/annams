@@ -6,7 +6,6 @@ describe('account/retrieve', () => {
   it('exports the correct keys', () => {
     expect(retrieveAccount).to.have.keys([
       'getUser',
-      'usingEmail',
       'usingId',
       'usingUsername',
       'usingUuid',
@@ -18,23 +17,6 @@ describe('account/retrieve', () => {
       expect(() => {
         retrieveAccount(knexMock);
       }).to.throw();
-    });
-
-    context('email is valid', () => {
-      before(() => {
-        sinon.stub(retrieveAccount, 'usingEmail');
-      });
-
-      after(() => {
-        retrieveAccount.usingEmail.restore();
-      });
-
-      it('works', () => {
-        const email = 'abcde@test.com';
-        retrieveAccount(knexMock, {email});
-        expect(retrieveAccount.usingEmail).to.be.calledOnce;
-        expect(retrieveAccount.usingEmail).to.be.calledWith(knexMock, email);
-      });
     });
 
     context('username is valid', () => {
@@ -72,45 +54,44 @@ describe('account/retrieve', () => {
     });
 
     context('precedence', () => {
-      const email = 'test@domain.com';
+      const id = '123456789';
       const username = 'testuser';
       const uuid = 'teste-test-test-testtttt';
 
       before(() => {
-        sinon.stub(retrieveAccount, 'usingEmail');
+        sinon.stub(retrieveAccount, 'usingId');
         sinon.stub(retrieveAccount, 'usingUsername');
         sinon.stub(retrieveAccount, 'usingUuid');
       });
 
       after(() => {
-        retrieveAccount.usingEmail.restore();
+        retrieveAccount.usingId.restore();
         retrieveAccount.usingUsername.restore();
         retrieveAccount.usingUuid.restore();
       });
 
       afterEach(() => {
-        retrieveAccount.usingEmail.resetHistory();
+        retrieveAccount.usingId.resetHistory();
         retrieveAccount.usingUsername.resetHistory();
         retrieveAccount.usingUuid.resetHistory();
       });
 
-      it('is given to email', () => {
-        retrieveAccount(knexMock, {email, username, uuid});
-        expect(retrieveAccount.usingEmail).to.be.calledOnce;
+      it('is given to id', () => {
+        retrieveAccount(knexMock, {id, username, uuid});
         expect(retrieveAccount.usingUsername).to.not.be.called;
         expect(retrieveAccount.usingUuid).to.not.be.called;
       });
 
-      it('is given to username when email is absent', () => {
+      it('is given to username when id is absent', () => {
         retrieveAccount(knexMock, {username, uuid});
-        expect(retrieveAccount.usingEmail).to.not.be.called;
+        expect(retrieveAccount.usingId).to.not.be.called;
         expect(retrieveAccount.usingUsername).to.be.calledOnce;
         expect(retrieveAccount.usingUuid).to.not.be.called;
       });
 
       it('is given to uuid when both usernamd and email iare absent', () => {
         retrieveAccount(knexMock, {uuid});
-        expect(retrieveAccount.usingEmail).to.not.be.called;
+        expect(retrieveAccount.usingId).to.not.be.called;
         expect(retrieveAccount.usingUsername).to.not.be.called;
         expect(retrieveAccount.usingUuid).to.be.calledOnce;
       });
@@ -137,7 +118,7 @@ describe('account/retrieve', () => {
     });
   });
 
-  describe('.usingEmail()', () => {
+  describe('.usingId()', () => {
     before(() => {
       sinon.stub(retrieveAccount, 'getUser');
     });
@@ -147,8 +128,8 @@ describe('account/retrieve', () => {
     });
 
     it('calls the getUser factory function correctly', () => {
-      retrieveAccount.usingEmail('_db', 'someones@email.com');
-      expect(retrieveAccount.getUser).to.be.calledWith('_db', 'email', 'someones@email.com'); // eslint-disable-line max-len
+      retrieveAccount.usingId('_db', '123456789');
+      expect(retrieveAccount.getUser).to.be.calledWith('_db', 'id', '123456789'); // eslint-disable-line max-len
     });
   });
 
