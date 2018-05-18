@@ -1,3 +1,5 @@
+const uuidv4 = require('uuid/v4');
+
 const retrieveAccount = require('./retrieve');
 
 const knexMock = require('../../test/mocks/knex');
@@ -46,7 +48,7 @@ describe('account/retrieve', () => {
       });
 
       it('works', () => {
-        const uuid = 'testing-uuid';
+        const uuid = uuidv4();
         retrieveAccount(knexMock, {uuid});
         expect(retrieveAccount.usingUuid).to.be.calledOnce;
         expect(retrieveAccount.usingUuid).to.be.calledWith(knexMock, uuid);
@@ -56,7 +58,7 @@ describe('account/retrieve', () => {
     context('precedence', () => {
       const id = '123456789';
       const username = 'testuser';
-      const uuid = 'teste-test-test-testtttt';
+      const uuid = uuidv4();
 
       before(() => {
         sinon.stub(retrieveAccount, 'usingId');
