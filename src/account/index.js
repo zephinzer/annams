@@ -1,13 +1,13 @@
 const db = require('../db');
 
-const createAccount = require('./create');
-// const deleteAccount = require('./delete');
-const retrieveAccount = require('./retrieve');
+const create = require('./create').bind(null, db);
+const retrieve = require('./retrieve').bind(null, db);
 // const updateAccount = require('./update');
+// const deleteAccount = require('./delete');
 
 module.exports = {
-  create: createAccount.bind(this, db),
+  create,
+  retrieve,
   // delete: deleteAccount,
-  retrieve: retrieveAccount.bind(this, db),
   // update: updateAccount,
 };
