@@ -1,6 +1,6 @@
 const {validate} = require('./utility');
 
-const ERROR_INVALID_PARAMETERS = 'Invalid paremeters - one of :id, :email, :username, :uuid has to be specified'; // eslint-disable-line max-len
+const ERROR_INVALID_PARAMETERS = 'Invalid paremeters - one of :id, :username, or :uuid has to be specified'; // eslint-disable-line max-len
 
 module.exports = retrieveAccount;
 
