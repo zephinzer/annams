@@ -60,11 +60,15 @@ validate.password = (password, {
 validate.username = (username) => {
   return (
     (typeof username === 'string')
+    && username.match(/[a-zA-Z0-9\-\_\.]/gi)
+    && (username.indexOf('.') !== 0)
+    && (username.indexOf('.') !== username.length - 1)
   );
 };
 
 validate.uuid = (uuid) => {
   return (
     (typeof uuid === 'string')
+    && uuid.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i) !== null // eslint-disable-line max-len
   );
 };

@@ -1,3 +1,5 @@
+const uuidv4 = require('uuid/v4');
+
 const validator = require('./validator');
 
 describe('account/utility/validator', () => {
@@ -283,11 +285,12 @@ describe('account/utility/validator', () => {
     });
   });
 
-  describe('.uuid', () => {
+  describe.only('.uuid', () => {
     it('works as expected', () => {
       const validUuids = [
-        '16c8370f-c0e4-4f12-bdd1-ac3f2284a9e1',
-        'faaeb34b-9d88-428b-b22f-7f35cfd67457',
+        uuidv4(),
+        uuidv4(),
+        uuidv4(),
       ];
       const invalidUuids = [
         1,
@@ -297,6 +300,7 @@ describe('account/utility/validator', () => {
         undefined,
       ];
       validUuids.forEach((uuid) => {
+        console.info(uuid);
         expect(validator.uuid(uuid)).eql(true);
       });
       invalidUuids.forEach((uuid) => {
