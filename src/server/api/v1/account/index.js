@@ -12,9 +12,15 @@ module.exports = user;
 function user() {
   return new utility.RESTfulEntity([
     new Route('post', '/account'),
-    new Route('get', '/accounts'),
-    new Route('get', '/account'),
-    new Route('get', '/account/:identifier', (req, res) => {
+    new Route('get', '/accounts', (req, res) => {
+      const {offset, limit} = req.query;
+      account
+        .query({offset, limit})
+        .then((results) => {
+          res.json(results);
+        });
+    }),
+    new Route('get', '/account/:identifier', (req, res, next) => {
       const {identifier} = req.params;
       const validation = {
         id: validate.id(identifier),
