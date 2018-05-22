@@ -1,4 +1,3 @@
-const db = require('../db');
 const utility = require('./utility');
 
 module.exports = queryAccounts;
