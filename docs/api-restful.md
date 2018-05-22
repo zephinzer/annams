@@ -9,21 +9,23 @@ Entities:
 The base URL for Annams API is `http://annams.yourapp.com/api/v1`. The `v*` indicates the version of the API we are calling.
 
 ## Session
-
 ### Create Session (Login)
 #### `POST /session`
+N.A.
 
 ### Retrieve Session Data
 #### `GET /session`
+N.A.
 
 ### Update Session Data
 #### `PATCH /session`
+N.A.
 
 ### Delete Session (Logout)
 #### `DELETE /session`
+N.A.
 
 ## User
-
 ### Create User (Register New Account)
 #### `POST /account`
 
@@ -38,8 +40,23 @@ The base URL for Annams API is `http://annams.yourapp.com/api/v1`. The `v*` indi
 ### Retrieve all Users
 #### `GET /accounts`
 
+##### Query URL Parameters
+
+- **`offset`** : defines the offset as to which to start the query. **Defaults to 0**
+
+- **`limit`** : defines how many items the response should contain. **Defaults to 20**
+
+##### Examples
+
+```sh
+# get 20 accounts starting from the first
+curl -X GET 'http://localhost:10000/api/v1/accounts';
+
+# get 10 accounts starting from the fifth account
+curl -X GET 'http://localhost:10000/api/v1/accounts?offset=5&limit=10';
+```
+
 ### Retrieve User Data
-#### `GET /account`
 #### `GET /account/:userId`
 
 ### Retrieve Groups a User belongs to
