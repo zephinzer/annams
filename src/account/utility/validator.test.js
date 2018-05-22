@@ -285,7 +285,7 @@ describe('account/utility/validator', () => {
     });
   });
 
-  describe.only('.uuid', () => {
+  describe('.uuid', () => {
     it('works as expected', () => {
       const validUuids = [
         uuidv4(),
