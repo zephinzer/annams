@@ -1,6 +1,7 @@
 const express = require('express');
 const compression = require('compression');
 
+const error = require('./error');
 const liveness = require('./liveness');
 const logger = require('./logger');
 const metrics = require('./metrics');
@@ -38,6 +39,8 @@ function server(asMiddleware = false) {
       .type('application/json')
       .status(200)
       .json('ok'));
+    app.use(error().notFound);
+    app.use(error().serverError);
     server.instance = app;
   }
   return server.instance;
