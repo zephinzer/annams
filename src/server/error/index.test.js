@@ -44,7 +44,7 @@ describe('server/error', () => {
     });
   });
 
-  describe.only('.serverError()', () => {
+  describe('.serverError()', () => {
     before(() => {
       sinon.stub(error, 'generateErrorResponse');
     });
