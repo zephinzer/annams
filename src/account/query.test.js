@@ -3,7 +3,7 @@ const utility = require('./utility');
 
 const knexMock = require('../../test/mocks/knex');
 
-describe.only('account/query', () => {
+describe('account/query', () => {
   it('exports a function', () => {
     expect(queryAccounts).to.be.a('function');
   });
