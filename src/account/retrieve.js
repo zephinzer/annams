@@ -1,4 +1,5 @@
-const {validate} = require('./utility');
+const utility = require('./utility');
+const {validate} = utility;
 
 const ERROR_INVALID_PARAMETERS = 'Invalid paremeters - one of :id, :username, or :uuid has to be specified'; // eslint-disable-line max-len
 
@@ -49,12 +50,7 @@ function retrieveAccount(
 retrieveAccount.getUser =
   (db, key, value) => {
     return db('accounts')
-      .select([
-        'email',
-        'username',
-        'uuid',
-        'id',
-      ])
+      .select(utility.constant.accountSelectSerializer)
       .where(key, '=', value)
       .then((results) => {
         return results;
