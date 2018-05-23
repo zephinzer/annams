@@ -14,6 +14,17 @@ describe('config/validation', () => {
     });
 
     describe('length', () => {
+      let originalPasswordValidationLength;
+      before(() => {
+        originalPasswordValidationLength
+          = process.env.VALIDATION_PASSWORD_LENGTH;
+      });
+
+      after(() => {
+        process.env.VALIDATION_PASSWORD_LENGTH
+          = originalPasswordValidationLength;
+      });
+
       it('has reasonable defaults', () => {
         delete process.env.VALIDATION_PASSWORD_LENGTH;
         const testValidation = validation();
