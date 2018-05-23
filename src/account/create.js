@@ -13,12 +13,17 @@ module.exports = createAccount;
  * @param {Object} options.email
  * @param {Object} [options.username=null]
  * @param {Object} [options.password=null]
+ *
+ * @return {Promise}
  */
-function createAccount(db, {
-  email,
-  username = null,
-  password = null,
-} = {}) {
+function createAccount(
+  db,
+  {
+    email,
+    username = null,
+    password = null,
+  } = {}
+) {
   const validation = {
     email: validate.email(email),
     username: validate.username(username),
@@ -26,7 +31,7 @@ function createAccount(db, {
   };
 
   if (!validation.email) {
-    throw new Error(`:email specified ("${email}") was invalid.`);
+    throw new Error(`Specified email ("${email}") was invalid.`);
   }
 
   const insertObject = {email};
@@ -39,10 +44,9 @@ function createAccount(db, {
     insertObject.password = password;
   }
 
-  db('accounts')
+  return db('accounts')
     .insert(insertObject)
-    .then((res) => {
-      console.info(res);
+    .then((result) => {
+      return result;
     });
-    // TODO
 };
