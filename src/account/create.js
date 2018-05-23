@@ -6,9 +6,8 @@ module.exports = createAccount;
  * Creates a new Account with the email :email.
  *
  * If :username is specified, a username will be set.
- * 
  * If :pasword is specified, a password will be set.
- * 
+ *
  * @param {Object} db
  * @param {Object} options
  * @param {Object} options.email
