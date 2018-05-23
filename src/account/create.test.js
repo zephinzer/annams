@@ -2,7 +2,7 @@ const accountCreate = require('./create');
 
 const knexMock = require('../../test/mocks/knex');
 
-describe.only('account/create', () => {
+describe('account/create', () => {
   it('exports a function', () => {
     expect(accountCreate).to.be.a('function');
   });
