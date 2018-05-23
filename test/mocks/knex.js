@@ -15,6 +15,7 @@ function KnexMock(...args) {
   this.databaseName = args[0];
   this.spy = {
     constructor: sinon.spy(),
+    insert: sinon.spy(),
     limit: sinon.spy(),
     offset: sinon.spy(),
     orderBy: sinon.spy(),
@@ -31,6 +32,10 @@ function KnexMock(...args) {
   };
   this.spy.constructor.apply(this, [...args]);
 
+  this.insert = function(...args) {
+    this.spy.insert.apply(this, [...args]);
+    return this;
+  };
   this.limit = function(...args) {
     this.spy.limit.apply(this, [...args]);
     return this;
