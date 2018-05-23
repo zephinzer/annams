@@ -261,6 +261,27 @@ describe('account/utility/validator', () => {
         expect(validator.password(password, options)).eql(false);
       });
     });
+
+    it('validates multi-requirements correctly', () => {
+      const validPasswords = [
+        '1234567890aA1!',
+      ];
+      const invalidPasswords = [
+        'abcdefghjik',
+      ];
+      const options = {
+        length: 10,
+        specials: true,
+        numbers: true,
+        casings: true,
+      };
+      validPasswords.forEach((password) => {
+        expect(validator.password(password, options)).eql(true);
+      });
+      invalidPasswords.forEach((password) => {
+        expect(validator.password(password, options)).eql(false);
+      });
+    });
   });
 
   describe('.username', () => {
