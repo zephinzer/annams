@@ -6,7 +6,8 @@ exports.up = function(knex, Promise) {
     table.string('username', 32);
     table.string('password', 256);
     table.integer('session_id').unsigned();
-    table.timestamps();
+    table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
+    table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable();
   });
 };
 
