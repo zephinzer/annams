@@ -7,6 +7,7 @@ const logger = require('./logger');
 const metrics = require('./metrics');
 const readiness = require('./readiness');
 const security = require('./security');
+const serializer = require('./serializer');
 const tracer = require('./tracer');
 const utility = require('./utility');
 const api = require('./api');
@@ -32,6 +33,7 @@ function server(asMiddleware = false) {
     }
     app.use(compression());
     app.use(utility.cors());
+    app.use(serializer());
     app.use(api());
     app.use(readiness());
     app.use(liveness());
