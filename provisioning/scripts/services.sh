@@ -9,6 +9,28 @@ case $CHOSEN_ACTION in
     docker-compose -f "${DOCKER_COMPOSE_PATH}" build;
     exit $?;
     ;;
+  'mysql')
+    docker ps | grep annams_dev_database_mysql >/dev/null;
+    if [ "$?" != "0" ]; then 
+      printf -- 'Docker container "annams_dev_database_mysql" could not be found.\n';
+      printf -- '> Try running "npm run services start" first\n';
+      printf -- '> Exiting with error code 1.\n';
+      exit 1;
+    fi;
+    command -v mysql >/dev/null;
+    if [ "$?" != "0" ]; then 
+      printf -- 'MySQL command line utility tool "mysql" could not be found.\n';
+      printf -- '> Try installing it first for your system before running this.\n';
+      printf -- '> Exiting with error code 2.\n';
+      exit 2;
+    fi;
+    mysql \
+      -h127.0.0.1 \
+      -P13306 \
+      -uannams_user \
+      -pannams_password \
+    ;
+    ;;
   'status')
     _=$(docker ps | grep annams_dev_metrics_prometheus);
     printf -- 'metrics:      ';
