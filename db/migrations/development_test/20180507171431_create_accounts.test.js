@@ -38,7 +38,8 @@ describe('migration:create sessions', () => {
       expect(knexMock._.table.spy.timestamp).to.be.calledTwice;
       expect(knexMock._.table.spy.notNullable).to.be.calledTwice;
       expect(knexMock._.table.spy.defaultTo).to.be.calledTwice;
-      expect(knexMock._.table.spy.defaultTo).to.be.calledWith(knexMock._.fn.mock.now());
+      expect(knexMock._.table.spy.defaultTo)
+        .to.be.calledWith(knexMock._.fn.mock.now());
     });
   });
 
