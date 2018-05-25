@@ -20,9 +20,11 @@ function KnexMockTable(knexMock) {
     inTable: sinon.spy(),
     increments: sinon.spy(),
     integer: sinon.spy(),
+    notNullable: sinon.spy(),
     primary: sinon.spy(),
     references: sinon.spy(),
     string: sinon.spy(),
+    timestamp: sinon.spy(),
     timestamps: sinon.spy(),
     unsigned: sinon.spy(),
     reset: () => {
@@ -63,6 +65,10 @@ function KnexMockTable(knexMock) {
       this.spy.integer.apply(null, [...args]);
       return this.mock;
     },
+    notNullable: (...args) => {
+      this.spy.notNullable.apply(null, [...args]);
+      return this.mock;
+    },
     primary: (...args) => {
       this.spy.primary.apply(null, [...args]);
       return this.mock;
@@ -73,6 +79,10 @@ function KnexMockTable(knexMock) {
     },
     string: (...args) => {
       this.spy.string.apply(null, [...args]);
+      return this.mock;
+    },
+    timestamp: (...args) => {
+      this.spy.timestamp.apply(null, [...args]);
       return this.mock;
     },
     timestamps: (...args) => {
