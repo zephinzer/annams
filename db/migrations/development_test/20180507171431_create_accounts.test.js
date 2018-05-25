@@ -35,7 +35,10 @@ describe('migration:create sessions', () => {
       expect(knexMock._.table.spy.string).to.be.calledWith('password', 256);
       expect(knexMock._.table.spy.integer).to.be.calledWith('session_id');
       expect(knexMock._.table.spy.unsigned).to.be.called;
-      expect(knexMock._.table.spy.timestamps).to.be.called;
+      expect(knexMock._.table.spy.timestamp).to.be.calledTwice;
+      expect(knexMock._.table.spy.notNullable).to.be.calledTwice;
+      expect(knexMock._.table.spy.defaultTo).to.be.calledTwice;
+      expect(knexMock._.table.spy.defaultTo).to.be.calledWith(knexMock._.fn.mock.now());
     });
   });
 
