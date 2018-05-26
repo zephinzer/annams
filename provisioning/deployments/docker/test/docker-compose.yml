@@ -11,7 +11,7 @@ services:
     entrypoint: [ "npm", "run", "test", "sec" ]
     volumes:
       - "../../../../.nsprc:/app/.nsprc:ro"
-  test:
+  test-unit:
     image: ${ANNAMS_DEV_IMAGE}
     entrypoint: [ "npm", "run", "test" ]
     volumes:

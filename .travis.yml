@@ -99,7 +99,7 @@ jobs:
     - npm run ${NPM_TASK}
   - stage: test
     env:
-      - TASK: test lint
+      - TASK: test-lint
     script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(cat ./.commit_hash)"
@@ -107,7 +107,7 @@ jobs:
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
   - stage: test
     env:
-      - TASK: test sec
+      - TASK: test-sec
     script:
     - git log -n 1 --format='%H' > ./.commit_hash
     - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(cat ./.commit_hash)"
@@ -115,7 +115,7 @@ jobs:
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
   - stage: test
     env:
-      - TASK: test
+      - TASK: test-unit
     before_script:
     - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - chmod +x ./cc-test-reporter
