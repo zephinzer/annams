@@ -2,13 +2,13 @@ version: "3"
 services:
   test-lint:
     image: ${ANNAMS_DEV_IMAGE}
-    entrypoint: [ "npm", "run", "test-lint" ]
+    entrypoint: [ "npm", "run", "test", "lint" ]
     volumes:
       - "../../../../.eslintrc:/app/.eslintrc:ro"
       - "../../../../.eslintignore:/app/.eslintignore:ro"
   test-sec:
     image: ${ANNAMS_DEV_IMAGE}
-    entrypoint: [ "npm", "run", "test-sec" ]
+    entrypoint: [ "npm", "run", "test", "sec" ]
     volumes:
       - "../../../../.nsprc:/app/.nsprc:ro"
   test:
