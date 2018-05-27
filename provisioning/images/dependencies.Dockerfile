@@ -1,4 +1,5 @@
 FROM node:8-alpine
+LABEL MAINTAINER="zephinzer <dev@joeir.net>"
 WORKDIR /app
 ARG NODE_ENV="development"
 ARG YARN_FLAGS="--development"

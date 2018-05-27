@@ -134,7 +134,7 @@ For pipeline purposes, run:
 
 ```bash
 ENV=developmnt npm run build \
-  && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test;
+  && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test-unit;
 ```
 
 ### Consumer-Driven-Contract Testing
@@ -147,7 +147,25 @@ In short, run `npm run build-mock` to create the Wiremock image, then run `npm r
 ## Continuous Integration
 We use Travis to automatically run tests on every push to any branch. 
 
-`WIP`
+### Image Build Process
+#### Dependencies Image Building
+##### Building for Development
+```sh
+ENV=development npm run build-deps -- latest
+```
+##### Building for Production
+```sh
+npm run build-deps -- latest
+```
+#### Application Image Building
+##### Building for Development
+```sh
+ENV=development DEPENDENCY_VERSION=latest npm run build;
+```
+##### Building for Production
+```sh
+DEPENDENCY_VERSION=latest npm run build;
+```
 
 ## Release
 Releases are done on GitHub, NPM and Docker Hub.
