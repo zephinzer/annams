@@ -21,10 +21,6 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 jobs:
   include:
-  - stage: citest
-    if: branch = master
-    script:
-    - printf -- "i shouldnt run\n"
   - stage: build_dependencies
     env:
       - ENV: development
@@ -138,9 +134,7 @@ jobs:
     - sed -i.bak -e "s|/app|$(pwd)|g" ./coverage/lcov.info
     - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
   - stage: release
-    branches:
-      only:
-        - master
+    if: branch = master
     env:
       - PLATFORM: github.com
     script:
@@ -159,6 +153,7 @@ jobs:
         git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
   - stage: publish
+    if: branch = master
     env:
       - PLATFORM: npmjs.org
     script:
@@ -170,6 +165,7 @@ jobs:
         printf -- "Skipping because this is a pull request.\n";
       fi;
   - stage: publish
+    if: branch = master
     env:
       - PLATFORM: hub.docker.io
       - ENV: production
