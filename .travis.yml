@@ -5,6 +5,7 @@ node_js:
 services:
   - docker
 stages:
+  - citest
   - build_dependencies
   - build_applications
   - test
@@ -20,6 +21,12 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 jobs:
   include:
+  - stage: citest
+    branches:
+      only:
+        - master
+    script:
+    - printf -- "i shouldnt run\n"
   - stage: build_dependencies
     env:
       - ENV: development
