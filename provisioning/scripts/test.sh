@@ -1,20 +1,37 @@
 #!/bin/sh
-printf -- "Called with arguments: $@ (->MOCHA_FLAGS)\n";
-MOCHA_FLAGS="$@";
-FLAG_WATCH='--watch';
-CALLED_WITH_COMMAND="$0 $@";
-if [ -z "${CALLED_WITH_COMMAND##*$FLAG_WATCH*}" ]; then
-  NYC_FLAGS='--silent';
-else
-  NYC_FLAGS='';
-fi;
+CURR_DIR="$(dirname $0)";
+CALLED_WITH_ARGS="$*";
+CHOSEN_ACTION="$(printf -- "${*}" | cut -f 1 -d ' ')";
+ARGUMENTS="$(printf -- "${*}" | cut -f2- -d ' ')";
+
+printf -- "\033[1m";
+printf -- "------------------\n";
+printf -- "Called...\n";
+printf -- "  from directory: ${PWD}/${CURR_DIR}\n";
+printf -- "  with arguments: ${CALLED_WITH_ARGS}\n";
+printf -- "  with action:    ${CHOSEN_ACTION}\n";
+printf -- "  with params:    ${ARGUMENTS}\n";
+printf -- "------------------\n";
+printf -- "\033[0m";
+
 export NODE_ENV='test';
 
 case $CHOSEN_ACTION in
   help)
-    printf << HELP
-hi
+    printf -- "$(cat << HELP
+\033[1mUsage\033[0m:
+  npm test [action]
+
+\033[1mActions\033[0m:
+  help           - displays this message
+  deployment     - runs a check on docker compose files
+  lint           - runs the linter on this project
+  sec            - runs a security check on this project's dependencies
+  watch          - runs the unit tests and watches for changes
+  *              - runs the unit tests
 HELP
+)";
+    exit 0;
     ;;
   deployment)
     command -v docker-compose >/dev/null;
