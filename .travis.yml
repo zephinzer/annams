@@ -133,6 +133,9 @@ jobs:
     - sed -i.bak -e "s|/app|$(pwd)|g" ./coverage/lcov.info
     - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
   - stage: release
+    branches:
+      only:
+        - master
     env:
       - PLATFORM: github.com
     script:
@@ -151,6 +154,9 @@ jobs:
         git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
   - stage: publish
+    branches:
+      only:
+        - master
     env:
       - PLATFORM: npmjs.org
     script:
@@ -158,6 +164,9 @@ jobs:
     - ./provisioning/scripts/publish-npm.sh;
     - rm -rf ~/.npmrc;
   - stage: publish
+    branches:
+      only:
+        - master
     env:
       - PLATFORM: hub.docker.io
       - ENV: production
