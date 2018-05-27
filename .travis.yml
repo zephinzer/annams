@@ -22,9 +22,7 @@ before_install:
 jobs:
   include:
   - stage: citest
-    branches:
-      only:
-        - master
+    if: branch = master
     script:
     - printf -- "i shouldnt run\n"
   - stage: build_dependencies
