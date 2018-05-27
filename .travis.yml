@@ -5,7 +5,6 @@ node_js:
 services:
   - docker
 stages:
-  - citest
   - build_dependencies
   - build_applications
   - test
@@ -94,10 +93,8 @@ jobs:
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
   - stage: test
-    env:
-      - NPM_TASK: test deployment
     script:
-    - npm run ${NPM_TASK}
+    - npm run test deployment
   - stage: test
     env:
       - TASK: test-lint
