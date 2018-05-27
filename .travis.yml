@@ -7,6 +7,7 @@ services:
 stages:
   - build_dependencies
   - build_applications
+  - static_sanity_checks
   - test
   - release
   - publish
@@ -92,7 +93,7 @@ jobs:
     - docker push zephinzer/annams:${ENV}-latest;
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
-  - stage: test
+  - stage: static_sanity_checks
     script:
     - npm run test deployment
   - stage: test
