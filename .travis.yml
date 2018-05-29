@@ -140,9 +140,9 @@ jobs:
     - |
       if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
         COMMIT_MESSAGE="$(cat ./.commit_message)";
-        if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then npm run version-major-bump;
-        elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump;
-        else npm run version-patch-bump;
+        if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then zsc version bump --major;
+        elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then zsc version bump --minor;
+        else npm run zsc version bump --patch;
         fi;
         git remote set-url origin https://${GH_USERNAME}:${GH_ACCESS_TOKEN}@github.com/${GIT_ORIGIN_REMOTE_PATH};
         git push origin "${TRAVIS_BRANCH}" --tags;
@@ -168,7 +168,7 @@ jobs:
     - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
         git log -n 1 --format='%H' > ./.commit_hash;
         git checkout "${TRAVIS_BRANCH}";
-        VERSION="$(npm run version-get | egrep -i '^[0-9]+\..')";
+        VERSION="$(zsc version current)";
         docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
         docker pull zephinzer/annams:${ENV}-latest;
         docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;

@@ -19,11 +19,7 @@
     "start": "./provisioning/scripts/start.sh",
     "start-services": "./provisioning/scripts/start-services.sh",
     "stop-services": "./provisioning/scripts/stop-services.sh",
-    "test": "./provisioning/scripts/test.sh",
-    "version-get": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest get-latest -q",
-    "version-patch-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate patch -q",
-    "version-minor-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate minor -q",
-    "version-major-bump": "docker run -v \"$(pwd):/app\" zephinzer/vtscripts:latest iterate major -q"
+    "test": "./provisioning/scripts/test.sh"
   },
   "author": "zephinzer",
   "contributors": [
@@ -46,7 +42,8 @@
     "nyc": "^11.4.1",
     "sinon": "^4.4.1",
     "sinon-chai": "^2.14.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "zscripts": "^0.1.1"
   },
   "dependencies": {
     "bcrypt": "^2.0.1",
