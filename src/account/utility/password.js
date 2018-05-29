@@ -6,6 +6,8 @@ const password = {
     PBKDF2_ITERATIONS: 512,
     PBKDF2_KEY_LENGTH: 128,
   },
+  hash,
+  verify,
 };
 
 module.exports = password;
@@ -19,7 +21,7 @@ module.exports = password;
  *
  * @return {String}
  */
-password.hash = (passwordPlainText, salt) => {
+function hash(passwordPlainText, salt) {
   return (pbkdf2.pbkdf2Sync(
     passwordPlainText,
     salt,
@@ -33,13 +35,13 @@ password.hash = (passwordPlainText, salt) => {
  * Returns true if the provided :passwordPlainText together with the
  * :salt, when hashed equals to the hashed password :passwordHashed.
  *
- * @param {String} salt
  * @param {String} passwordPlainText
+ * @param {String} salt
  * @param {String} passwordHashed
  *
  * @return {Boolean}
  */
-password.verify = (salt, passwordPlainText, passwordHashed) => {
+function verify(passwordPlainText, salt, passwordHashed) {
   return (password.hash(passwordPlainText, salt) === passwordHashed);
 };
 

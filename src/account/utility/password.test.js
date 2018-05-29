@@ -42,7 +42,7 @@ describe.only('account/utility/password', () => {
       const passwordHash = passwordUtility.hash(password, salt);
       expect(
         passwordUtility
-          .verify(salt, password, passwordHash.toString())
+          .verify(password, salt, passwordHash.toString())
       ).to.be.true;
     });
   });
@@ -74,10 +74,10 @@ describe.only('account/utility/password', () => {
       it('will cause the .verify() function to fail if changed', () => {
         const passwordHash = passwordUtility.hash(password, salt);
         expect(passwordHash).to.eql(hashSnapshotHelloWorld);
-        expect(passwordUtility.verify(salt, password, passwordHash))
+        expect(passwordUtility.verify(password, salt, passwordHash))
           .to.be.true;
         passwordUtility.constant.PBKDF2_DIGEST = 'sha256';
-        expect(passwordUtility.verify(salt, password, passwordHash))
+        expect(passwordUtility.verify(password, salt, passwordHash))
           .to.be.false;
       });
     });
@@ -100,11 +100,11 @@ describe.only('account/utility/password', () => {
       it('will cause the .verify() function to fail if changed', () => {
         const passwordHash = passwordUtility.hash(password, salt);
         expect(passwordHash).to.eql(hashSnapshotHelloWorld);
-        expect(passwordUtility.verify(salt, password, passwordHash))
+        expect(passwordUtility.verify(password, salt, passwordHash))
           .to.be.true;
         passwordUtility.constant.PBKDF2_ITERATIONS =
           passwordUtility.constant.PBKDF2_ITERATIONS - 1;
-        expect(passwordUtility.verify(salt, password, passwordHash))
+        expect(passwordUtility.verify(password, salt, passwordHash))
           .to.be.false;
       });
     });
@@ -127,11 +127,11 @@ describe.only('account/utility/password', () => {
       it('will cause the .verify() function to fail if changed', () => {
         const passwordHash = passwordUtility.hash(password, salt);
         expect(passwordHash).to.eql(hashSnapshotHelloWorld);
-        expect(passwordUtility.verify(salt, password, passwordHash))
+        expect(passwordUtility.verify(password, salt, passwordHash))
           .to.be.true;
         passwordUtility.constant.PBKDF2_KEY_LENGTH =
           passwordUtility.constant.PBKDF2_KEY_LENGTH + 1;
-        expect(passwordUtility.verify(salt, password, passwordHash))
+        expect(passwordUtility.verify(password, salt, passwordHash))
           .to.be.false;
       });
     });
