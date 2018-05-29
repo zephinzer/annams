@@ -1,16 +1,17 @@
 const validator = require('./validator');
+const password = require('./password');
 
 const accountUtility = {};
 
 module.exports = accountUtility;
 
 accountUtility.validate = validator;
+accountUtility.password = password;
 accountUtility.constant = {
   accountSelectSerializer: [
     'email',
     'username',
     'uuid',
-    'id',
   ],
   defaults: {
     offset: 0,

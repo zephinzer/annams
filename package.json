@@ -17,8 +17,6 @@
     "reset-mock": "./provisioning/scripts/reset-mock.sh",
     "services": "./provisioning/scripts/services.sh",
     "start": "./provisioning/scripts/start.sh",
-    "start-services": "./provisioning/scripts/start-services.sh",
-    "stop-services": "./provisioning/scripts/stop-services.sh",
     "test": "./provisioning/scripts/test.sh"
   },
   "author": "zephinzer",
@@ -60,6 +58,7 @@
     "mysql2": "^1.5.3",
     "os-utils": "^0.0.14",
     "password-validate": "^0.0.2",
+    "pbkdf2": "^3.0.16",
     "pino": "^4.13.0",
     "prom-client": "^10.2.2",
     "redis": "^2.8.0",
