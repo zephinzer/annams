@@ -49,7 +49,7 @@ jobs:
       curl -s https://index.docker.io/v1/repositories/zephinzer/annams/tags | jq '.[].name' | grep "deps-${ENV}-$(cat ./.dependency_hash)";
       if [ "$?" != "0" ] || [ -z "${COMMIT_MESSAGE##*"[force build]"*}" ]; then
         ENV=${ENV} npm run build-deps -- "$(cat ./.dependency_hash)";
-        docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+        docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
         docker tag zephinzer/annams:deps-${ENV}-$(cat ./.dependency_hash) zephinzer/annams:deps-${ENV}-latest;
         docker push zephinzer/annams:deps-${ENV}-$(cat ./.dependency_hash);
         docker push zephinzer/annams:deps-${ENV}-latest;
@@ -63,7 +63,7 @@ jobs:
     - git log -n 1 --format='%H' > ./.commit_hash;
     - ENV=${ENV} DEPENDENCY_VERSION="$(cat ./.dependency_hash)" npm run build;
     - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${ENV}-$(cat ./.commit_hash);
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
     - docker push zephinzer/annams:${ENV}-latest;
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
@@ -76,7 +76,7 @@ jobs:
     - npm run services stop
     - npm run mock export
     - git log -n 1 --format='%H' > ./.commit_hash;
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
     - docker push zephinzer/annams:${ENV}-latest;
     - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
@@ -89,7 +89,7 @@ jobs:
     - git log -n 1 --format='%H' > ./.commit_hash;
     - ENV=${ENV} DEPENDENCY_VERSION="$(cat ./.dependency_hash)" npm run build;
     - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${ENV}-$(cat ./.commit_hash);
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+    - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
     - docker push zephinzer/annams:${ENV}-latest;
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
@@ -100,16 +100,14 @@ jobs:
     env:
       - TASK: test-lint
     script:
-    - git log -n 1 --format='%H' > ./.commit_hash
-    - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(cat ./.commit_hash)"
+    - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(git log -n 1 --format='%H')"
     - docker pull "${ANNAMS_DEV_IMAGE}"
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
   - stage: test
     env:
       - TASK: test-sec
     script:
-    - git log -n 1 --format='%H' > ./.commit_hash
-    - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(cat ./.commit_hash)"
+    - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(git log -n 1 --format='%H')"
     - docker pull "${ANNAMS_DEV_IMAGE}"
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
   - stage: test
@@ -120,8 +118,7 @@ jobs:
     - chmod +x ./cc-test-reporter
     - ./cc-test-reporter before-build
     script:
-    - git log -n 1 --format='%H' > ./.commit_hash
-    - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(cat ./.commit_hash)"
+    - export ANNAMS_DEV_IMAGE="zephinzer/annams:development-$(git log -n 1 --format='%H')"
     - docker pull "${ANNAMS_DEV_IMAGE}"
     - mkdir -p ./coverage/.nyc_output
     - mkdir -p ./coverage/.nyc_output/processinfo
@@ -172,7 +169,7 @@ jobs:
         git log -n 1 --format='%H' > ./.commit_hash;
         git checkout "${TRAVIS_BRANCH}";
         VERSION="$(npm run version-get | egrep -i '^[0-9]+\..')";
-        docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+        docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
         docker pull zephinzer/annams:${ENV}-latest;
         docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
         docker push zephinzer/annams:latest;
