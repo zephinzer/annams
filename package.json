@@ -8,7 +8,6 @@
   },
   "scripts": {
     "build": "./provisioning/scripts/build.sh",
-    "build-deps": "./provisioning/scripts/build-deps.sh",
     "db-updater": "./provisioning/scripts/db-updater.sh",
     "eslint": "npm run test-lint",
     "eslint-fix": "npm run fix-lint",

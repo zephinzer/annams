@@ -140,7 +140,7 @@ ENV=developmnt npm run build \
 ### Consumer-Driven-Contract Testing
 Wiremock is used to mock Annams. This feature is still a WIP but you can check out the documentation on how to do this at [the README](../mock/README.md).
 
-In short, run `npm run build-mock` to create the Wiremock image, then run `npm run start-mock` to start the container. Visit http://localhost:8080. To start the recorder, go to http://localhost:8080/__admin/recorder.
+In short, run `npm run build mock` to create the Wiremock image, then run `npm run start-mock` to start the container. Visit http://localhost:8080. To start the recorder, go to http://localhost:8080/__admin/recorder.
 
 [Read more on Wiremock](http://wiremock.org).
 
@@ -151,11 +151,11 @@ We use Travis to automatically run tests on every push to any branch.
 #### Dependencies Image Building
 ##### Building for Development
 ```sh
-ENV=development npm run build-deps -- latest
+ENV=development npm run build deps -- latest
 ```
 ##### Building for Production
 ```sh
-npm run build-deps -- latest
+npm run build deps -- latest
 ```
 #### Application Image Building
 ##### Building for Development
