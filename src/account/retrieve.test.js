@@ -1,6 +1,7 @@
 const uuidv4 = require('uuid/v4');
 
 const retrieveAccount = require('./retrieve');
+const accountUtility = require('./utility');
 
 const knexMock = require('../../test/mocks/knex');
 
@@ -107,12 +108,8 @@ describe('account/retrieve', () => {
         .getUser(knexMock, '_key', '_value')
         .then((resolved) => {
           expect(knexMocked.spy.constructor).to.be.calledWith('accounts');
-          expect(knexMocked.spy.select).to.be.calledWith([
-            'email',
-            'username',
-            'uuid',
-            'id',
-          ]);
+          expect(knexMocked.spy.select)
+            .to.be.calledWith(accountUtility.constant.accountSelectSerializer);
           expect(knexMocked.spy.where).to.be.calledWith('_key', '=', '_value');
           expect(resolved).to.eql('_then_resolved');
         });

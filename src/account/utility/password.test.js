@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const passwordUtility = require('./password');
 
-describe.only('account/utility/password', () => {
+describe('account/utility/password', () => {
   const hashSnapshotHelloWorld =
     fs.readFileSync(
       path.join(__dirname, '../../../test/resources/password.hash')

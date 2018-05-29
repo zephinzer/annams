@@ -5,6 +5,7 @@ describe('account/utility', () => {
     expect(utility).to.have.keys([
       'constant',
       'validate',
+      'password',
     ]);
   });
 
@@ -18,7 +19,6 @@ describe('account/utility', () => {
 
     describe('.accountSelectSerializer', () => {
       it('exports the correct values', () => {
-        expect(utility.constant.accountSelectSerializer).to.contain('id');
         expect(utility.constant.accountSelectSerializer).to.contain('email');
         expect(utility.constant.accountSelectSerializer).to.contain('uuid');
         expect(utility.constant.accountSelectSerializer).to.contain('username');
