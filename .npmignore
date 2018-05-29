@@ -2,10 +2,15 @@
 coverage
 node_modules
 provisioning
-tests
+test
 *.test.js
 **/*.test.js
+.codeclimate.yml
 .dockerignore
 .env
+.gitignore
 .nodemon.json
 .nsprc
+.travis.yml
+CNAME
+*.log

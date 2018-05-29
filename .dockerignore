@@ -1,8 +1,14 @@
 # local development files
 .git
+.gitignore
 .env
 provisioning/deployments
 provisioning/images
+
+# third party files
+.codeclimate.yml
+.travis.yml
+CNAME
 
 # documentation & coverage
 docs
