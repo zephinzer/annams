@@ -1,17 +1,17 @@
 const utility = require('../../utility');
+
 const {Route} = utility;
 
-module.exports = user;
+module.exports = account;
 
 /**
  * @return {utility.RESTfulEntity}
  */
-function user() {
+function account() {
   return new utility.RESTfulEntity([
-    new Route('post', '/account'),
-    new Route('get', '/accounts'),
-    new Route('get', '/account'),
-    new Route('get', '/account/:accountId'),
+    new Route('post', '/account', require('./post')),
+    new Route('get', '/accounts', require('./get')),
+    new Route('get', '/account/:identifier', require('./get-id')),
     new Route('pathch', '/account/:accountId'),
     new Route('delete', '/account'),
   ]).get();

@@ -1,13 +1,41 @@
+const uuidv4 = require('uuid/v4');
+
 const validator = require('./validator');
 
 describe('account/utility/validator', () => {
   it('has the correct keys', () => {
     expect(validator).to.have.keys([
+      'id',
       'email',
       'password',
       'username',
       'uuid',
     ]);
+  });
+
+  describe('.id', () => {
+    it('validates IDs correctly', () => {
+      const validIds = [
+        '1',
+        1,
+        '123',
+        1234567,
+      ];
+      const invalidIds = [
+        0,
+        -1,
+        true,
+        {},
+        null,
+        () => {},
+      ];
+      validIds.forEach((id) => {
+        expect(validator.id(id)).to.be.true;
+      });
+      invalidIds.forEach((id) => {
+        expect(validator.id(id)).to.be.false;
+      });
+    });
   });
 
   describe('.email', () => {
@@ -233,6 +261,27 @@ describe('account/utility/validator', () => {
         expect(validator.password(password, options)).eql(false);
       });
     });
+
+    it('validates multi-requirements correctly', () => {
+      const validPasswords = [
+        '1234567890aA1!',
+      ];
+      const invalidPasswords = [
+        'abcdefghjik',
+      ];
+      const options = {
+        length: 10,
+        specials: true,
+        numbers: true,
+        casings: true,
+      };
+      validPasswords.forEach((password) => {
+        expect(validator.password(password, options)).eql(true);
+      });
+      invalidPasswords.forEach((password) => {
+        expect(validator.password(password, options)).eql(false);
+      });
+    });
   });
 
   describe('.username', () => {
@@ -260,8 +309,9 @@ describe('account/utility/validator', () => {
   describe('.uuid', () => {
     it('works as expected', () => {
       const validUuids = [
-        '16c8370f-c0e4-4f12-bdd1-ac3f2284a9e1',
-        'faaeb34b-9d88-428b-b22f-7f35cfd67457',
+        uuidv4(),
+        uuidv4(),
+        uuidv4(),
       ];
       const invalidUuids = [
         1,
@@ -271,6 +321,7 @@ describe('account/utility/validator', () => {
         undefined,
       ];
       validUuids.forEach((uuid) => {
+        console.info(uuid);
         expect(validator.uuid(uuid)).eql(true);
       });
       invalidUuids.forEach((uuid) => {

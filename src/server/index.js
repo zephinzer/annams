@@ -1,11 +1,13 @@
 const express = require('express');
 const compression = require('compression');
 
+const error = require('./error');
 const liveness = require('./liveness');
 const logger = require('./logger');
 const metrics = require('./metrics');
 const readiness = require('./readiness');
 const security = require('./security');
+const serializer = require('./serializer');
 const tracer = require('./tracer');
 const utility = require('./utility');
 const api = require('./api');
@@ -31,6 +33,7 @@ function server(asMiddleware = false) {
     }
     app.use(compression());
     app.use(utility.cors());
+    app.use(serializer());
     app.use(api());
     app.use(readiness());
     app.use(liveness());
@@ -38,6 +41,8 @@ function server(asMiddleware = false) {
       .type('application/json')
       .status(200)
       .json('ok'));
+    app.use(error().notFound);
+    app.use(error().serverError);
     server.instance = app;
   }
   return server.instance;

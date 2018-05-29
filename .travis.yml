@@ -7,6 +7,7 @@ services:
 stages:
   - build_dependencies
   - build_applications
+  - static_sanity_checks
   - test
   - release
   - publish
@@ -92,11 +93,9 @@ jobs:
     - docker push zephinzer/annams:${ENV}-latest;
     - docker push zephinzer/annams:${ENV}-$(cat ./.commit_hash);
     - docker logout;
-  - stage: test
-    env:
-      - NPM_TASK: test-deployment
+  - stage: static_sanity_checks
     script:
-    - npm run ${NPM_TASK}
+    - npm run test deployment
   - stage: test
     env:
       - TASK: test-lint
@@ -115,7 +114,7 @@ jobs:
     - docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run ${TASK}
   - stage: test
     env:
-      - TASK: test
+      - TASK: test-unit
     before_script:
     - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - chmod +x ./cc-test-reporter
@@ -133,6 +132,7 @@ jobs:
     - sed -i.bak -e "s|/app|$(pwd)|g" ./coverage/lcov.info
     - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
   - stage: release
+    if: branch = master
     env:
       - PLATFORM: github.com
     script:
@@ -141,7 +141,7 @@ jobs:
     - git checkout "${TRAVIS_BRANCH}";
     - git reset --hard "$(cat ./.commit_hash)";
     - |
-      if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+      if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
         COMMIT_MESSAGE="$(cat ./.commit_message)";
         if [ -z "${COMMIT_MESSAGE##*"[major release]"*}" ]; then npm run version-major-bump;
         elif [ -z "${COMMIT_MESSAGE##*"[minor release]"*}" ]; then npm run version-minor-bump;
@@ -151,24 +151,34 @@ jobs:
         git push origin "${TRAVIS_BRANCH}" --tags;
       fi;
   - stage: publish
+    if: branch = master
     env:
       - PLATFORM: npmjs.org
     script:
-    - printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
-    - ./provisioning/scripts/publish-npm.sh;
-    - rm -rf ~/.npmrc;
+    - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+        printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
+        ./provisioning/scripts/publish-npm.sh;
+        rm -rf ~/.npmrc;
+      else
+        printf -- "Skipping because this is a pull request.\n";
+      fi;
   - stage: publish
+    if: branch = master
     env:
       - PLATFORM: hub.docker.io
       - ENV: production
     script:
-    - git log -n 1 --format='%H' > ./.commit_hash;
-    - git checkout "${TRAVIS_BRANCH}";
-    - VERSION="$(npm run version-get | egrep -i '^[0-9]+\..')"
-    - docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
-    - docker pull zephinzer/annams:${ENV}-latest;
-    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
-    - docker push zephinzer/annams:latest;
-    - docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${VERSION};
-    - docker push zephinzer/annams:${VERSION};
-    - docker logout
+    - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+        git log -n 1 --format='%H' > ./.commit_hash;
+        git checkout "${TRAVIS_BRANCH}";
+        VERSION="$(npm run version-get | egrep -i '^[0-9]+\..')";
+        docker login -u ${DH_USERNAME} -p ${DH_PASSWORD};
+        docker pull zephinzer/annams:${ENV}-latest;
+        docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:latest;
+        docker push zephinzer/annams:latest;
+        docker tag zephinzer/annams:${ENV}-latest zephinzer/annams:${VERSION};
+        docker push zephinzer/annams:${VERSION};
+        docker logout;
+      else
+        printf -- "Skipping because this is a pull request.\n";
+      fi;

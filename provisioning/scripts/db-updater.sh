@@ -1,25 +1,29 @@
 #!/bin/sh
-DATABASE_UP=0;
-DATABASE_HOST=dev_database;
-DATABASE_PORT=3306;
+if [ "${DB_HOST}" = "" ]; then DB_HOST=dev_database; fi;
+if [ "${DB_PORT}" = "" ]; then DB_PORT=3306; fi;
 
-printf -- 'Waiting for MySQL to be up..';
+DATABASE_UP=0;
+printf -- "Waiting for MySQL at '${DB_HOST}:${DB_PORT}' to be up..";
 while [ "${DATABASE_UP}" = "0" ]; do
-  nc -z -v "${DATABASE_HOST}" "${DATABASE_PORT}";
+  nc -z -v "${DB_HOST}" "${DB_PORT}" 2>/dev/null;
   if [ "$?" = "0" ]; then DATABASE_UP=1; fi;
   printf '.';
   sleep 1;
 done;
-printf -- " MySQL found at ${DATABASE_HOST}:${DATABASE_PORT}.\n";
+printf -- " MySQL found at ${DB_HOST}:${DB_PORT}.\n";
 
 if [ "${ENABLE_MIGRATION}" = "1" ]; then
   printf -- 'Performing migration...\n';
-  knex migrate:latest;
+  DATABASE_HOST="${DB_HOST}" \
+    DATABASE_PORT="${DB_PORT}" \
+    knex migrate:latest;
 fi;
 
 if [ "${ENABLE_SEEDING}" = "1" ]; then
   printf -- 'Performing data seeding...\n';
-  knex seed:run;
+  DATABASE_HOST="${DB_HOST}" \
+    DATABASE_PORT="${DB_PORT}" \
+    knex seed:run;
 fi;
 
 exit 0;

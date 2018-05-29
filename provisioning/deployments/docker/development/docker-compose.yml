@@ -60,7 +60,7 @@ services:
       DATABASE_PORT: "3306"
       DATABASE_NAME: "annams"
       ENABLE_MIGRATION: "1"
-      ENABLED_SEDDING: "1"
+      ENABLE_SEEDING: "1"
     entrypoint: [ "npm", "run", "db-updater" ]
     working_dir: /app
     user: ${USER_ID}

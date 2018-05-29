@@ -31,12 +31,10 @@ function KnexMockSchema(knexMock) {
   this.mock = {
     alterTable: (...args) => {
       this.spy.alterTable.apply(null, [...args]);
-      console.info(this.knex);
       args[1](this.knex._.table.mock);
     },
     createTable: (...args) => {
       this.spy.createTable.apply(null, [...args]);
-      console.info(this.knex);
       args[1](this.knex._.table.mock);
     },
     dropTable: (...args) => {
