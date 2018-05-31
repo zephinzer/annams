@@ -4,7 +4,7 @@ const apiAccountPut = require('./put');
 
 const expressMock = require('../../../../../test/mocks/express');
 
-describe.only('server/api/v1/account/put', () => {
+describe('server/api/v1/account/put', () => {
   afterEach(() => {
     expressMock.request._.reset();
     expressMock.response._.reset();
