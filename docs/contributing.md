@@ -1,9 +1,10 @@
 # Contributing to Annams
 
 1. [Technologies Involved](#technologies-involved)
-2. [Setting up the development environment](#setting-up-the-development-environment)
+2. [Provisioning the Development Environment](#provisioning-the-development-environment)
 3. [Running in development](#running-in-development)
 4. [Testing](#testing)
+5. [Continuous Integration](#continuous-integration)
 
 We work via standard fork + merge request to `master` model.
 
@@ -20,93 +21,89 @@ We work via standard fork + merge request to `master` model.
 5. Kubernetes - *deployment*
   - MiniKube for testing deployments
 
-## Provisioning
+## Provisioning the Development Environment
 You'll need a Docker daemon installed and running on your host machine, and you can get it from this link: https://store.docker.com/search?type=edition&offering=community.
 
-Confirm that Docker, Git, Node 8 and Yarn are installed on your machine. You can verify this via:
+Confirm that Docker, Node 8 and Yarn are installed on your machine. You can verify this via:
 
-```bash
+```sh
 docker version;
 # > Client: ...
-git --version
-# > git version ...
+docker-compose version;
+# > docker-compose version: ...
 node -v
 # > v....
 yarn -v
 # > ...
 ```
 
-## Development
 ### Dependency Installation
 To get started, install the NPM dependencies. We use Yarn to manage the dependencies:
 
-```bash
-yarn install
+```sh
+yarn install;
 ```
 
-### External Services Startup
+### Support Services Startup
 Next, start the services in the background:
 
-```bash
-npm run services start
+```sh
+npm run services start;
 ```
 
 Verify they are up by running:
 
-```bash
-docker ps | grep annams_dev
+```sh
+npm run service status;
 ```
 
 > To stop the services, run `npm run services stop`
 
 The available services are:
 
-- MySQL (exposed on port 13306 on host - [localhost:13306](localhost:13306))
+- MySQL (exposed on port 13306 on host - [localhost:13306](http://localhost:13306))
 - Prometheus (exposed on port 19090 on host [localhost:19090](http://localhost:19090))
 - Prometheus PushGateway (exposed on port 19091 on host [localhost:19091](http://localhost:19091))
-- Redis (exposed on port 16379 on host [localhost:16379](localhost:16379))
-- Wiremock (exposed on port 18081 on host localhost:18081](localhost:18081))
+- Redis (exposed on port 16379 on host [localhost:16379](http://localhost:16379))
+- Wiremock (exposed on port 18081 on host [localhost:18081](http://localhost:18081))
 - Zipkin (exposed on port 19411 on host [localhost:19411](http://localhost:19411))
 
 > The ports have been configured with a pre-pended `1` to avoid confusion between running in production/running in development.
 
+### Git Hooks
+Some Git hooks have been provided for ease of verifying that the code base is commit worthy. To add these to the Git repository, run:
+
+```sh
+npm run git-provisioning;
+```
+
+> Do not use Yarn as relative paths using `dirname $0` are used.
+
+## Running in development
 ### Application Startup
 You should then be able to run the following command to get started developing locally:
 
-```bash
+```sh
 npm start
 ```
 
 To test the production build, run:
 
-```bash
-npm start-prd
-```
-
-OR
-
-```bash
+```sh
 ENV=production npm start
 ```
 
 ## Testing
-
 ### Code Quality
 ESLint is used for the linter. Run it with:
 
-```bash
-npm run test-lint;
-```
-
-To fix auto-correctable errors, run:
-
-```bash
-npm run fix-lint;
+```sh
+npm run test lint;
 ```
 
 For pipeline purposes, run:
 
-```bash
+```sh
 ENV=developmnt npm run build \
   && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test-lint;
 ```
@@ -114,21 +111,23 @@ ENV=developmnt npm run build \
 ### Depndency Vulnerability
 NSP is used to check for known security vulnerabilities in dependencies. Run it with:
 
-```bash
-npm run test-sec;
+```sh
+npm run test sec;
 ```
 
 For pipeline purposes, run:
 
-```bash
+```sh
 ENV=developmnt npm run build \
   && ANNAMS_DEV_IMAGE="zephinzer/annams:development-latest" docker-compose -f ./provisioning/deployments/docker/test/docker-compose.yml run test-sec;
 ```
 
 ### Functional Testing
-Mocha is used as the test framework with tests stored in [`./tests`](../tests) relative to the project root.
+Mocha is used as the test framework with tests stored in [`./tests`](../tests) relative to the project root. Run it with:
 
-`WIP`
+```sh
+npm run test;
+```
 
 For pipeline purposes, run:
 
@@ -148,26 +147,21 @@ In short, run `npm run build mock` to create the Wiremock image, then run `npm r
 We use Travis to automatically run tests on every push to any branch. 
 
 ### Image Build Process
-#### Dependencies Image Building
-##### Building for Development
+#### Building for Development
 ```sh
-ENV=development npm run build deps -- latest
-```
-##### Building for Production
-```sh
-npm run build deps -- latest
-```
-#### Application Image Building
-##### Building for Development
-```sh
+ENV=development npm run build deps -- latest;
 ENV=development DEPENDENCY_VERSION=latest npm run build;
 ```
-##### Building for Production
+
+#### Building for Production
 ```sh
+npm run build deps -- latest;
 DEPENDENCY_VERSION=latest npm run build;
 ```
 
-## Release
-Releases are done on GitHub, NPM and Docker Hub.
+### Releasing
+Releases are done on GitHub, NPM and Docker Hub. This process is automated in the Travis CI pipeline.
 
-`WIP`
+- GitHub @ https://github.com/zephinzer/annams/releases
+- NPM @ https://www.npmjs.com/package/annams
+- Docker Hub @ https://hub.docker.com/r/zephinzer/annams/

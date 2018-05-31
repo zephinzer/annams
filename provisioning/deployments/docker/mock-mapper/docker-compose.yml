@@ -11,7 +11,7 @@ services:
       - ANNAMS_HOST=dev_app
       - WIREMOCK_HOST=dev_mock
       - WIREMOCK_PORT=8080
-    entrypoint: [ "/app/provisioning/scripts/mock-scrape.sh" ]
+    entrypoint: [ "/app/provisioning/scripts/entrypoints/mock-scrape.sh" ]
     user: ${USER_ID}
     volumes:
       - "../../../../mock:/app/mock:Z"

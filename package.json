@@ -9,15 +9,11 @@
   "scripts": {
     "build": "./provisioning/scripts/build.sh",
     "db-updater": "./provisioning/scripts/db-updater.sh",
-    "eslint": "npm run test-lint",
-    "eslint-fix": "npm run fix-lint",
-    "exec-mock": "./provisioning/scripts/exec-mock.sh",
-    "fix-lint": "eslint . --fix",
     "mock": "./provisioning/scripts/mock.sh",
-    "reset-mock": "./provisioning/scripts/reset-mock.sh",
     "services": "./provisioning/scripts/services.sh",
     "start": "./provisioning/scripts/start.sh",
-    "test": "./provisioning/scripts/test.sh"
+    "test": "./provisioning/scripts/test.sh",
+    "git-provision": "./provisioning/scripts/git-provision.sh"
   },
   "author": "zephinzer",
   "contributors": [

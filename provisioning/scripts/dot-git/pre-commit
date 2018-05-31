@@ -1,0 +1,21 @@
+#!/bin/sh
+printf -- '\033[1mANNAMS pre-commit hook\033[0m\n\n';
+
+DO_NOT_PUSH=0;
+printf -- '> verifying deployment files integrity... \n';
+yarn test deployment;
+if [ "$?" != "0" ]; then DO_NOT_PUSH=1; fi;
+printf -- '> linting the involved commits... \n';
+yarn test lint;
+if [ "$?" != "0" ]; then DO_NOT_PUSH=1; fi;
+printf -- '> checking for vulnerabilities... \n';
+yarn test sec;
+if [ "$?" != "0" ]; then DO_NOT_PUSH=1; fi;
+
+if [ ${DO_NOT_PUSH} -eq 1 ]; then
+  printf -- '> \033[31m\033[1msome checks failed... NO COMMIT.\033[0m\n';
+  exit 1;
+else
+  printf -- '> \033[32m\033[1mall checks passed... COMMITTING...\033[0m\n';
+  exit 0;
+fi;

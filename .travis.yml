@@ -154,7 +154,7 @@ jobs:
     script:
     - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
         printf -- "//${NPM_REGISTRY_URL}/:_authToken=${NPM_TOKEN}" > ~/.npmrc;
-        ./provisioning/scripts/publish-npm.sh;
+        ./provisioning/scripts/ci/publish-npm.sh;
         rm -rf ~/.npmrc;
       else
         printf -- "Skipping because this is a pull request.\n";
