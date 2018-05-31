@@ -1,9 +1,12 @@
 const express = require('express');
 
+const validate = require('./validate');
+
 module.exports = {
   initializeRouter,
   RESTfulEntity,
   Route,
+  validate,
 };
 
 /**

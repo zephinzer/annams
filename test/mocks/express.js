@@ -11,17 +11,29 @@ express._.mock = function(thisArg) {
   return mockedProperty;
 };
 
+express.next = express._.mock(express.next);
+express.next._ = {
+  reset: () => {
+    express.next.spy.resetHistory();
+  },
+};
+
 express.request = {};
-express.request.headers = {};
-express.request.headers.id = '_test_express_mock_id';
-express.request.header = {};
-express.request.header.origin = '_test_express_mock_origin';
-express.request.host = '_test_express_mock_host';
-express.request.method = '_test_express_mock_method';
+express.request._ = {
+  reset: () => {
+    express.request.headers = {};
+    express.request.headers.id = '_test_express_mock_id';
+    express.request.header = {};
+    express.request.header.origin = '_test_express_mock_origin';
+    express.request.host = '_test_express_mock_host';
+    express.request.method = '_test_express_mock_method';
+  },
+};
+express.request._.reset();
 
 express.response = {};
 express.response._ = {};
-express.response._.clear = function() {
+express.response._.reset = function() {
   const properties =
     Object.keys(express.response).filter((val) => (val.indexOf('_') !== 0));
   properties.forEach((property) => {

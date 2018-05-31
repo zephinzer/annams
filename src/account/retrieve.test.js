@@ -102,7 +102,11 @@ describe('account/retrieve', () => {
   });
 
   describe('.getUser()', () => {
-    it('works', () => {
+    beforeEach(() => {
+      knexMock._.resetAll();
+    });
+
+    it('works', (done) => {
       let knexMocked;
       knexMocked = retrieveAccount
         .getUser(knexMock, '_key', '_value')
@@ -112,8 +116,9 @@ describe('account/retrieve', () => {
             .to.be.calledWith(accountUtility.constant.accountSelectSerializer);
           expect(knexMocked.spy.where).to.be.calledWith('_key', '=', '_value');
           expect(resolved).to.eql('_then_resolved');
+          done();
         });
-      return knexMocked;
+      knexMocked.spy.then.args[0][0]('_then_resolved');
     });
   });
 

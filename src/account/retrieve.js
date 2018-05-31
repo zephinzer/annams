@@ -51,10 +51,7 @@ retrieveAccount.getUser =
   (db, key, value) => {
     return db('accounts')
       .select(utility.constant.accountSelectSerializer)
-      .where(key, '=', value)
-      .then((results) => {
-        return results;
-      });
+      .where(key, '=', value);
   };
 
 retrieveAccount.usingId = (db, id) =>

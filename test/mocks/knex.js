@@ -14,6 +14,7 @@ module.exports = KnexMock;
 function KnexMock(...args) {
   this.databaseName = args[0];
   this.spy = {
+    catch: sinon.spy(),
     constructor: sinon.spy(),
     insert: sinon.spy(),
     limit: sinon.spy(),
@@ -21,6 +22,7 @@ function KnexMock(...args) {
     orderBy: sinon.spy(),
     select: sinon.spy(),
     then: sinon.spy(),
+    update: sinon.spy(),
     where: sinon.spy(),
     reset: () => {
       Object.keys(this.spy).forEach((key) => {
@@ -31,6 +33,11 @@ function KnexMock(...args) {
     },
   };
   this.spy.constructor.apply(this, [...args]);
+
+  this.catch = function(...args) {
+    this.spy.catch.apply(this, [...args]);
+    return this;
+  };
 
   this.insert = function(...args) {
     this.spy.insert.apply(this, [...args]);
@@ -56,21 +63,18 @@ function KnexMock(...args) {
     return this;
   };
 
+  this.update = function(...args) {
+    this.spy.update.apply(this, [...args]);
+    return this;
+  };
+
   this.where = function(...args) {
     this.spy.where.apply(this, [...args]);
     return this;
   };
 
-  this.then = function(...args) {
+  this.then = (...args) => {
     this.spy.then.apply(this, [...args]);
-    setTimeout(() => {
-      try {
-        args[0]('_then_resolved');
-      } catch (ex) {
-        console.error(ex);
-        throw ex;
-      }
-    }, 5);
     return this;
   };
   return this;
@@ -78,6 +82,7 @@ function KnexMock(...args) {
 
 KnexMock._ = {};
 
+KnexMock.__exceptions = [];
 KnexMock._.fn = new KnexMockFn(KnexMock);
 KnexMock._.schema = new KnexMockSchema(KnexMock);
 KnexMock._.table = new KnexMockTable(KnexMock);

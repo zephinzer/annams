@@ -1,4 +1,5 @@
-const {validate} = require('./utility');
+const error = require('./error');
+const utility = require('./utility');
 
 module.exports = createAccount;
 
@@ -10,28 +11,33 @@ module.exports = createAccount;
  *
  * @param {Object} db
  * @param {Object} options
- * @param {Object} options.email
+ * @param {Object} [options.email=null]
  * @param {Object} [options.username=null]
  * @param {Object} [options.password=null]
  *
+ * @throws {Error}
  * @return {Promise}
  */
 function createAccount(
   db,
   {
-    email,
+    email = null,
     username = null,
     password = null,
   } = {}
 ) {
+  if (!email) {
+    throw error.missingField('email');
+  }
+
   const validation = {
-    email: validate.email(email),
-    username: validate.username(username),
-    password: validate.password(password),
+    email: utility.validate.email(email),
+    username: utility.validate.username(username),
+    password: utility.validate.password(password),
   };
 
   if (!validation.email) {
-    throw new Error(`Specified email ("${email}") was invalid.`);
+    throw error.invalidField('email', email);
   }
 
   const insertObject = {email};

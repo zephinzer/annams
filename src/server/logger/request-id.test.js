@@ -16,7 +16,7 @@ describe('server/logger/request-id', () => {
   });
 
   context('tracer is defined', () => {
-    it('sets the ID of the request header correctly', () => {
+    it('sets the ID of the request correctly', () => {
       const getTraceIdSpy = sinon.spy();
       const tracerMock = {
         getTraceId: (...args) => {
@@ -27,8 +27,10 @@ describe('server/logger/request-id', () => {
       const middleware = requestIdLogger(tracerMock);
       const request = {headers: {}};
       middleware(request, null, () => ({}));
-      expect(request.headers).to.have.key('id');
+      expect(request.headers).to.include.key('id');
       expect(request.headers.id).to.eql('_test_request_id_trace_id');
+      expect(request).to.include.key('id');
+      expect(request.id).to.eql('_test_request_id_trace_id');
     });
   });
 });

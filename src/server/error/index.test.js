@@ -7,11 +7,42 @@ describe('server/error', () => {
     expect(error).to.be.a('function');
   });
 
+  it('has the right keys', () => {
+    expect(error).to.have.keys([
+      'instance',
+      'generateErrorResponse',
+      'trigger',
+    ]);
+  });
+
   it('returns an object with the correct keys and type', () => {
     expect(error()).to.have.keys([
       'notFound',
       'serverError',
     ]);
+  });
+  describe('.trigger', () => {
+    const verifyConformsToStandard = (errorTrigger) => {
+      expect(() => errorTrigger()).to.throw(Error);
+      try {
+        errorTrigger();
+      } catch (ex) {
+        expect(ex).to.have.keys(['status', 'code']);
+        expect(ex.message).to.not.be.empty;
+      }
+    };
+
+    it('has the right keys', () => {
+      expect(error.trigger).to.have.keys([
+        'badRequest',
+      ]);
+    });
+
+    describe('.badRequest()', () => {
+      it('triggers an error with the correct properties', () => {
+        verifyConformsToStandard(error.trigger.badRequest);
+      });
+    });
   });
 
   describe('.notFound()', () => {
@@ -20,7 +51,7 @@ describe('server/error', () => {
     });
 
     beforeEach(() => {
-      expressMock.response._.clear();
+      expressMock.response._.reset();
       error.generateErrorResponse.resetHistory();
     });
 
@@ -33,14 +64,15 @@ describe('server/error', () => {
     });
 
     it('works as expected', () => {
-      error().notFound(null, expressMock.response, null);
-      expect(expressMock.response.status.spy).to.be.calledWith(404);
-      expect(expressMock.response.json.spy).to.be.calledOnce;
-      expect(error.generateErrorResponse).to.be.calledOnce;
-      expect(error.generateErrorResponse).to.be.calledWith(
-        'ERROR_NOT_FOUND',
-        'not found'
-      );
+      error().notFound({
+        method: '__test_method',
+        path: '/__test/__path',
+      }, expressMock.response, expressMock.next);
+      expect(expressMock.next.spy).to.be.calledWithExactly({
+        code: 'ERROR_ROUTE_NOT_FOUND',
+        message: 'The requested route (__test_method /__test/__path) could not be found.', // eslint-disable-line max-len
+        status: 404,
+      });
     });
   });
 
@@ -50,7 +82,7 @@ describe('server/error', () => {
     });
 
     beforeEach(() => {
-      expressMock.response._.clear();
+      expressMock.response._.reset();
       error.generateErrorResponse.resetHistory();
     });
 
@@ -63,13 +95,14 @@ describe('server/error', () => {
     });
 
     it('works as expected if a null error was thrown', () => {
-      error().serverError(null, null, expressMock.response, null);
-      expect(expressMock.response.status.spy).to.be.calledWith(500);
+      error().serverError(null, {id: '_test_id'}, expressMock.response, null);
+      expect(expressMock.response.status.spy).to.be.calledWithExactly(500);
       expect(expressMock.response.json.spy).to.be.calledOnce;
       expect(error.generateErrorResponse).to.be.calledOnce;
-      expect(error.generateErrorResponse).to.be.calledWith(
+      expect(error.generateErrorResponse).to.be.calledWithExactly(
         'ERROR_GENERIC',
-        'unknown'
+        'An unknown error occurred.',
+        '_test_id',
       );
     });
 
@@ -81,12 +114,13 @@ describe('server/error', () => {
         code: testCodeValue,
         message: testMessagevalue,
       }, null, expressMock.response, null);
-      expect(expressMock.response.status.spy).to.be.calledWith(500);
+      expect(expressMock.response.status.spy).to.be.calledWithExactly(500);
       expect(expressMock.response.json.spy).to.be.calledOnce;
       expect(error.generateErrorResponse).to.be.calledOnce;
-      expect(error.generateErrorResponse).to.be.calledWith(
+      expect(error.generateErrorResponse).to.be.calledWithExactly(
         testCodeValue,
-        testMessagevalue
+        testMessagevalue,
+        '---',
       );
     });
   });

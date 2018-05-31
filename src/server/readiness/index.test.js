@@ -145,7 +145,7 @@ describe('server/readiness', () => {
       });
 
       afterEach(() => {
-        expressMock.response._.clear();
+        expressMock.response._.reset();
       });
 
       it('logs the correct output to the console', async () => {
@@ -187,7 +187,7 @@ describe('server/readiness', () => {
       });
 
       afterEach(() => {
-        expressMock.response._.clear();
+        expressMock.response._.reset();
       });
 
       it('returns the correct headers', async () => {
@@ -216,7 +216,7 @@ describe('server/readiness', () => {
       });
 
       afterEach(() => {
-        expressMock.response._.clear();
+        expressMock.response._.reset();
       });
 
       it('returns the correct headers', async () => {

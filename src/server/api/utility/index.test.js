@@ -11,6 +11,7 @@ describe('server/api/utility', () => {
       'initializeRouter',
       'RESTfulEntity',
       'Route',
+      'validate',
     ]);
   });
 

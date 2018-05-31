@@ -15,7 +15,9 @@ module.exports = requestIdLogger;
  */
 function requestIdLogger(tracer = {}) {
   return (req, res, next) => {
-    req.headers.id = (!tracer.getTraceId) ? uuid() : tracer.getTraceId();
+    const traceId = (!tracer.getTraceId) ? uuid() : tracer.getTraceId();
+    req.headers.id = traceId;
+    req.id = traceId;
     next();
   };
 };

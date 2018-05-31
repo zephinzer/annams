@@ -13,9 +13,7 @@ describe('account/create', () => {
     });
 
     it('throws an error if the :email option is not specified', () => {
-      expect(() => {
-        accountCreate(knexMock);
-      }).to.throw();
+      expect(() => accountCreate(knexMock)).to.throw(Error);
     });
 
     it('throws an error if the :email option is invalid', () => {
