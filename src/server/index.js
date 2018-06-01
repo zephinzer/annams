@@ -1,6 +1,7 @@
-const express = require('express');
 const compression = require('compression');
+const express = require('express');
 
+const dev = require('./dev');
 const error = require('./error');
 const liveness = require('./liveness');
 const logger = require('./logger');
@@ -41,6 +42,7 @@ function server(asMiddleware = false) {
       .type('application/json')
       .status(200)
       .json('ok'));
+    app.use(dev());
     app.use(error().notFound);
     app.use(error().serverError);
     server.instance = app;

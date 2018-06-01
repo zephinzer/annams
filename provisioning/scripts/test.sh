@@ -97,12 +97,12 @@ HELP
       exit 1;
     fi;
     nyc \
-      --silent \
       --clean \
       --produce-source-map \
       --report-dir=coverage \
       --reporter=lcov \
-      --reporter=text-lcov \
+      --reporter=lcov-text \
+      --reporter=html \
       --show-process-tree \
       --temp-directory=coverage/.nyc_output \
       mocha --recursive ./src/test.entrypoint.js \
