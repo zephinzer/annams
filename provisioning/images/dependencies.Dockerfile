@@ -13,7 +13,6 @@ RUN apk add --no-cache g++ make python \
   && chown app:app -R /app
 USER app
 COPY ./package.json /app/package.json
-COPY ./package-lock.json /app/package-lock.json
 COPY ./yarn.lock /app/yarn.lock
 COPY ./.yarnclean /app/.yarnclean
 RUN yarn install ${YARN_FLAGS} \
