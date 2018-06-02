@@ -23,4 +23,10 @@ module.exports = {
     const error = new Error(`The required field ${fieldName} was not found.`); // eslint-disable-line max-len
     return Object.assign(error, {code, status});
   },
+  dbOperationFailed: () => {
+    const code = 'ERROR_ACCOUNT_OPERATION_FAILED';
+    const status = 500;
+    const error = new Error(`A database operation has failed.`); // eslint-disable-line max-len
+    return Object.assign(error, {code, status});
+  },
 };
