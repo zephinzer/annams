@@ -24,65 +24,82 @@ function updateAccount(
     password = null,
   } = {},
 ) {
-  if (!userUuid) {
-    throw error.missingField('uuid');
-  }
-
-  const validation = {
-    uuid: utility.validate.uuid(userUuid),
-    email: utility.validate.email(email),
-    username: utility.validate.username(username),
-    password: utility.validate.password(password),
-  };
-
-  if (!validation.uuid) {
-    throw error.invalidField('uuid', userUuid);
-  }
-
+  const {
+    checkAccountWithUuidExists,
+    updateAccountWithUuid,
+    validateUuid,
+    validateEmail,
+    validateUsername,
+    validatePassword,
+  } = updateAccount.utility;
   const updateFields = {};
 
-  if (email !== null) {
-    if (!validation.email) {
-      throw error.invalidField('email', email);
-    } else {
-      updateFields.email = email;
-    }
-  }
+  validateUuid(userUuid);
+  validateEmail(email);
+  updateFields.email = email;
+  validateUsername(username);
+  updateFields.username = username;
+  validatePassword(password);
+  updateFields.password = utility.password.hash(password, userUuid);
 
-  if (username !== null) {
-    if (!validation.username) {
-      throw error.invalidField('username', username);
-    } else {
-      updateFields.username = username;
-    }
-  }
+  return updateAccountWithUuid(db, userUuid, updateFields)
+    .then((result) => (result === 1) ? Object.keys(updateFields) : null)
+    .then((updateFields) =>
+      (updateFields !== null) ?
+        updateFields
+        : checkAccountWithUuidExists(db, userUuid)
+    );
+};
 
-  if (password !== null) {
-    if (!validation.password) {
-      throw error.invalidSecureField('password');
-    } else {
-      updateFields.password = utility.password.hash(password, userUuid);
+updateAccount.utility = {
+  checkAccountWithUuidExists: (db, uuidValue) => {
+    return db('accounts')
+      .select(utility.constant.accountSelectSerializer)
+      .where('uuid', '=', uuidValue)
+      .then((accounts) => {
+        if (!accounts || accounts.length === 0) {
+          throw error.accountNotFound(uuidValue);
+        } else {
+          throw error.dbOperationFailed();
+        }
+      });
+  },
+  updateAccountWithUuid: (db, uuidValue, updateFields) => {
+    return db('accounts')
+      .where('uuid', '=', uuidValue)
+      .update(updateFields);
+  },
+  validateUuid: (uuidValue) => {
+    if (!uuidValue) {
+      throw error.missingField('uuid');
     }
-  }
-
-  return db('accounts')
-    .where('uuid', '=', userUuid)
-    .update(updateFields)
-    .then((result) => {
-      if (result === 1) {
-        return Object.keys(updateFields);
-      } else {
-        throw new Error();
+    const valid = utility.validate.uuid(uuidValue);
+    if (!valid) {
+      throw error.invalidField('uuid', uuidValue);
+    }
+  },
+  validateEmail: (emailValue) => {
+    if (emailValue !== null) {
+      const valid = utility.validate.email(emailValue);
+      if (!valid) {
+        throw error.invalidField('email', emailValue);
       }
-    })
-    .catch(() => {
-      return db('accounts')
-        .select(utility.constant.accountSelectSerializer)
-        .where('uuid', '=', userUuid)
-        .then((accounts) => {
-          if (!accounts || accounts.length === 0) {
-            throw error.accountNotFound(userUuid);
-          }
-        });
-    });
+    }
+  },
+  validateUsername: (usernameValue) => {
+    if (usernameValue !== null) {
+      const valid = utility.validate.username(usernameValue);
+      if (!valid) {
+        throw error.invalidField('username', usernameValue);
+      }
+    }
+  },
+  validatePassword: (passwordValue) => {
+    if (passwordValue !== null) {
+      const valid = utility.validate.password(passwordValue);
+      if (!valid) {
+        throw error.invalidSecureField('password');
+      }
+    }
+  },
 };
