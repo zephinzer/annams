@@ -21,11 +21,13 @@ express.next._ = {
 express.request = {};
 express.request._ = {
   reset: () => {
+    express.request.get = () => '_annams_test_request_get';
     express.request.headers = {};
     express.request.headers.id = '_test_express_mock_id';
-    express.request.header = {};
+    express.request.header = () => {};
     express.request.header.origin = '_test_express_mock_origin';
     express.request.host = '_test_express_mock_host';
+    express.request.originalUrl = 'http://annams/_test/_originalUrl';
     express.request.method = '_test_express_mock_method';
   },
 };
@@ -43,5 +45,6 @@ express.response._.reset = function() {
 express.response.json = express._.mock(express.response);
 express.response.status = express._.mock(express.response);
 express.response.type = express._.mock(express.response);
+express.response.on = express._.mock(express.response);
 
 module.exports = express;

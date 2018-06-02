@@ -3,6 +3,8 @@ const expressZipkinInstrumentation = require('express-zipkin-instrumentation');
 
 const config = require('../../config')();
 
+const expressMock = require('../../../test/mocks/express');
+
 const serverTracer = require('./');
 
 describe('server/tracer', () => {
@@ -31,19 +33,24 @@ describe('server/tracer', () => {
       before(() => {
         zipkinEnabledStatus = config.server.tracing.zipkin.enabled;
         config.server.tracing.zipkin.enabled = false;
+        expressMock.request._.reset();
+        expressMock.response._.reset();
+        expressMock.next._.reset();
       });
 
       after(() => {
         config.server.tracing.zipkin.enabled = zipkinEnabledStatus;
+        expressMock.request._.reset();
+        expressMock.response._.reset();
+        expressMock.next._.reset();
       });
 
       it('returns a pass through express middleware', () => {
         const server = express();
         const middleware = serverTracer();
-        const next = sinon.spy();
         expect(() => server.use(middleware)).to.not.throw();
-        middleware(null, null, next);
-        expect(next).to.be.calledOnce;
+        middleware(expressMock.request, expressMock.response, expressMock.next);
+        expect(expressMock.next.spy).to.be.calledOnce;
       });
     });
 

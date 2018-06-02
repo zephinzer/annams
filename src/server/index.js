@@ -1,6 +1,7 @@
 const compression = require('compression');
 const express = require('express');
 
+const defaultMiddleware = require('./default');
 const dev = require('./dev');
 const error = require('./error');
 const liveness = require('./liveness');
@@ -38,14 +39,12 @@ function server(asMiddleware = false) {
     app.use(api());
     app.use(readiness());
     app.use(liveness());
-    app.get('/', (req, res) => res
-      .type('application/json')
-      .status(200)
-      .json('ok'));
     app.use(dev());
+    defaultMiddleware.connect(app);
     app.use(error().notFound);
     app.use(error().serverError);
     server.instance = app;
+    server.instance.createdAt = (new Date()).getTime();
   }
   return server.instance;
 };
