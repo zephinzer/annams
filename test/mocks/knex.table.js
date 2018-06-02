@@ -12,88 +12,84 @@ module.exports = KnexMockTable;
 function KnexMockTable(knexMock) {
   this.knex = knexMock;
 
-  this.spy = {
-    dateTime: sinon.spy(),
-    defaultTo: sinon.spy(),
-    dropForeign: sinon.spy(),
-    foreign: sinon.spy(),
-    inTable: sinon.spy(),
-    increments: sinon.spy(),
-    integer: sinon.spy(),
-    notNullable: sinon.spy(),
-    primary: sinon.spy(),
-    references: sinon.spy(),
-    string: sinon.spy(),
-    timestamp: sinon.spy(),
-    timestamps: sinon.spy(),
-    unsigned: sinon.spy(),
-    reset: () => {
-      Object.keys(this.spy).forEach((key) => {
-        if (typeof this.spy[key].resetHistory === 'function') {
-          this.spy[key].resetHistory();
-        }
-      });
-    },
-  };
-
-  this.mock = {
-    dateTime: (...args) => {
-      this.spy.dateTime.apply(null, [...args]);
-      return this.mock;
-    },
-    defaultTo: (...args) => {
-      this.spy.defaultTo.apply(null, [...args]);
-      return this.mock;
-    },
-    dropForeign: (...args) => {
-      this.spy.dropForeign.apply(null, [...args]);
-      return this.mock;
-    },
-    foreign: (...args) => {
-      this.spy.foreign.apply(null, [...args]);
-      return this.mock;
-    },
-    inTable: (...args) => {
-      this.spy.inTable.apply(null, [...args]);
-      return this.mock;
-    },
-    increments: (...args) => {
-      this.spy.increments.apply(null, [...args]);
-      return this.mock;
-    },
-    integer: (...args) => {
-      this.spy.integer.apply(null, [...args]);
-      return this.mock;
-    },
-    notNullable: (...args) => {
-      this.spy.notNullable.apply(null, [...args]);
-      return this.mock;
-    },
-    primary: (...args) => {
-      this.spy.primary.apply(null, [...args]);
-      return this.mock;
-    },
-    references: (...args) => {
-      this.spy.references.apply(null, [...args]);
-      return this.mock;
-    },
-    string: (...args) => {
-      this.spy.string.apply(null, [...args]);
-      return this.mock;
-    },
-    timestamp: (...args) => {
-      this.spy.timestamp.apply(null, [...args]);
-      return this.mock;
-    },
-    timestamps: (...args) => {
-      this.spy.timestamps.apply(null, [...args]);
-      return this.mock;
-    },
-    unsigned: (...args) => {
-      this.spy.unsigned.apply(null, [...args]);
-      return this.mock;
-    },
-  };
+  initializeSpies.bind(this)();
+  initializeMocks.bind(this)();
 
   return this;
+};
+
+/**
+ * Add a new string into this array to mock that function
+ *
+ * @var {Array} KnexMockTable.functions
+ */
+KnexMockTable.functions = [
+  'dateTime',
+  'defaultTo',
+  'dropForeign',
+  'inTable',
+  'increments',
+  'integer',
+  'notNullable',
+  'primary',
+  'references',
+  'string',
+  'timestamp',
+  'timestamps',
+  'unsigned',
+  'foreign',
+];
+
+/**
+ * Initializes the .mock property of the context of this function
+ *
+ * @example initializeMocks.bind(this)();
+ */
+function initializeMocks() {
+  const createMock = initializeMocks.create.bind(this);
+  KnexMockTable.functions.forEach(
+    (mockedFunctionKey) => createMock(mockedFunctionKey)
+  );
+};
+
+/**
+ * Creates a new property named :keyName on this.mock
+ *
+ * @param {String} keyName
+ */
+initializeMocks.create = function(keyName) {
+  this.mock = this.mock || {};
+  this.mock[keyName] = (...args) => {
+    this.spy[keyName].apply(null, [...args]);
+    return this.mock;
+  };
+};
+
+/**
+ * Initializes the .spy property of the context of this function
+ *
+ * @example initializeSpies.bind(this)()
+ */
+function initializeSpies() {
+  const createSpy = initializeSpies.create.bind(this);
+  KnexMockTable.functions.forEach(
+    (mockedFunctionKey) => createSpy(mockedFunctionKey)
+  );
+  this.spy.reset = () => {
+    Object.keys(this.spy).forEach((key) => {
+      if (typeof this.spy[key].resetHistory === 'function') {
+        this.spy[key].resetHistory();
+      }
+    });
+  };
+};
+
+/**
+ * Creates a new property :keyName on this. spy
+ *
+ * @param {String} keyName
+ */
+initializeSpies.create = function(keyName) {
+  this.spy = this.spy || {};
+  this.spy[keyName] = sinon.spy();
 };

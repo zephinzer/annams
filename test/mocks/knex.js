@@ -6,31 +6,36 @@ const KnexMockTable = require('./knex.table');
 
 module.exports = KnexMock;
 
+KnexMock.functions = [
+  'catch',
+  'constructor',
+  'insert',
+  'limit',
+  'offset',
+  'orderBy',
+  'select',
+  'then',
+  'update',
+  'where',
+];
+
 /**
  * Returns a mock knex instance
  *
  * @return {KnexMock}
  */
 function KnexMock(...args) {
+  const createSpies = KnexMock.createSpies.bind(this);
   this.databaseName = args[0];
-  this.spy = {
-    catch: sinon.spy(),
-    constructor: sinon.spy(),
-    insert: sinon.spy(),
-    limit: sinon.spy(),
-    offset: sinon.spy(),
-    orderBy: sinon.spy(),
-    select: sinon.spy(),
-    then: sinon.spy(),
-    update: sinon.spy(),
-    where: sinon.spy(),
-    reset: () => {
-      Object.keys(this.spy).forEach((key) => {
-        if (typeof this.spy[key].resetHistory === 'function') {
-          this.spy[key].resetHistory();
-        }
-      });
-    },
+  KnexMock.functions.forEach((mockedFunctionKey) => {
+    createSpies(mockedFunctionKey);
+  });
+  this.spy.reset = () => {
+    Object.keys(this.spy).forEach((key) => {
+      if (typeof this.spy[key].resetHistory === 'function') {
+        this.spy[key].resetHistory();
+      }
+    });
   };
   this.spy.constructor.apply(this, [...args]);
 
@@ -78,6 +83,16 @@ function KnexMock(...args) {
     return this;
   };
   return this;
+};
+
+/**
+ * Creates a new property :keyName on this. spy
+ *
+ * @param {String} keyName
+ */
+KnexMock.createSpies = function(keyName) {
+  this.spy = this.spy || {};
+  this.spy[keyName] = sinon.spy();
 };
 
 KnexMock._ = {};
