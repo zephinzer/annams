@@ -12,12 +12,16 @@ module.exports = db;
  */
 function db(...knexOptions) {
  if (db.instance === null) {
-  db.instance = knex(knexConfig);
+  db.initialize();
  }
  return db.instance.apply(this, [...knexOptions]);
 };
 
 db.instance = null;
+
+db.initialize = () => {
+  db.instance = knex(knexConfig);
+};
 
 db.reset = () => {
   db.instance = null;
