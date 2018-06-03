@@ -61,6 +61,10 @@ describe('server/api/utility', () => {
   });
 
   describe('.Route()', () => {
+    afterEach(() => {
+      expressMock.response._.reset();
+    });
+
     it('returns a Route instance', () => {
       const route = new apiUtility.Route();
       expect(route).to.be.instanceOf(apiUtility.Route);

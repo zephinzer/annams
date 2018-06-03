@@ -29,6 +29,7 @@ express.request._ = {
     express.request.host = '_test_express_mock_host';
     express.request.originalUrl = 'http://annams/_test/_originalUrl';
     express.request.method = '_test_express_mock_method';
+    express.request.params = {};
   },
 };
 express.request._.reset();

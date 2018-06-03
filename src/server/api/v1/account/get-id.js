@@ -1,6 +1,8 @@
 const {validate} = require('../../../../account/utility');
 const account = require('../../../../account');
 
+const error = require('../../../error');
+
 module.exports = getAccountWithIdentifier;
 
 /**
@@ -12,19 +14,9 @@ module.exports = getAccountWithIdentifier;
  */
 function getAccountWithIdentifier(req, res) {
   const {identifier} = req.params;
-  const validation = {
-    id: validate.id(identifier),
-    uuid: validate.uuid(identifier),
-  };
-  const retrieveData = {};
-  console.info(identifier);
-  if (validation.id === true) {
-    retrieveData.id = parseInt(identifier);
-  } else if (validation.uuid === true) {
-    retrieveData.uuid = identifier;
-  } else {
-    throw new Error('Invalid identifier provided');
-  }
+  const retrieveData =
+    getAccountWithIdentifier.validateAndRetrieveIdentifier(identifier);
+
   getAccountWithIdentifier.account
     .retrieve(retrieveData)
     .then((result) => {
@@ -33,3 +25,25 @@ function getAccountWithIdentifier(req, res) {
 };
 
 getAccountWithIdentifier.account = account;
+
+/**
+ * Returns an object with either an :id or :uuid property depending on which
+ * was validated to be valid. :id is given precedence.
+ *
+ * @param {String} identifier
+ *
+ * @return {Object}
+ */
+getAccountWithIdentifier.validateAndRetrieveIdentifier = (identifier) => {
+  const validation = {
+    id: validate.id(identifier),
+    uuid: validate.uuid(identifier),
+  };
+  if (validation.id === true) {
+    return {id: parseInt(identifier)};
+  } else if (validation.uuid === true) {
+    return {uuid: identifier};
+  } else {
+    error.trigger.badRequest(`Invalid identifier ("${identifier}") provided.`);
+  }
+};
