@@ -101,7 +101,6 @@ HELP
       --produce-source-map \
       --report-dir=coverage \
       --reporter=lcov \
-      --reporter=lcov-text \
       --reporter=html \
       --show-process-tree \
       --temp-directory=coverage/.nyc_output \
