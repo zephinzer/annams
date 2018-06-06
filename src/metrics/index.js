@@ -18,22 +18,26 @@ metrics.error = {
  *
  * @return {Prometheus.Register}
  */
-function metrics() {
-  Prometheus.register.clear();
+function metrics({
+  enablePushGateway = false,
+} = {}) {
+  metrics.prometheus.register.clear();
   metrics.registerOperatingSystemMetrics();
-  Prometheus.collectDefaultMetrics({
-    register: Prometheus.register,
+  metrics.prometheus.collectDefaultMetrics({
+    register: metrics.prometheus.register,
     timeout: config.metrics.interval,
   });
   if (metrics._harvestOperatingSystemMetrics !== null) {
-    clearTimeout(metrics._harvestOperatingSystemMetrics());
+    clearTimeout(metrics._harvestOperatingSystemMetrics);
   }
   metrics.harvestOperatingSystemMetrics();
-  if (config.environment === 'development') {
-    metrics.initializePushGatewayForDevelopment(true);
+  if (config.environment === 'development' || enablePushGateway) {
+    metrics.initializePushGateway(true);
   }
-  return Prometheus.register;
+  return metrics.prometheus.register;
 };
+
+metrics.prometheus = Prometheus;
 
 metrics.createGauge = (name, help) => {
   return new Prometheus.Gauge({name, help});
@@ -82,7 +86,7 @@ metrics.pushGatewayResponseHandler = (err, res, body) => {
     metrics.error.pushGateway = false;
   }
 };
-metrics.initializePushGatewayForDevelopment = (reset = false) => {
+metrics.initializePushGateway = (reset = false) => {
   if (metrics._pushGateway === null || reset) {
     (reset && (metrics._pushGatewayTimeoutObject !== null))
       && clearTimeout(metrics._pushGatewayTimeoutObject);
@@ -95,7 +99,7 @@ metrics.initializePushGatewayForDevelopment = (reset = false) => {
     {jobName: 'annams'},
     metrics.pushGatewayResponseHandler),
   metrics._pushGatewayTimeoutObject = setTimeout(
-    metrics.initializePushGatewayForDevelopment,
+    metrics.initializePushGateway,
     metrics._pushGatewayPushInterval
   );
 };

@@ -3,14 +3,167 @@ const metrics = require('./');
 describe('metrics', () => {
   it('has the correct keys', () => {
     expect(metrics).to.include.keys([
+      'prometheus',
       'createGauge',
       'harvestOperatingSystemMetrics',
-      'initializePushGatewayForDevelopment',
+      'initializePushGateway',
       'pushGatewayResponseHandler',
       'registerOperatingSystemMetrics',
       'status',
       'error',
     ]);
+  });
+
+  describe('constructor()', () => {
+    const original = {};
+    const spy = {};
+    const mock = {};
+
+    before(() => {
+      original.prometheus = metrics.prometheus;
+      original._harvestOperatingSystemMetrics =
+        metrics._harvestOperatingSystemMetrics;
+      sinon.stub(metrics, 'registerOperatingSystemMetrics');
+      sinon.stub(metrics, 'harvestOperatingSystemMetrics');
+      spy.clear = sinon.spy();
+      spy.collectDefaultMetrics = sinon.spy();
+      mock.register = {
+        clear: spy.clear,
+      };
+      metrics.prometheus = {
+        collectDefaultMetrics: spy.collectDefaultMetrics,
+        register: mock.register,
+      };
+    });
+
+    beforeEach(() => {
+      metrics();
+    });
+
+    after(() => {
+      metrics.prometheus = original.prometheus;
+      metrics._harvestOperatingSystemMetrics =
+        original._harvestOperatingSystemMetrics;
+      metrics.registerOperatingSystemMetrics.restore();
+      metrics.harvestOperatingSystemMetrics.restore();
+    });
+
+    afterEach(() => {
+      spy.clear.resetHistory();
+      spy.collectDefaultMetrics.resetHistory();
+      metrics.registerOperatingSystemMetrics.resetHistory();
+      metrics.harvestOperatingSystemMetrics.resetHistory();
+    });
+
+    it('clears the prometheus register', () => {
+      expect(spy.clear).to.be.calledOnce;
+    });
+
+    it('collects default metrics', () => {
+      expect(spy.collectDefaultMetrics).to.be.calledOnce;
+      expect(spy.collectDefaultMetrics).to.be.calledWith({
+        register: mock.register,
+        timeout: require('../config')().metrics.interval,
+      });
+    });
+
+    it('registers operating system metrics', () => {
+      expect(metrics.registerOperatingSystemMetrics).to.be.calledOnce;
+    });
+
+    it('harvests operating system metrics', () => {
+      expect(metrics.harvestOperatingSystemMetrics).to.be.calledOnce;
+    });
+
+    context('operating system metrics already being harvested', () => {
+      const original = {};
+
+      before(() => {
+        original._harvestOperatingSystemMetrics =
+          metrics._harvestOperatingSystemMetrics;
+        metrics._harvestOperatingSystemMetrics = setTimeout(() => {
+          throw new Error('this timeout was not cleared ):');
+        }, 10000); // unrealistically long number
+        console.info(metrics._harvestOperatingSystemMetrics);
+      });
+
+      after(() => {
+        metrics._harvestOperatingSystemMetrics =
+          original._harvestOperatingSystemMetrics;
+      });
+
+      it('clears the timeout for the harvest cycle', () => {
+        console.info(metrics._harvestOperatingSystemMetrics);
+        expect(metrics._harvestOperatingSystemMetrics._onTimeout)
+          .to.equal(null);
+      });
+    });
+
+    context('NODE_ENV is "development"', () => {
+      const original = {};
+
+      before(() => {
+        const config = require('../config')();
+        original.config = {
+          environment: config.environment,
+        };
+        config.environment = 'development';
+        sinon.stub(metrics, 'initializePushGateway');
+      });
+
+      after(() => {
+        const config = require('../config')();
+        config.environment = original.config.environment;
+        metrics.initializePushGateway.restore();
+      });
+
+      afterEach(() => {
+        metrics.initializePushGateway.resetHistory();
+      });
+
+      it('initialies the push gateway', () => {
+        expect(metrics.initializePushGateway).to.be.calledOnce;
+      });
+    });
+
+    context('enablePushGateway flag is set to `true`', () => {
+      const original = {};
+
+      before(() => {
+        const config = require('../config')();
+        original.config = {
+          environment: config.environment,
+        };
+        config.environment = 'not-development';
+        sinon.stub(metrics, 'initializePushGateway');
+      });
+
+      beforeEach(() => {
+        metrics({
+          enablePushGateway: true,
+        });
+      });
+
+      after(() => {
+        const config = require('../config')();
+        config.environment = original.config.environment;
+        metrics.initializePushGateway.restore();
+      });
+
+      afterEach(() => {
+        metrics.initializePushGateway.resetHistory();
+      });
+
+      it('initialies the push gateway', () => {
+        expect(metrics.initializePushGateway).to.be.calledOnce;
+      });
+    });
+  });
+
+  describe('.prometheus', () => {
+    it('exports an object', () => {
+      expect(metrics.prometheus).to.be.an('object');
+    });
   });
 
   describe('.createGauge()', () => {
@@ -90,7 +243,7 @@ describe('metrics', () => {
     });
   });
 
-  describe('.initializePushGatewayForDevelopment', () => {
+  describe('.initializePushGateway', () => {
     context('reset === true || push gateway not initialised', () => {
       const Prometheus = require('prom-client');
 
@@ -144,7 +297,7 @@ describe('metrics', () => {
         });
 
         it('works as expected', () => {
-          metrics.initializePushGatewayForDevelopment(true);
+          metrics.initializePushGateway(true);
           expect(clearTimeoutSpy).to.be.calledOnce;
           expect(clearTimeoutSpy).to.be.calledWith(pushGatewayTimeoutObject);
           expect(pushGatewaySpy).to.be.calledOnce;
@@ -159,7 +312,7 @@ describe('metrics', () => {
           );
           expect(setTimeoutSpy).to.be.calledOnce;
           expect(setTimeoutSpy).to.be.calledWith(
-            metrics.initializePushGatewayForDevelopment,
+            metrics.initializePushGateway,
             metrics._pushGatewayPushInterval
           );
         });
@@ -172,7 +325,7 @@ describe('metrics', () => {
         });
 
         it('works as expected', () => {
-          metrics.initializePushGatewayForDevelopment(true);
+          metrics.initializePushGateway(true);
           expect(clearTimeoutSpy).to.not.be.called;
           expect(pushGatewaySpy).to.be.calledOnce;
           expect(pushGatewayPushSpy).to.be.calledOnce;
@@ -210,7 +363,7 @@ describe('metrics', () => {
       });
 
       it('works as expected', () => {
-        metrics.initializePushGatewayForDevelopment(false);
+        metrics.initializePushGateway(false);
         expect(metrics._pushGateway.push).to.be.calledOnce;
         expect(metrics._pushGateway.push).to.be.calledWith(
           {jobName: 'annams'},
@@ -218,7 +371,7 @@ describe('metrics', () => {
         );
         expect(setTimeoutSpy).to.be.calledOnce;
         expect(setTimeoutSpy).to.be.calledWith(
-          metrics.initializePushGatewayForDevelopment,
+          metrics.initializePushGateway,
           metrics._pushGatewayPushInterval,
         );
       });
