@@ -1,5 +1,5 @@
 #!/bin/sh
-CURRDIR="$(dirname $0)";
+CURR_DIR="$(dirname $0)";
 
 if [ "${ANNAMS_HOST}" = '' ]; then ANNAMS_HOST='127.0.0.1'; fi;
 if [ "${ANNAMS_PORT}" = '' ]; then ANNAMS_PORT=10000; fi;
@@ -94,4 +94,15 @@ curl -sSL -X ${METHOD} "${URL}" > /dev/null;
 
 printf -- '\nStopping mock recorder... ';
 curl -sSL -X POST "${WIREMOCK_BASE_URL}/__admin/recordings/stop" > /dev/null;
-printf -- 'Done.\n';
+printf -- 'Done.\n\n';
+
+printf -- 'Listing generated mocks from "./mock/mappings":\n';
+MOCK_LISTING=$(ls -a1 ${CURR_DIR}/../../../mock/mappings | egrep -v '^\.[a-z\.]*');
+printf -- "${MOCK_LISTING}" | xargs -I@ sh -c 'printf -- "  - @\n";';
+printf -- '\n';
+
+printf -- 'Listing registered routes for the mock:\n';
+printf -- "${MOCK_LISTING}" | xargs -I@ sh -c "cat $(pwd)/mock/mappings/@ | jq '.request | \"  - \" + .method + \" \" + .url' -r";
+
+printf -- '\nExiting with code 0.\n';
+exit 0;

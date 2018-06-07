@@ -37,7 +37,7 @@ case $CHOSEN_ACTION in
     if [ "$?" = "0" ]; then printf -- 'UP\n';
     else printf -- 'DOWN\n';
     fi;
-    _=$(docker ps | grep annams_dev_mock_wiremock);
+    _=$(docker ps | grep annams_dev_mock_mapper_wiremock);
     printf -- 'mock:         ';
     if [ "$?" = "0" ]; then printf -- 'UP\n';
     else printf -- 'DOWN\n';
@@ -47,7 +47,7 @@ case $CHOSEN_ACTION in
     if [ "$?" = "0" ]; then printf -- 'UP\n';
     else printf -- 'DOWN\n';
     fi;
-    _=$(docker ps | grep annams_dev_annams);
+    _=$(docker ps | grep annams_dev_app);
     printf -- 'application:  ';
     if [ "$?" = "0" ]; then printf -- 'UP\n';
     else printf -- 'DOWN\n';

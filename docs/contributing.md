@@ -137,11 +137,25 @@ ENV=developmnt npm run build \
 ```
 
 ### Consumer-Driven-Contract Testing
-Wiremock is used to mock Annams. This feature is still a WIP but you can check out the documentation on how to do this at [the README](../mock/README.md).
+Wiremock is used to create mocks.
 
-In short, run `npm run build mock` to create the Wiremock image, then run `npm run start-mock` to start the container. Visit http://localhost:8080. To start the recorder, go to http://localhost:8080/__admin/recorder.
+When you run `[npm run|yarn] services start`, an instance of Wiremock is spun up together with the other services.
 
-[Read more on Wiremock](http://wiremock.org).
+To create the mock, confirm that the services are all up with:
+
+```sh
+yarn services status
+```
+
+Then run the command to start the mock mapper:
+
+```sh
+yarn mock map
+```
+
+To create an accurate mock, stop all services (`yarn services stop`) and start them again (`yarn services start`) before running the above command. This is because Wiremock will run the queries against the copy of Annams started by `yarn services start`.
+
+[Read more on Wiremock here](http://wiremock.org).
 
 ## Continuous Integration
 We use Travis to automatically run tests on every push to any branch. 

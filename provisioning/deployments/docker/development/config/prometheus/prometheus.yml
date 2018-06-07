@@ -9,6 +9,13 @@ scrape_configs:
   scheme: http
   static_configs:
   - targets:
+    - annms_dev_app:9091
+- job_name: annams
+  metrics_path: /metrics
+  honor_labels: true
+  scheme: http
+  static_configs:
+  - targets:
     - annams_dev_metrics_push_gateway:9091
 - job_name: zipkin
   metrics_path: /prometheus

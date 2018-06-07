@@ -1,4 +1,5 @@
 FROM alpine:3.7
+LABEL description="Service virtualisation mock image for ANNAMS"
 RUN apk add --no-cache openjdk8
 ARG VERSION_WIREMOCK='2.17.0'
 WORKDIR /app

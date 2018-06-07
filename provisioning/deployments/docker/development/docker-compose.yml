@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   dev_app:
-    container_name: annams_dev_annams
+    container_name: annms_dev_app
     networks:
       - annams
     build:
@@ -69,8 +69,8 @@ services:
       - "../../../../src:/app/src:Z"
       - "../../../../db:/app/db:Z"
       - "../../../../provisioning/scripts:/app/provisioning/scripts:Z"
-  dev_mock:
-    container_name: annams_dev_mock_wiremock
+  dev_mock_mapper:
+    container_name: annams_dev_mock_mapper_wiremock
     networks:
       - annams
     build:
